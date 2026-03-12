@@ -1,11 +1,11 @@
 ---
 schema_version: 1
-docker_project_path: "C:/Users/cuadr/Desktop/mis-proyectos/workspace-test/projects/a7cb866f-ddba-4d47-9982-f73464cb495f"
+docker_project_path: "C:/Users/cuadr/Desktop/colpruebas
 compose_file: "docker-compose.yml"
 env_file_prod: ".env"
 env_file_test: ".env"
-project_name_prod: "colpruebas-prod"
-project_name_test: "colpruebas-test"
+project_name_prod: "colpruebas"
+project_name_test: "colpruebas"
 deploy_branch_prod: "main"
 deploy_branch_test: "main"
 prod_services: "frontend-prod,api-prod"
