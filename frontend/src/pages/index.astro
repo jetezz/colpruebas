@@ -1,0 +1,50 @@
+---
+const title = "Test Project";
+const timestamp = new Date().toISOString();
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      h1 {
+        color: #333;
+      }
+      .info {
+        background: #e7f3ff;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 1rem;
+      }
+      .timestamp {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Test Project</h1>
+      <p>This is a simple test project for deploy and tunnel testing.</p>
+      <div class="info">
+        <strong>Environment:</strong> test<br />
+        <strong>Timestamp:</strong> {timestamp}
+      </div>
+    </div>
+  </body>
+</html>

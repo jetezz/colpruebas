@@ -1,0 +1,32 @@
+services:
+  frontend-test:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8083:4321"
+    environment:
+      - NODE_ENV=test
+      - API_URL=http://api-test:3000
+    depends_on:
+      - api-test
+    networks:
+      - internal
+    restart: unless-stopped
+
+  api-test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3000"
+    environment:
+      - NODE_ENV=test
+      - PORT=3000
+    networks:
+      - internal
+    restart: unless-stopped
+
+networks:
+  internal:
+    driver: bridge
