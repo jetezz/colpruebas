@@ -5,6 +5,6 @@ export default defineConfig({
   server: {
     port: 4321,
     host: true,
-    allowedHosts: ['colpruebas.online', 'localhost', '127.0.0.1'],
+    allowedHosts: ['colpruebas.online', 'test.colpruebas.online', 'localhost', '127.0.0.1'],
   }
 });
