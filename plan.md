@@ -27,7 +27,7 @@ Configurar un proyecto simple con backend y frontend que muestre información de
 |----------|------------|------|
 | APP_NAME | colpruebas | colpruebas |
 | ENVIRONMENT | production | test |
-| GIT_BRANCH | main | main |
+
 
 ## Verificación
 

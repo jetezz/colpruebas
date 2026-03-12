@@ -25,7 +25,7 @@ Proyecto para validar los sistemas de deploy y tunnel.
 ### Variables de entorno:
 - `APP_NAME=colpruebas`
 - `ENVIRONMENT=production` / `ENVIRONMENT=test`
-- `GIT_BRANCH=main`
+
 
 ### Contenedores:
 - colpruebas-frontend-prod

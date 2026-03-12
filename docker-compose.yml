@@ -15,7 +15,6 @@ services:
       - APP_NAME=colpruebas
       - ENVIRONMENT=production
       - API_URL=http://api-prod:3000
-      - GIT_BRANCH=${GIT_BRANCH:-main}
     depends_on:
       - api-prod
     networks:
@@ -34,7 +33,6 @@ services:
       - APP_NAME=colpruebas
       - ENVIRONMENT=production
       - PORT=3000
-      - GIT_BRANCH=${GIT_BRANCH:-main}
     networks:
       - internal
     restart: unless-stopped
@@ -55,7 +53,6 @@ services:
       - APP_NAME=colpruebas
       - ENVIRONMENT=test
       - API_URL=http://api-test:3000
-      - GIT_BRANCH=${GIT_BRANCH:-main}
     depends_on:
       - api-test
     networks:
@@ -74,7 +71,6 @@ services:
       - APP_NAME=colpruebas
       - ENVIRONMENT=test
       - PORT=3000
-      - GIT_BRANCH=${GIT_BRANCH:-main}
     networks:
       - internal
     restart: unless-stopped

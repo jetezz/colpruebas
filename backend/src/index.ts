@@ -6,17 +6,17 @@ const PORT = process.env.PORT || 3000;
 
 const APP_NAME = process.env.APP_NAME || 'colpruebas';
 const ENVIRONMENT = process.env.ENVIRONMENT || 'production';
-const GIT_BRANCH = process.env.GIT_BRANCH || 'main';
+const GIT_BRANCH = 'main';
 
 app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  const message = ENVIRONMENT === 'test' 
-    ? 'API de test funcionando' 
+  const message = ENVIRONMENT === 'test'
+    ? 'API de test funcionando'
     : 'API de prod funcionando';
-    
-  res.json({ 
+
+  res.json({
     app: APP_NAME,
     message: message,
     environment: ENVIRONMENT,
@@ -27,15 +27,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
+  res.json({
+    status: 'ok',
     environment: ENVIRONMENT,
-    timestamp: new Date().toISOString() 
+    timestamp: new Date().toISOString()
   });
 });
 
 app.get('/api/status', (req, res) => {
-  res.json({ 
+  res.json({
     app: APP_NAME,
     environment: ENVIRONMENT,
     gitBranch: GIT_BRANCH,
