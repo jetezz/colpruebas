@@ -1,50 +1,64 @@
 ---
-const title = "Test Project";
+import Header from '../components/Header.astro';
+import InfoCard from '../components/InfoCard.astro';
+import Footer from '../components/Footer.astro';
+
+const appName = 'colpruebas';
+const environment = import.meta.env.ENVIRONMENT || 'test';
 const timestamp = new Date().toISOString();
+
+const frontendStatus = environment === 'production' 
+  ? 'Estamos en el frontend de PRODUCCIÓN' 
+  : 'Estamos en el frontend de TEST';
+
+const apiStatus = environment === 'production'
+  ? 'API de producción funcionando'
+  : 'API de test funcionando';
+
+const gitBranch = 'TEST';
 ---
 
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
+    <title>{appName}</title>
     <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
       body {
         font-family: system-ui, -apple-system, sans-serif;
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 2rem;
-        background: #f5f5f5;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
       }
       .container {
         background: white;
         padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      }
-      h1 {
-        color: #333;
-      }
-      .info {
-        background: #e7f3ff;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-top: 1rem;
-      }
-      .timestamp {
-        color: #666;
-        font-size: 0.9rem;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        max-width: 600px;
+        width: 100%;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Test Project</h1>
-      <p>This is a simple test project for deploy and tunnel testing.</p>
-      <div class="info">
-        <strong>Environment:</strong> test<br />
-        <strong>Timestamp:</strong> {timestamp}
-      </div>
+      <Header title={appName} />
+      <InfoCard 
+        appName={appName}
+        environment={environment}
+        frontendStatus={frontendStatus}
+        apiStatus={apiStatus}
+        gitBranch={gitBranch}
+      />
+      <Footer timestamp={timestamp} />
     </div>
   </body>
 </html>

@@ -2,8 +2,12 @@ FROM oven/bun:1-alpine
 
 WORKDIR /app
 
-COPY public ./public
+COPY package.json ./
+COPY astro.config.mjs ./
+RUN bun add astro
+
+COPY src ./src
 
 EXPOSE 4321
 
-CMD ["bun", "-e", "const server = Bun.serve({ port: 4321, fetch: (req) => new Response(Bun.file('public/index.html'), { headers: { 'Content-Type': 'text/html' } }) }); console.log('Server running on port ' + server.port);"]
+CMD ["bun", "run", "astro", "dev", "--host"]

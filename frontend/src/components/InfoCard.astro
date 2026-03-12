@@ -1,0 +1,66 @@
+---
+interface Props {
+  appName: string;
+  environment: string;
+  frontendStatus: string;
+  apiStatus: string;
+  gitBranch: string;
+}
+
+const { appName, environment, frontendStatus, apiStatus, gitBranch } = Astro.props;
+---
+
+<div class="info-card">
+  <div class="info-row">
+    <span class="label">Aplicación:</span>
+    <span class="value">{appName}</span>
+  </div>
+  <div class="info-row">
+    <span class="label">Entorno:</span>
+    <span class={`value ${environment}`}>{environment === 'production' ? 'PRODUCCIÓN' : 'TEST'}</span>
+  </div>
+  <div class="info-row">
+    <span class="label">Frontend:</span>
+    <span class={`value ${environment}`}>{frontendStatus}</span>
+  </div>
+  <div class="info-row">
+    <span class="label">API:</span>
+    <span class={`value ${environment}`}>{apiStatus}</span>
+  </div>
+  <div class="info-row">
+    <span class="label">Rama Git:</span>
+    <span class={`value ${environment}`}>{gitBranch}</span>
+  </div>
+</div>
+
+<style>
+  .info-card {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e9ecef;
+  }
+  .info-row:last-child {
+    border-bottom: none;
+  }
+  .label {
+    font-weight: 600;
+    color: #495057;
+  }
+  .value {
+    color: #667eea;
+    font-weight: 500;
+  }
+  .value.production {
+    color: #28a745;
+  }
+  .value.test {
+    color: #ffc107;
+  }
+</style>

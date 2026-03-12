@@ -1,5 +1,14 @@
 {
-  "name": "test-frontend",
+  "name": "colpruebas-frontend",
   "version": "1.0.0",
-  "type": "module"
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^4.0.0"
+  }
 }

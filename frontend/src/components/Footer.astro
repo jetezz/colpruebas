@@ -1,0 +1,20 @@
+---
+interface Props {
+  timestamp: string;
+}
+
+const { timestamp } = Astro.props;
+---
+
+<footer>
+  <div class="timestamp">{timestamp}</div>
+</footer>
+
+<style>
+  footer {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+  }
+</style>
