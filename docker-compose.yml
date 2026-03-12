@@ -1,10 +1,49 @@
 services:
-  frontend-test:
+  # ═══════════════════════════════════════════════════════════════════════
+  # PRODUCTION SERVICES
+  # ═══════════════════════════════════════════════════════════════════════
+
+  frontend-prod:
+    container_name: testapp-frontend-prod
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "8083:4321"
+      - "${FRONTEND_PORT:-8085}:4321"
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://api-prod:3000
+    depends_on:
+      - api-prod
+    networks:
+      - internal
+    restart: unless-stopped
+
+  api-prod:
+    container_name: testapp-api-prod
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT:-3005}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - internal
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # TEST SERVICES
+  # ═══════════════════════════════════════════════════════════════════════
+
+  frontend-test:
+    container_name: testapp-frontend-test
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_TEST_PORT:-8086}:4321"
     environment:
       - NODE_ENV=test
       - API_URL=http://api-test:3000
@@ -15,11 +54,12 @@ services:
     restart: unless-stopped
 
   api-test:
+    container_name: testapp-api-test
     build:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "3003:3000"
+      - "${API_TEST_PORT:-3006}:3000"
     environment:
       - NODE_ENV=test
       - PORT=3000
