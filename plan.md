@@ -1,9 +1,12 @@
-# Plan de Implementación: Deploy y Tunnel para Proyecto de Prueba
+# Plan de Implementación: Proyecto colpruebas
 
 ## Objetivo
-Configurar un proyecto simple con backend (Bun/Express) y frontend que pueda desplegarse y accederse mediante los sistemas de deploy y tunnel del proyecto padre.
+Configurar un proyecto simple con backend y frontend que muestre información del entorno (prod/test), API y rama Git.
 
 ## Resumen de Configuración
+
+### Nombre del Proyecto
+**colpruebas**
 
 ### Puertos Asignados
 | Servicio     | Puerto Host | Puerto Contenedor | Environment |
@@ -14,51 +17,86 @@ Configurar un proyecto simple con backend (Bun/Express) y frontend que pueda des
 | api-test       | 3006        | 3000              | test        |
 
 ### Contenedores
-- `testapp-frontend-prod` - Frontend Production
-- `testapp-api-prod` - API Production  
-- `testapp-frontend-test` - Frontend Test
-- `testapp-api-test` - API Test
+- `colpruebas-frontend-prod` - Frontend Production
+- `colpruebas-api-prod` - API Production  
+- `colpruebas-frontend-test` - Frontend Test
+- `colpruebas-api-test` - API Test
 
-### Archivos de Configuración
-- `.env` - Variables de entorno con puertos
-- `docker-compose.yml` - 4 servicios (prod + test)
-- `.mis-proyectos/environment.docker.md` - Configuración para webhook-listener
+### Variables de Entorno
+| Variable | Production | Test |
+|----------|------------|------|
+| APP_NAME | colpruebas | colpruebas |
+| ENVIRONMENT | production | test |
+| GIT_BRANCH | main | main |
 
 ## Verificación
 
 ### Servicios Corriendo ✅
 ```
-testapp-frontend-prod   0.0.0.0:8085->4321/tcp
-testapp-frontend-test   0.0.0.0:8086->4321/tcp
-testapp-api-prod        0.0.0.0:3005->3000/tcp
-testapp-api-test        0.0.0.0:3006->3000/tcp
+colpruebas-frontend-prod   0.0.0.0:8085->4321/tcp
+colpruebas-frontend-test   0.0.0.0:8086->4321/tcp
+colpruebas-api-prod        0.0.0.0:3005->3000/tcp
+colpruebas-api-test        0.0.0.0:3006->3000/tcp
 ```
 
 ### Pruebas Realizadas ✅
-- [x] Frontend Prod: http://localhost:8085 - OK
-- [x] Frontend Test: http://localhost:8086 - OK
-- [x] API Prod: http://localhost:3005 - OK (environment: production)
-- [x] API Test: http://localhost:3006 - OK (environment: test)
+
+**Frontend Production (http://localhost:8085)**
+- Aplicación: colpruebas
+- Entorno: PRODUCCIÓN
+- Frontend: Estamos en el frontend de PRODUCCIÓN
+- API: API de producción funcionando
+- Rama Git: main
+
+**Frontend Test (http://localhost:8086)**
+- Aplicación: colpruebas
+- Entorno: TEST
+- Frontend: Estamos en el frontend de TEST
+- API: API de test funcionando
+- Rama Git: main
+
+**API Production (http://localhost:3005)**
+```json
+{
+  "app": "colpruebas",
+  "message": "API de prod funcionando",
+  "environment": "production",
+  "gitBranch": "main",
+  "version": "1.0.0"
+}
+```
+
+**API Test (http://localhost:3006)**
+```json
+{
+  "app": "colpruebas",
+  "message": "API de test funcionando",
+  "environment": "test",
+  "gitBranch": "main",
+  "version": "1.0.0"
+}
+```
 
 ## Estructura del Proyecto
 ```
 a7cb866f-ddba-4d47-9982-f73464cb495f/
-├── .env                          # Puertos: 8085, 8086, 3005, 3006
-├── docker-compose.yml            # 4 servicios
+├── .env                          # Puertos y variables Git
+├── docker-compose.yml            # 4 servicios (prod + test)
 ├── plan.md                       # Este archivo
 ├── .mis-proyectos/
 │   └── environment.docker.md     # Config deploy
 ├── backend/
-│   ├── src/index.ts             # API Express
+│   ├── src/index.ts             # API Express con variables de entorno
 │   ├── package.json
 │   └── Dockerfile
 └── frontend/
-    ├── public/index.html         # Página HTML
+    ├── public/index.html         # HTML con info de entorno
     ├── package.json
     └── Dockerfile
 ```
 
 ## Notas
-- Los puertos 8085/8086 y 3005/3006 fueron elegidos para evitar conflictos con otras aplicaciones
-- El proyecto está configurado para usar el webhook-listener del proyecto padre
-- Los nombres de contenedor empiezan con "testapp-" para ser reconocibles
+- Los contenedores ahora tienen nombres reconocibles (colpruebas-*)
+- El frontend detecta el entorno según el puerto (8085=prod, 8086=test)
+- La API devuelve mensajes diferenciados según ENVIRONMENT
+- Se muestra la rama Git (main) en el frontend

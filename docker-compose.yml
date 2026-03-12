@@ -4,7 +4,7 @@ services:
   # ═══════════════════════════════════════════════════════════════════════
 
   frontend-prod:
-    container_name: testapp-frontend-prod
+    container_name: colpruebas-frontend-prod
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -12,7 +12,10 @@ services:
       - "${FRONTEND_PORT:-8085}:4321"
     environment:
       - NODE_ENV=production
+      - APP_NAME=colpruebas
+      - ENVIRONMENT=production
       - API_URL=http://api-prod:3000
+      - GIT_BRANCH=${GIT_BRANCH:-main}
     depends_on:
       - api-prod
     networks:
@@ -20,7 +23,7 @@ services:
     restart: unless-stopped
 
   api-prod:
-    container_name: testapp-api-prod
+    container_name: colpruebas-api-prod
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -28,7 +31,10 @@ services:
       - "${API_PORT:-3005}:3000"
     environment:
       - NODE_ENV=production
+      - APP_NAME=colpruebas
+      - ENVIRONMENT=production
       - PORT=3000
+      - GIT_BRANCH=${GIT_BRANCH:-main}
     networks:
       - internal
     restart: unless-stopped
@@ -38,7 +44,7 @@ services:
   # ═══════════════════════════════════════════════════════════════════════
 
   frontend-test:
-    container_name: testapp-frontend-test
+    container_name: colpruebas-frontend-test
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -46,7 +52,10 @@ services:
       - "${FRONTEND_TEST_PORT:-8086}:4321"
     environment:
       - NODE_ENV=test
+      - APP_NAME=colpruebas
+      - ENVIRONMENT=test
       - API_URL=http://api-test:3000
+      - GIT_BRANCH=${GIT_BRANCH:-main}
     depends_on:
       - api-test
     networks:
@@ -54,7 +63,7 @@ services:
     restart: unless-stopped
 
   api-test:
-    container_name: testapp-api-test
+    container_name: colpruebas-api-test
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -62,7 +71,10 @@ services:
       - "${API_TEST_PORT:-3006}:3000"
     environment:
       - NODE_ENV=test
+      - APP_NAME=colpruebas
+      - ENVIRONMENT=test
       - PORT=3000
+      - GIT_BRANCH=${GIT_BRANCH:-main}
     networks:
       - internal
     restart: unless-stopped

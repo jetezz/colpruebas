@@ -2,7 +2,7 @@ FROM oven/bun:1-alpine
 
 WORKDIR /app
 
-RUN mkdir -p public && echo '<!DOCTYPE html><html><body><h1>Test Project</h1></body></html>' > public/index.html
+COPY public ./public
 
 EXPOSE 4321
 
