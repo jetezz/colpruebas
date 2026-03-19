@@ -2,7 +2,15 @@ import type { APIRoute } from 'astro';
 
 export const ALL: APIRoute = async ({ request }) => {
   const url = new URL(request.url);
-  const backendUrl = `http://api-test:3000${url.pathname}${url.search}`;
+  let path = url.pathname;
+
+  if (path === '/api' || path === '/api/') {
+    path = '/';
+  } else if (path === '/api/health') {
+    path = '/health';
+  }
+
+  const backendUrl = `http://api-test:3000${path}${url.search}`;
 
   try {
     const response = await fetch(backendUrl, {
