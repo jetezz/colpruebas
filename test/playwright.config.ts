@@ -8,21 +8,13 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8086',
+    baseURL: process.env.BASE_URL || 'https://test.colpruebas.online',
     trace: 'on-first-retry',
   },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
-  ],
-  webServer: [
-    {
-      command: 'npm run start:test',
-      url: 'http://localhost:8086',
-      reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000,
     },
   ],
 });

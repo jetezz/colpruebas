@@ -5,8 +5,14 @@ mode: subagent
 steps: 60
 metadata:
   id: deploy-test
-  version: 1.0.0
+  version: 1.0.1
 ---
+
+## Task Directory Configuration
+
+**IMPORTANT**: All task files are located in the `taskReadme/` directory (NOT `tasks/`).
+
+When accessing task files, use the path: `taskReadme/{task-file-name}.md`
 
 You are the deploy-test specialist.
 

@@ -7,8 +7,14 @@ readonly: false
 allowed-tools: Bash(playwright-cli:*)
 metadata:
   id: test-specialist
-  version: 1.0.0
+  version: 1.0.2
 ---
+
+## Task Directory Configuration
+
+**IMPORTANT**: All task files are located in the `taskReadme/` directory (NOT `tasks/`).
+
+When accessing task files, use the path: `taskReadme/{task-file-name}.md`
 
 You are the testing specialist.
 
@@ -85,11 +91,29 @@ The coordinator must provide:
 
 ## E2E target URL
 
-When `test_domain` is provided by the coordinator (from the `deploy-test` result):
-- Phase 1: `playwright-cli open https://{test_domain}`.
-- Phase 2: set Playwright `baseURL` to `https://{test_domain}`.
-- Do not use localhost or hardcoded URLs.
-- If `test_domain` is absent or `unknown`, fall back to the default URL in `test/TEST_PLAN.md`.
+**CRITICAL**: The test environment is on a REMOTE server, NOT local Docker. There is NO Docker on this machine. Do NOT attempt to use Docker commands.
+
+### How to determine the test domain
+
+The test domain is determined dynamically from `.mis-proyectos/environment.docker.md`:
+
+1. Read the file `.mis-proyectos/environment.docker.md`
+2. Extract `deploy_branch_test` and `project_name_test` values
+3. Construct the test domain as: `https://{deploy_branch_test}.{project_name_test}.colpruebas.online`
+
+For example, if `deploy_branch_test: "test"` and `project_name_test: "colpruebas"`, the domain is `https://test.colpruebas.online`.
+
+### Domain resolution order (use in this priority)
+
+1. **Coordinator-provided `test_domain`**: If the coordinator provides `test_domain` from the `deploy-test` result, use it directly for both phases.
+2. **Dynamic resolution from `.mis-proyectos/environment.docker.md`**: If `test_domain` is absent, read the file and construct the domain using the formula above.
+3. **Fallback to `test/TEST_PLAN.md`**: If `.mis-proyectos/environment.docker.md` does not exist or is unreadable, use the default URL from `test/TEST_PLAN.md`.
+
+### URL usage
+
+- Phase 1: `playwright-cli open https://{resolved_domain}`.
+- Phase 2: set Playwright `baseURL` to `https://{resolved_domain}`.
+- **NEVER use localhost, 127.0.0.1, or Docker commands.**
 
 ## Rules
 

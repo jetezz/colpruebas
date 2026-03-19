@@ -5,8 +5,14 @@ mode: primary
 steps: 40
 metadata:
   id: coordinator
-  version: 1.0.0
+  version: 1.0.1
 ---
+
+## Task Directory Configuration
+
+**IMPORTANT**: All task files are located in the `taskReadme/` directory (NOT `tasks/`).
+
+When accessing task files, use the path: `taskReadme/{task-file-name}.md`
 
 > **AGENT-TEAM ORCHESTRATION WITH AI SUB-AGENTS**
 > You are the central ORCHESTRATOR of a team of specialized AI sub-agents.

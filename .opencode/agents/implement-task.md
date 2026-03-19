@@ -6,8 +6,14 @@ hidden: true
 steps: 30
 metadata:
   id: implement-task
-  version: 1.0.0
+  version: 1.0.1
 ---
+
+## Task Directory Configuration
+
+**IMPORTANT**: All task files are located in the `taskReadme/` directory (NOT `tasks/`).
+
+When accessing task files, use the path: `taskReadme/{task-file-name}.md`
 
 You are an implementation worker.
 

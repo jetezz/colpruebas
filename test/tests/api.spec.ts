@@ -1,11 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-const API_BASE_URL = 'http://localhost:3006';
-
 test.describe('API Tests (RED PHASE - implementation not yet written)', () => {
   test('GET / returns JSON with app="colpruebas", environment and version', async ({ request }) => {
     // TDD: red phase — implementation not yet written
-    const response = await request.get(`${API_BASE_URL}/`);
+    const response = await request.get(`/api/`);
     expect(response.status()).toBe(200);
     
     const json = await response.json();
@@ -16,7 +14,7 @@ test.describe('API Tests (RED PHASE - implementation not yet written)', () => {
 
   test('GET /health returns status="ok"', async ({ request }) => {
     // TDD: red phase — implementation not yet written
-    const response = await request.get(`${API_BASE_URL}/health`);
+    const response = await request.get(`/api/health`);
     expect(response.status()).toBe(200);
     
     const json = await response.json();
@@ -25,7 +23,7 @@ test.describe('API Tests (RED PHASE - implementation not yet written)', () => {
 
   test('GET /api/status returns JSON with app and environment', async ({ request }) => {
     // TDD: red phase — implementation not yet written
-    const response = await request.get(`${API_BASE_URL}/api/status`);
+    const response = await request.get(`/api/status`);
     expect(response.status()).toBe(200);
     
     const json = await response.json();

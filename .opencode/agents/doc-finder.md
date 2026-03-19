@@ -6,7 +6,7 @@ steps: 15
 readonly: true
 metadata:
   id: doc-finder
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 You are an internal documentation lookup specialist.
