@@ -8,6 +8,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - ENVIRONMENT=production
     ports:
       - "${FRONTEND_PORT:-8085}:4321"
     environment:
@@ -46,6 +48,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - ENVIRONMENT=test
     ports:
       - "${FRONTEND_TEST_PORT:-8086}:4321"
     environment:

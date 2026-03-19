@@ -8,6 +8,9 @@ RUN bun add astro @astrojs/node
 
 COPY src ./src
 
+ARG ENVIRONMENT=test
+ENV PUBLIC_ENVIRONMENT=$ENVIRONMENT
+
 RUN bun run astro build
 
 EXPOSE 4321
