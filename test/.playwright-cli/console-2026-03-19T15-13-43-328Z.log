@@ -1,0 +1,3 @@
+[     702ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://test.colpruebas.online/favicon.ico:0
+[   31360ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://test.colpruebas.online/api/status:0
+[   35151ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://test.colpruebas.online/api/status:0

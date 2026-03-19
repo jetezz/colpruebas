@@ -1,13 +1,13 @@
 ---
 title: Genera unos test muy sencillos para asegurar el funcionamiento
-status: branching
+status: blocked
 created: "2026-03-19T11:04:20.976Z"
-updated: "2026-03-19T11:04:20.976Z"
+updated: "2026-03-19T12:30:00.000Z"
 source_branch: develop
 target_branch: develop
 branch_name: 2026-03-19-test-sencillos
 pr_url: null
-error_message: null
+error_message: "Infrastructure not available: Docker not found in environment, API server not running on localhost:3006, Frontend server not running on localhost:8086. Tests cannot execute without the test environment infrastructure running."
 project_id: ""
 project_url: ""
 ---

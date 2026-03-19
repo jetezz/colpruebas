@@ -7,7 +7,7 @@ env_file_test: ".env"
 project_name_prod: "colpruebas"
 project_name_test: "colpruebas"
 deploy_branch_prod: "main"
-deploy_branch_test: "test"
+deploy_branch_test: "2026-03-19-test-sencillos"
 prod_services: "frontend-prod,api-prod"
 test_services: "frontend-test,api-test"
 prod_port: 8085
