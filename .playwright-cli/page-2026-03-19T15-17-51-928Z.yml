@@ -1,0 +1,35 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - heading "🚀 colpruebas" [level=1] [ref=e4]
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]: "Aplicación:"
+        - generic [ref=e8]: colpruebas
+      - generic [ref=e9]:
+        - generic [ref=e10]: "Entorno:"
+        - generic [ref=e11]: TEST
+      - generic [ref=e12]:
+        - generic [ref=e13]: "Frontend:"
+        - generic [ref=e14]: Estamos en el frontend de TEST
+      - generic [ref=e15]:
+        - generic [ref=e16]: "API:"
+        - generic [ref=e17]: API de test funcionando
+      - generic [ref=e18]:
+        - generic [ref=e19]: "Rama Git:"
+        - generic [ref=e20]: MAIN
+    - contentinfo [ref=e21]:
+      - generic [ref=e22]: 2026-03-19T15:17:51.382Z
+  - generic [ref=e25]:
+    - button "Menu" [ref=e26]:
+      - img [ref=e28]
+      - generic: Menu
+    - button "Inspect" [ref=e32]:
+      - img [ref=e34]
+      - generic: Inspect
+    - button "Audit" [ref=e36]:
+      - img [ref=e38]
+      - generic: Audit
+    - button "Settings" [ref=e41]:
+      - img [ref=e43]
+      - generic: Settings
