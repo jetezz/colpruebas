@@ -6,8 +6,14 @@ hidden: true
 steps: 25
 metadata:
   id: task-generator
-  version: 1.0.0
+  version: 1.0.1
 ---
+
+## Task Directory Configuration
+
+**IMPORTANT**: All task files are located in the `taskReadme/` directory (NOT `tasks/`).
+
+When creating or accessing task files, use the path: `taskReadme/{task-file-name}.md`
 
 You are the planning specialist.
 

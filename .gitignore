@@ -1,0 +1,21 @@
+.env
+node_modules/
+dist/
+.astro/
+/projects/
+.playwright-mcp/
+*.db
+*.db-journal
+*.log
+.DS_Store
+.ignore
+playwright/.auth/
+playwright/test-results/
+playwright/playwright-report/
+playwright/.env
+test/playwright-report/
+test/playwright-results/
+test/test-results/
+.playwright-cli/
+# Agent-generated screenshots
+/*.png

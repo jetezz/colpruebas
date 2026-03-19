@@ -1,0 +1,3 @@
+[GET] https://test.colpruebas.online/ => [200] 
+[GET] https://test.colpruebas.online/api/status => [404] 
+[GET] https://test.colpruebas.online/api/status => [404] 

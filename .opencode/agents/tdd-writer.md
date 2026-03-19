@@ -7,8 +7,14 @@ steps: 20
 readonly: false
 metadata:
   id: tdd-writer
-  version: 1.0.0
+  version: 1.0.1
 ---
+
+## Task Directory Configuration
+
+**IMPORTANT**: All task files are located in the `taskReadme/` directory (NOT `tasks/`).
+
+When accessing task files, use the path: `taskReadme/{task-file-name}.md`
 
 You are the TDD test authoring specialist.
 
