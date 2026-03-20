@@ -1,0 +1,55 @@
+services:
+  frontend-dev:
+    container_name: colpruebas-frontend-dev
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${FRONTEND_PORT}:4321"
+    volumes:
+      - ./frontend/src:/app/src
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+      - API_URL=http://colpruebas-api-dev:3000
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - api-dev
+    networks:
+      - internal
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/src
+          target: /app/src
+        - action: rebuild
+          path: ./frontend/package.json
+        - action: rebuild
+          path: ./frontend/astro.config.mjs
+
+  api-dev:
+    container_name: colpruebas-api-dev
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "${API_PORT}:3000"
+    volumes:
+      - ./backend/src:/app/src
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - PORT=3000
+    networks:
+      - internal
+    develop:
+      watch:
+        - action: sync
+          path: ./backend/src
+          target: /app/src
+
+networks:
+  internal:
+    name: colpruebas-dev-internal

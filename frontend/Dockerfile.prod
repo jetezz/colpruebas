@@ -1,0 +1,18 @@
+FROM oven/bun:1-alpine
+
+WORKDIR /app
+
+COPY package.json ./
+COPY astro.config.mjs ./
+RUN bun add astro @astrojs/node
+
+COPY src ./src
+
+ARG PUBLIC_ENVIRONMENT=production
+ENV PUBLIC_ENVIRONMENT=$PUBLIC_ENVIRONMENT
+
+RUN bun run astro build
+
+EXPOSE 4321
+
+CMD bun run node ./dist/server/entry.mjs
