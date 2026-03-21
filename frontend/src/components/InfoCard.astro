@@ -15,10 +15,7 @@ const { appName, environment, frontendStatus, apiStatus, gitBranch } = Astro.pro
     <span class="label">Aplicación:</span>
     <span class="value">{appName}</span>
   </div>
-  <div class="info-row">
-    <span class="label">Entorno:</span>
-    <span class={`value ${environment}`}>{environment === 'production' ? 'PRODUCCIÓN' : 'TEST'}</span>
-  </div>
+ 
   <div class="info-row">
     <span class="label">Frontend:</span>
     <span class={`value ${environment}`}>{frontendStatus}</span>

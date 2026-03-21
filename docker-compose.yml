@@ -1,22 +1,18 @@
 services:
-  # ═══════════════════════════════════════════════════════════════════════
-  # PRODUCTION SERVICES
-  # ═══════════════════════════════════════════════════════════════════════
-
   frontend-prod:
     container_name: colpruebas-frontend-prod
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       args:
-        - ENVIRONMENT=production
+        - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
     ports:
-      - "${FRONTEND_PORT:-8085}:4321"
+      - "${FRONTEND_PORT}:4321"
     environment:
-      - NODE_ENV=production
-      - APP_NAME=colpruebas
-      - ENVIRONMENT=production
-      - API_URL=http://api-prod:3000
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+      - API_URL=http://colpruebas-api-prod:3000
     depends_on:
       - api-prod
     networks:
@@ -27,53 +23,13 @@ services:
     container_name: colpruebas-api-prod
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
-      - "${API_PORT:-3005}:3000"
+      - "${API_PORT}:3000"
     environment:
-      - NODE_ENV=production
-      - APP_NAME=colpruebas
-      - ENVIRONMENT=production
-      - PORT=3000
-    networks:
-      - internal
-    restart: unless-stopped
-
-  # ═══════════════════════════════════════════════════════════════════════
-  # TEST SERVICES
-  # ═══════════════════════════════════════════════════════════════════════
-
-  frontend-test:
-    container_name: colpruebas-frontend-test
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - ENVIRONMENT=test
-    ports:
-      - "${FRONTEND_TEST_PORT:-8086}:4321"
-    environment:
-      - NODE_ENV=test
-      - APP_NAME=colpruebas
-      - ENVIRONMENT=test
-      - API_URL=http://api-test:3000
-    depends_on:
-      - api-test
-    networks:
-      - internal
-    restart: unless-stopped
-
-  api-test:
-    container_name: colpruebas-api-test
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "${API_TEST_PORT:-3006}:3000"
-    environment:
-      - NODE_ENV=test
-      - APP_NAME=colpruebas
-      - ENVIRONMENT=test
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - ENVIRONMENT=${ENVIRONMENT}
       - PORT=3000
     networks:
       - internal
@@ -81,4 +37,4 @@ services:
 
 networks:
   internal:
-    driver: bridge
+    name: colpruebas-prod-internal
