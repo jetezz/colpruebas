@@ -1,0 +1,10 @@
+{
+  "name": "colpruebas-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "bun run test:back && bun run test:front",
+    "test:back": "cd back && bun test",
+    "test:front": "cd front && bun install && bunx playwright test"
+  }
+}

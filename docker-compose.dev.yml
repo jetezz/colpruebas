@@ -1,12 +1,13 @@
 services:
   frontend-dev:
+    container_name: colpruebas-frontend-dev
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
     ports:
       - "${FRONTEND_PORT}:4321"
     volumes:
-      - ${PROJECT_ROOT:-.}/frontend/src:/app/src
+      - ./frontend/src:/app/src
     environment:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}
@@ -28,13 +29,14 @@ services:
           path: ./frontend/astro.config.mjs
 
   api-dev:
+    container_name: colpruebas-api-dev
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
     ports:
       - "${API_PORT}:3000"
     volumes:
-      - ${PROJECT_ROOT:-.}/backend/src:/app/src
+      - ./backend/src:/app/src
     environment:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}
