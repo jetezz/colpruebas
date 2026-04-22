@@ -33,8 +33,6 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile.dev
-    ports:
-      - "${API_PORT}:3000"
     volumes:
       - ./backend/src:/app/src
     environment:
