@@ -1,0 +1,17 @@
+root_id: home
+navigation:
+  - id: home
+    title: Inicio
+    kind: view
+    bundle: views/home/index
+    children:
+      - id: home-status-summary
+        title: Resumen de estado
+        kind: feature
+        bundle: views/home/features/status-summary
+        children: []
+      - id: home-runtime-metadata
+        title: Metadatos de ejecución
+        kind: feature
+        bundle: views/home/features/runtime-metadata
+        children: []
