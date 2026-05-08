@@ -16,7 +16,10 @@ services:
     depends_on:
       - api-prod
     networks:
-      - internal
+      internal:
+      edge:
+        aliases:
+          - colpruebas-origin
     restart: unless-stopped
 
   api-prod:
@@ -36,3 +39,6 @@ services:
 networks:
   internal:
     name: colpruebas-prod-internal
+  edge:
+    external: true
+    name: mis-proyectos-edge

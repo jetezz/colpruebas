@@ -17,7 +17,10 @@ services:
     depends_on:
       - api-dev
     networks:
-      - internal
+      internal:
+      edge:
+        aliases:
+          - test-colpruebas-origin
     develop:
       watch:
         - action: sync
@@ -51,3 +54,6 @@ services:
 networks:
   internal:
     name: colpruebas-dev-internal
+  edge:
+    external: true
+    name: mis-proyectos-edge
