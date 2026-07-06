@@ -1,0 +1,67 @@
+{
+  "agent": {
+    "sdd-init": {
+      "model": "inherit"
+    },
+    "sdd-spec": {
+      "model": "inherit"
+    },
+    "sdd-tasks": {
+      "model": "inherit"
+    },
+    "sdd-design": {
+      "model": "inherit"
+    },
+    "sdd-archive": {
+      "model": "inherit"
+    },
+    "sdd-onboard": {
+      "model": "inherit"
+    },
+    "sdd-apply-doc": {
+      "model": "inherit"
+    },
+    "sdd-verify-code": {
+      "model": "inherit"
+    },
+    "sdd-explore-code": {
+      "model": "inherit"
+    },
+    "sdd-orchestrator": {
+      "model": "inherit"
+    },
+    "sdd-verify-pwcli": {
+      "model": "inherit"
+    },
+    "sdd-verify-units": {
+      "model": "inherit"
+    },
+    "sdd-explore-pwcli": {
+      "model": "inherit"
+    },
+    "sdd-verify-pwauto": {
+      "model": "inherit"
+    },
+    "sdd-apply-code-low": {
+      "model": "inherit"
+    },
+    "sdd-apply-code-high": {
+      "model": "inherit"
+    },
+    "sdd-apply-unit-tests": {
+      "model": "inherit"
+    },
+    "sdd-explore-research": {
+      "model": "inherit"
+    },
+    "sdd-apply-code-medium": {
+      "model": "inherit"
+    },
+    "sdd-apply-pwauto-tests": {
+      "model": "inherit"
+    },
+    "sdd-propose": {
+      "model": "inherit"
+    }
+  }
+}

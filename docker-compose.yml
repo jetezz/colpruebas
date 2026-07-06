@@ -6,13 +6,14 @@ services:
       dockerfile: Dockerfile.prod
       args:
         - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+        - PUBLIC_API_URL=${PUBLIC_API_URL}
     ports:
       - "${FRONTEND_PORT}:4321"
     environment:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}
       - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
-      - API_URL=http://colpruebas-api-prod:3000
+      - PUBLIC_API_URL=${PUBLIC_API_URL}
     depends_on:
       - api-prod
     networks:
@@ -25,8 +26,10 @@ services:
   api-prod:
     container_name: colpruebas-api-prod
     build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
+      context: .
+      dockerfile: ./backend/Dockerfile.prod
+    ports:
+      - "${API_PORT}:3000"
     environment:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}

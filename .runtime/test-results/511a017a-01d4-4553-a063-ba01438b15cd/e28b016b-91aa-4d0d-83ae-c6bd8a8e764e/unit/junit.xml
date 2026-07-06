@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="bun test" tests="32" assertions="0" failures="0" skipped="32" time="0.619300544">
+  <testsuite name="tests/back/coverage-endpoints.test.ts" file="tests/back/coverage-endpoints.test.ts" tests="11" assertions="0" failures="0" skipped="11" time="0" hostname="9fe12e746345">
+    <testsuite name="Writer atómico (PWT-04/05/06/07)" file="tests/back/coverage-endpoints.test.ts" line="70" tests="6" assertions="0" failures="0" skipped="6" time="0" hostname="9fe12e746345">
+      <testcase name="listCriteria retorna el array de criterios parseado" classname="Writer atómico (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="77" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="manualMark crea criterio nuevo y persiste como covered" classname="Writer atómico (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="82" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="manualMark rechaza criterionId inválido" classname="Writer atómico (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="97" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="patchBundleCoverage falla si criterion no existe" classname="Writer atómico (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="102" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="mockPwcliRun escribe PW-CLI covered cuando existe inventario" classname="Writer atómico (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="109" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="resetCoverage no convierte ausencia de test en rojo missing" classname="Writer atómico (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="130" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="Endpoints backend (PWT-04/05/06/07)" file="tests/back/coverage-endpoints.test.ts" line="152" tests="5" assertions="0" failures="0" skipped="5" time="0" hostname="9fe12e746345">
+      <testcase name="GET /api/projects/PROJ/docs/app-map retorna ok" classname="Endpoints backend (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="235" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="POST /coverage/manual con criterionId inválido → 400" classname="Endpoints backend (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="245" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="POST /coverage/manual con criterionId válido → 200 ok" classname="Endpoints backend (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="257" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="POST /coverage/reset con inventario vacío no rompe" classname="Endpoints backend (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="272" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="POST /test-pwcli/run devuelve agent=mock-pwcli" classname="Endpoints backend (PWT-04/05/06/07)" time="0" file="tests/back/coverage-endpoints.test.ts" line="284" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+  <testsuite name="tests/back/test-status.test.ts" file="tests/back/test-status.test.ts" tests="18" assertions="0" failures="0" skipped="18" time="0" hostname="9fe12e746345">
+    <testsuite name="resolveStatus — Unit/PW-AUTO (PWT-11)" file="tests/back/test-status.test.ts" line="30" tests="7" assertions="0" failures="0" skipped="7" time="0" hostname="9fe12e746345">
+      <testcase name="Unit sin test → no-test gris" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="31" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="PW-AUTO sin spec → no-test gris" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="43" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Unit con test + cubierto → passed verde" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="54" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Unit con test + última corrida falló → failed rojo" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="66" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Unit con test + sin corrida → not-run rojo Pendiente" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="79" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Unit con test + partial → partial ámbar" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="91" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="PW-AUTO con spec + not-applicable → gris No aplica" classname="resolveStatus — Unit/PW-AUTO (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="102" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="resolveStatus — PW-CLI (PWT-11)" file="tests/back/test-status.test.ts" line="114" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="9fe12e746345">
+      <testcase name="PW-CLI cubierto → manual-evidence azul" classname="resolveStatus — PW-CLI (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="115" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="PW-CLI sin evidencia → manual-missing gris" classname="resolveStatus — PW-CLI (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="126" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="PW-CLI not-applicable → gris No aplica" classname="resolveStatus — PW-CLI (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="136" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="PW-CLI partial → partial ámbar Parcial PW-CLI" classname="resolveStatus — PW-CLI (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="145" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="resolveStatus — Manual (PWT-11)" file="tests/back/test-status.test.ts" line="156" tests="4" assertions="0" failures="0" skipped="4" time="0" hostname="9fe12e746345">
+      <testcase name="Manual cubierto → manual-evidence verde" classname="resolveStatus — Manual (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="157" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Manual sin evidencia con manualMandatory=false → gris Sin evidencia" classname="resolveStatus — Manual (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="167" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Manual sin evidencia con manualMandatory=true → ámbar Sin evidencia manual" classname="resolveStatus — Manual (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="177" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="Manual not-applicable → gris No aplica" classname="resolveStatus — Manual (PWT-11)" time="0" file="tests/back/test-status.test.ts" line="189" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="buildLegend — visibilidad (PWT-08)" file="tests/back/test-status.test.ts" line="199" tests="2" assertions="0" failures="0" skipped="2" time="0" hostname="9fe12e746345">
+      <testcase name="documenta los 8 estados derivados" classname="buildLegend — visibilidad (PWT-08)" time="0" file="tests/back/test-status.test.ts" line="200" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="cada item expone label legible y color estable" classname="buildLegend — visibilidad (PWT-08)" time="0" file="tests/back/test-status.test.ts" line="215" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+    <testsuite name="Idempotencia (AC-019)" file="tests/back/test-status.test.ts" line="225" tests="1" assertions="0" failures="0" skipped="1" time="0" hostname="9fe12e746345">
+      <testcase name="mismo input → mismo output" classname="Idempotencia (AC-019)" time="0" file="tests/back/test-status.test.ts" line="226" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+  <testsuite name="tests/back/endpoints.test.ts" file="tests/back/endpoints.test.ts" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="9fe12e746345">
+    <testsuite name="Backend API Endpoints" file="tests/back/endpoints.test.ts" line="46" tests="3" assertions="0" failures="0" skipped="3" time="0" hostname="9fe12e746345">
+      <testcase name="GET / returns 200 and correct JSON structure" classname="Backend API Endpoints" time="0" file="tests/back/endpoints.test.ts" line="59" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="GET /health returns 200 and contains status ok" classname="Backend API Endpoints" time="0" file="tests/back/endpoints.test.ts" line="74" assertions="0">
+        <skipped />
+      </testcase>
+      <testcase name="GET /api/status returns 200 and correct JSON structure" classname="Backend API Endpoints" time="0" file="tests/back/endpoints.test.ts" line="86" assertions="0">
+        <skipped />
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>

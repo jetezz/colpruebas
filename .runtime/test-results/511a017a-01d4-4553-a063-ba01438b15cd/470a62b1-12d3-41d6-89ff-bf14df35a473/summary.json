@@ -1,0 +1,77 @@
+{
+  "run_id": "470a62b1-12d3-41d6-89ff-bf14df35a473",
+  "started_at": "2026-07-06T20:43:14.947Z",
+  "finished_at": "2026-07-06T20:43:15.616Z",
+  "target": {
+    "view": "home",
+    "feature": "home-runtime-metadata",
+    "method": "all"
+  },
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "HRM-01",
+      "status": "covered",
+      "duration_ms": 1
+    },
+    {
+      "id": "HRM-02",
+      "status": "covered",
+      "duration_ms": 1
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:43:14.947Z",
+      "finishedAt": "2026-07-06T20:43:15.041Z",
+      "exitCode": 0,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/470a62b1-12d3-41d6-89ff-bf14df35a473/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · home view proxy::HOME bundle declares HOME-01..HOME-05",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HSS bundle declares HSS-01..HSS-04",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HRM bundle declares HRM-01..HRM-02",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pwauto",
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:43:15.043Z",
+      "finishedAt": "2026-07-06T20:43:15.616Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": []
+    }
+  ]
+}

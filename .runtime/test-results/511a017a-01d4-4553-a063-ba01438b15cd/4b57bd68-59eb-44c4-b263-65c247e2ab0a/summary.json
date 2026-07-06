@@ -1,0 +1,170 @@
+{
+  "run_id": "4b57bd68-59eb-44c4-b263-65c247e2ab0a",
+  "started_at": "2026-07-06T20:41:47.080Z",
+  "finished_at": "2026-07-06T20:41:47.167Z",
+  "target": {
+    "view": "home",
+    "feature": null,
+    "method": "unit"
+  },
+  "passed": 5,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "HOME-01",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HOME-02",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HOME-03",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HOME-04",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HOME-05",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HRM-01",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HRM-02",
+      "status": "covered",
+      "duration_ms": 0
+    },
+    {
+      "id": "HSS-01",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HSS-02",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HSS-03",
+      "status": "covered",
+      "duration_ms": 3
+    },
+    {
+      "id": "HSS-04",
+      "status": "covered",
+      "duration_ms": 3
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:41:47.080Z",
+      "finishedAt": "2026-07-06T20:41:47.167Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/4b57bd68-59eb-44c4-b263-65c247e2ab0a/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home bundle declares HOME-01..HOME-05",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home-status-summary bundle declares HSS-01..HSS-04",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home-runtime-metadata bundle declares HRM-01..HRM-02",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::project-workspace:test-tab bundle declares PWT-01..PWT-12",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::docs/app-map returns state=valid via API",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01"
+          ]
+        }
+      ]
+    }
+  ]
+}

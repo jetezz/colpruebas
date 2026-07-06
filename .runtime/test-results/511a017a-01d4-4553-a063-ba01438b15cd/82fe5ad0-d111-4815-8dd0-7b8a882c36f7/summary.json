@@ -1,0 +1,87 @@
+{
+  "run_id": "82fe5ad0-d111-4815-8dd0-7b8a882c36f7",
+  "started_at": "2026-07-06T21:01:03.011Z",
+  "finished_at": "2026-07-06T21:01:04.433Z",
+  "target": {
+    "view": "home",
+    "feature": "home-runtime-metadata",
+    "method": "all"
+  },
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "HRM-01",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HRM-02",
+      "status": "covered",
+      "duration_ms": 4
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T21:01:03.011Z",
+      "finishedAt": "2026-07-06T21:01:03.099Z",
+      "exitCode": 0,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/82fe5ad0-d111-4815-8dd0-7b8a882c36f7/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · home view proxy::HOME bundle declares HOME-01..HOME-05",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HSS bundle declares HSS-01..HSS-04",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HRM bundle declares HRM-01..HRM-02",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pwauto",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T21:01:03.101Z",
+      "finishedAt": "2026-07-06T21:01:04.433Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": [
+        {
+          "id": "workspace-projects-colpruebas-home.spec.ts::@home colpruebas landing renders 5 criterios (HOME-01..05) › home-01 home-02 home-03 home-04 home-05 hss-01 hss-02 hss-03 hss-04 hrm-01 hrm-02",
+          "status": "passed",
+          "durationMs": 3,
+          "criterionIds": [
+            "HRM-01",
+            "HRM-02"
+          ]
+        }
+      ]
+    }
+  ]
+}

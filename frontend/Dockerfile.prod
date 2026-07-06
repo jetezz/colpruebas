@@ -4,12 +4,15 @@ WORKDIR /app
 
 COPY package.json ./
 COPY astro.config.mjs ./
+COPY tsconfig.json ./
 RUN bun add astro @astrojs/node
 
 COPY src ./src
 
 ARG PUBLIC_ENVIRONMENT=production
+ARG PUBLIC_API_URL=http://localhost:3005
 ENV PUBLIC_ENVIRONMENT=$PUBLIC_ENVIRONMENT
+ENV PUBLIC_API_URL=$PUBLIC_API_URL
 
 RUN bun run astro build
 

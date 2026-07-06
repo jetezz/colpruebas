@@ -1,0 +1,126 @@
+{
+  "run_id": "26dda564-9465-45d1-a09f-d42de4e7d218",
+  "started_at": "2026-07-06T21:03:59.789Z",
+  "finished_at": "2026-07-06T21:04:00.586Z",
+  "target": {
+    "view": "project-workspace",
+    "feature": null,
+    "method": "all"
+  },
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "PWT-01",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-02",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-03",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-04",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-05",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-06",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-07",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-08",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-09",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-10",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-11",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "PWT-12",
+      "status": "covered",
+      "duration_ms": 2
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T21:03:59.789Z",
+      "finishedAt": "2026-07-06T21:03:59.913Z",
+      "exitCode": 0,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/26dda564-9465-45d1-a09f-d42de4e7d218/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · project-workspace:test-tab proxy::test-tab bundle declares PWT-01..PWT-12",
+          "status": "passed",
+          "durationMs": 2,
+          "criterionIds": [
+            "PWT-01",
+            "PWT-02",
+            "PWT-03",
+            "PWT-04",
+            "PWT-05",
+            "PWT-06",
+            "PWT-07",
+            "PWT-08",
+            "PWT-09",
+            "PWT-10",
+            "PWT-11",
+            "PWT-12"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pwauto",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T21:03:59.915Z",
+      "finishedAt": "2026-07-06T21:04:00.586Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": [
+        {
+          "id": "workspace-projects-colpruebas-home.spec.ts::@home colpruebas landing renders 5 criterios (HOME-01..05) › home-01 home-02 home-03 home-04 home-05 hss-01 hss-02 hss-03 hss-04 hrm-01 hrm-02",
+          "status": "passed",
+          "durationMs": 3,
+          "criterionIds": []
+        }
+      ]
+    }
+  ]
+}

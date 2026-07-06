@@ -1,0 +1,250 @@
+[
+  {
+    "id": "Writer atómico (PWT-04/05/06/07)::listCriteria retorna el array de criterios parseado",
+    "status": "passed",
+    "durationMs": 4,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Writer atómico (PWT-04/05/06/07)::manualMark crea criterio nuevo y persiste como covered",
+    "status": "passed",
+    "durationMs": 4,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Writer atómico (PWT-04/05/06/07)::manualMark rechaza criterionId inválido",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Writer atómico (PWT-04/05/06/07)::patchBundleCoverage falla si criterion no existe",
+    "status": "passed",
+    "durationMs": 1,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Writer atómico (PWT-04/05/06/07)::mockPwcliRun escribe PW-CLI covered cuando existe inventario",
+    "status": "passed",
+    "durationMs": 1,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Writer atómico (PWT-04/05/06/07)::resetCoverage no convierte ausencia de test en rojo missing",
+    "status": "passed",
+    "durationMs": 1,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Endpoints backend (PWT-04/05/06/07)::GET /api/projects/PROJ/docs/app-map retorna ok",
+    "status": "passed",
+    "durationMs": 7,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Endpoints backend (PWT-04/05/06/07)::POST /coverage/manual con criterionId inválido → 400",
+    "status": "passed",
+    "durationMs": 9,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Endpoints backend (PWT-04/05/06/07)::POST /coverage/manual con criterionId válido → 200 ok",
+    "status": "passed",
+    "durationMs": 3,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Endpoints backend (PWT-04/05/06/07)::POST /coverage/reset con inventario vacío no rompe",
+    "status": "passed",
+    "durationMs": 2,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "Endpoints backend (PWT-04/05/06/07)::POST /test-pwcli/run devuelve agent=mock-pwcli",
+    "status": "passed",
+    "durationMs": 3,
+    "criterionIds": [
+      "PWT-04"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::Unit sin test → no-test gris",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::PW-AUTO sin spec → no-test gris",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::Unit con test + cubierto → passed verde",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::Unit con test + última corrida falló → failed rojo",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::Unit con test + sin corrida → not-run rojo Pendiente",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::Unit con test + partial → partial ámbar",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Unit/PW-AUTO (PWT-11)::PW-AUTO con spec + not-applicable → gris No aplica",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — PW-CLI (PWT-11)::PW-CLI cubierto → manual-evidence azul",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — PW-CLI (PWT-11)::PW-CLI sin evidencia → manual-missing gris",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — PW-CLI (PWT-11)::PW-CLI not-applicable → gris No aplica",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — PW-CLI (PWT-11)::PW-CLI partial → partial ámbar Parcial PW-CLI",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Manual (PWT-11)::Manual cubierto → manual-evidence verde",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Manual (PWT-11)::Manual sin evidencia con manualMandatory=false → gris Sin evidencia",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Manual (PWT-11)::Manual sin evidencia con manualMandatory=true → ámbar Sin evidencia manual",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "resolveStatus — Manual (PWT-11)::Manual not-applicable → gris No aplica",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-11"
+    ]
+  },
+  {
+    "id": "buildLegend — visibilidad (PWT-08)::documenta los 8 estados derivados",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-08"
+    ]
+  },
+  {
+    "id": "buildLegend — visibilidad (PWT-08)::cada item expone label legible y color estable",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "PWT-08"
+    ]
+  },
+  {
+    "id": "Idempotencia (AC-019)::mismo input → mismo output",
+    "status": "skipped",
+    "durationMs": 0,
+    "criterionIds": []
+  },
+  {
+    "id": "Backend API Endpoints::GET / returns 200 and correct JSON structure",
+    "status": "skipped",
+    "durationMs": 0,
+    "criterionIds": []
+  },
+  {
+    "id": "Backend API Endpoints::GET /health returns 200 and contains status ok",
+    "status": "skipped",
+    "durationMs": 0,
+    "criterionIds": []
+  },
+  {
+    "id": "Backend API Endpoints::GET /api/status returns 200 and correct JSON structure",
+    "status": "skipped",
+    "durationMs": 0,
+    "criterionIds": []
+  }
+]

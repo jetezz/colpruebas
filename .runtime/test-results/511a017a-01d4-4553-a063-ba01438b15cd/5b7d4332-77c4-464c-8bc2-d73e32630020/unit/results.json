@@ -1,0 +1,88 @@
+[
+  {
+    "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home bundle declares HOME-01..HOME-05",
+    "status": "passed",
+    "durationMs": 1,
+    "criterionIds": [
+      "HOME-01",
+      "HOME-02",
+      "HOME-03",
+      "HOME-04",
+      "HOME-05",
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04",
+      "HRM-01"
+    ]
+  },
+  {
+    "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home-status-summary bundle declares HSS-01..HSS-04",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "HOME-01",
+      "HOME-02",
+      "HOME-03",
+      "HOME-04",
+      "HOME-05",
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04",
+      "HRM-01"
+    ]
+  },
+  {
+    "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home-runtime-metadata bundle declares HRM-01..HRM-02",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "HOME-01",
+      "HOME-02",
+      "HOME-03",
+      "HOME-04",
+      "HOME-05",
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04",
+      "HRM-01",
+      "HRM-02"
+    ]
+  },
+  {
+    "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::project-workspace:test-tab bundle declares PWT-01..PWT-12",
+    "status": "passed",
+    "durationMs": 2,
+    "criterionIds": [
+      "HOME-01",
+      "HOME-02",
+      "HOME-03",
+      "HOME-04",
+      "HOME-05",
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04",
+      "HRM-01"
+    ]
+  },
+  {
+    "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::docs/app-map returns state=valid via API",
+    "status": "passed",
+    "durationMs": 2,
+    "criterionIds": [
+      "HOME-01",
+      "HOME-02",
+      "HOME-03",
+      "HOME-04",
+      "HOME-05",
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04",
+      "HRM-01"
+    ]
+  }
+]

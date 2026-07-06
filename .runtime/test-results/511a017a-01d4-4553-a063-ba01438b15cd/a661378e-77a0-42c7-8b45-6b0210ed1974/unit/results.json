@@ -1,0 +1,21 @@
+[
+  {
+    "id": "colpruebas managed project · project-workspace:test-tab proxy::test-tab bundle declares PWT-01..PWT-12",
+    "status": "passed",
+    "durationMs": 2,
+    "criterionIds": [
+      "PWT-01",
+      "PWT-02",
+      "PWT-03",
+      "PWT-04",
+      "PWT-05",
+      "PWT-06",
+      "PWT-07",
+      "PWT-08",
+      "PWT-09",
+      "PWT-10",
+      "PWT-11",
+      "PWT-12"
+    ]
+  }
+]

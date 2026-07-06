@@ -1,0 +1,168 @@
+{
+  "run_id": "0f0d85e7-afb4-4227-a9c7-bd3473c7e88d",
+  "started_at": "2026-07-06T21:03:57.179Z",
+  "finished_at": "2026-07-06T21:03:58.690Z",
+  "target": {
+    "view": "home",
+    "feature": null,
+    "method": "all"
+  },
+  "passed": 4,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "HOME-01",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HOME-02",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HOME-03",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HOME-04",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HOME-05",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HRM-01",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HRM-02",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HSS-01",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HSS-02",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HSS-03",
+      "status": "covered",
+      "duration_ms": 4
+    },
+    {
+      "id": "HSS-04",
+      "status": "covered",
+      "duration_ms": 4
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T21:03:57.179Z",
+      "finishedAt": "2026-07-06T21:03:57.344Z",
+      "exitCode": 0,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/0f0d85e7-afb4-4227-a9c7-bd3473c7e88d/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · home view proxy::HOME bundle declares HOME-01..HOME-05",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HSS bundle declares HSS-01..HSS-04",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01",
+            "HRM-02"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HRM bundle declares HRM-01..HRM-02",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01",
+            "HRM-02"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pwauto",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T21:03:57.346Z",
+      "finishedAt": "2026-07-06T21:03:58.690Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": [
+        {
+          "id": "workspace-projects-colpruebas-home.spec.ts::@home colpruebas landing renders 5 criterios (HOME-01..05) › home-01 home-02 home-03 home-04 home-05 hss-01 hss-02 hss-03 hss-04 hrm-01 hrm-02",
+          "status": "passed",
+          "durationMs": 3,
+          "criterionIds": [
+            "HOME-01",
+            "HOME-02",
+            "HOME-03",
+            "HOME-04",
+            "HOME-05",
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04",
+            "HRM-01",
+            "HRM-02"
+          ]
+        }
+      ]
+    }
+  ]
+}

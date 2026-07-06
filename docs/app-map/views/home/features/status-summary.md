@@ -2,8 +2,67 @@
 id: home-status-summary
 title: Resumen de estado
 kind: feature
-summary: Tarjeta principal que comunica nombre de la aplicacion y estado visible de frontend, API y rama.
-source_of_truth: quality-plan
+summary: >-
+  Tarjeta principal que comunica nombre de la aplicacion y estado visible de
+  frontend, API y rama.
+source_of_truth: app-map
+criteria:
+  - id: HSS-01
+    title: >-
+      El nombre de la aplicacion es visible dentro de la tarjeta central
+      `Resumen de estado` con la etiqueta `Aplicacion:`.
+    functional: implemented
+    coverage:
+      Unit: covered
+      PW-CLI: missing
+      PW-AUTO: covered
+      Manual: missing
+    notes: >-
+      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
+      Aplicacion:` + `info-card contiene colpruebas`. Anota `@ac HSS-01` en el
+      primer test del archivo.
+  - id: HSS-02
+    title: >-
+      El estado del frontend se muestra dentro de la misma tarjeta, alineado a
+      la derecha del label `Frontend:`, diferenciado por entorno (production
+      verde / test amarillo).
+    functional: implemented
+    coverage:
+      Unit: covered
+      PW-CLI: missing
+      PW-AUTO: covered
+      Manual: missing
+    notes: >-
+      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
+      Frontend:`. Estilo de color vive en InfoCard.astro `.value.production` /
+      `.value.test`.
+  - id: HSS-03
+    title: >-
+      El estado de la API se muestra dentro de la tarjeta con la etiqueta `API:`
+      y replica el patron de color por entorno.
+    functional: implemented
+    coverage:
+      Unit: covered
+      PW-CLI: missing
+      PW-AUTO: covered
+      Manual: missing
+    notes: >-
+      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
+      API:`.
+  - id: HSS-04
+    title: >-
+      La rama git operativa se renderiza con la etiqueta `Rama Git:` en la misma
+      tarjeta y respeta el color del entorno actual.
+    functional: implemented
+    coverage:
+      Unit: covered
+      PW-CLI: missing
+      PW-AUTO: covered
+      Manual: missing
+    notes: >-
+      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene Rama
+      Git:`. El dato dinamico proviene de runtime-metadata; esta feature expone
+      solo el rendering.
 ---
 
 # Resumen de estado
@@ -23,9 +82,10 @@ Reduce la incertidumbre inicial y ayuda a validar si esta viendo el entorno corr
 
 | ID | Nivel | Cubre |
 |---|---|---|
-| home-01 | obligatorio | Nombre de la aplicacion visible |
-| home-02 | obligatorio | Estado visible del frontend y de la API |
-| home-03 | esperado | Referencia operativa de rama visible |
+| HSS-01 | obligatorio | Aplicacion visible con label `Aplicacion:` y valor correcto |
+| HSS-02 | obligatorio | Frontend visible con label `Frontend:` y color por entorno |
+| HSS-03 | obligatorio | API visible con label `API:` y color por entorno |
+| HSS-04 | esperado | Rama git visible con label `Rama Git:` y color por entorno |
 
 ## Estados principales
 

@@ -1,0 +1,27 @@
+{
+  "run_id": "367254cf-7cb5-482d-830e-54056e0e3543",
+  "started_at": "2026-07-06T20:46:34.931Z",
+  "finished_at": "2026-07-06T20:46:35.506Z",
+  "target": {
+    "view": "home",
+    "feature": null,
+    "method": "pwauto"
+  },
+  "passed": 0,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [],
+  "methods": [
+    {
+      "method": "pwauto",
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:46:34.931Z",
+      "finishedAt": "2026-07-06T20:46:35.506Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": []
+    }
+  ]
+}

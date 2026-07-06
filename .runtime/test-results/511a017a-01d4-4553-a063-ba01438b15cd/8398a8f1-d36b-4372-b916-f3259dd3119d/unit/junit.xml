@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="bun test" tests="3" assertions="14" failures="0" skipped="0" time="0.028662437">
+  <testsuite name="frontend/__tests__/home/home.test.ts" file="frontend/__tests__/home/home.test.ts" tests="3" assertions="14" failures="0" skipped="0" time="0" hostname="9fe12e746345">
+    <testsuite name="colpruebas managed project · home view proxy" file="frontend/__tests__/home/home.test.ts" line="47" tests="3" assertions="14" failures="0" skipped="0" time="0.001" hostname="9fe12e746345">
+      <testcase name="HOME bundle declares HOME-01..HOME-05" classname="colpruebas managed project · home view proxy" time="0.00157" file="frontend/__tests__/home/home.test.ts" line="48" assertions="6" />
+      <testcase name="HSS bundle declares HSS-01..HSS-04" classname="colpruebas managed project · home view proxy" time="0.000148" file="frontend/__tests__/home/home.test.ts" line="57" assertions="5" />
+      <testcase name="HRM bundle declares HRM-01..HRM-02" classname="colpruebas managed project · home view proxy" time="0.000083" file="frontend/__tests__/home/home.test.ts" line="66" assertions="3" />
+    </testsuite>
+  </testsuite>
+</testsuites>

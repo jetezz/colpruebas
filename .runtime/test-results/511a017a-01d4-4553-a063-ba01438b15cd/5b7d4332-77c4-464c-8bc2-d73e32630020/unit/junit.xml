@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="bun test" tests="5" assertions="16" failures="1" skipped="0" time="0.034941927">
+  <testsuite name="frontend/__tests__/workspace-projects-colpruebas.test.ts" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" tests="5" assertions="16" failures="1" skipped="0" time="0" hostname="9fe12e746345">
+    <testsuite name="colpruebas managed project · mirror proxy (workspace=511a017a...)" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" line="69" tests="5" assertions="16" failures="1" skipped="0" time="0.002" hostname="9fe12e746345">
+      <testcase name="home bundle declares HOME-01..HOME-05" classname="colpruebas managed project · mirror proxy (workspace=511a017a...)" time="0.000632" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" line="70" assertions="6" />
+      <testcase name="home-status-summary bundle declares HSS-01..HSS-04" classname="colpruebas managed project · mirror proxy (workspace=511a017a...)" time="0.000129" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" line="79" assertions="5" />
+      <testcase name="home-runtime-metadata bundle declares HRM-01..HRM-02" classname="colpruebas managed project · mirror proxy (workspace=511a017a...)" time="0.000084" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" line="93" assertions="3" />
+      <testcase name="project-workspace:test-tab bundle declares PWT-01..PWT-12" classname="colpruebas managed project · mirror proxy (workspace=511a017a...)" time="0.001585" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" line="101" assertions="2" />
+      <testcase name="docs/app-map returns state=valid via API" classname="colpruebas managed project · mirror proxy (workspace=511a017a...)" time="0.001959" file="frontend/__tests__/workspace-projects-colpruebas.test.ts" line="109" assertions="0">
+        <failure type="AssertionError" />
+      </testcase>
+    </testsuite>
+  </testsuite>
+</testsuites>

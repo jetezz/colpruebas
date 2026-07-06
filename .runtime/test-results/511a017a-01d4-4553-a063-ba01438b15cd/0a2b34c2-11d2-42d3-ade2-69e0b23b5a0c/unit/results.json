@@ -1,0 +1,35 @@
+[
+  {
+    "id": "colpruebas managed project · home view proxy::HOME bundle declares HOME-01..HOME-05",
+    "status": "passed",
+    "durationMs": 1,
+    "criterionIds": [
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04"
+    ]
+  },
+  {
+    "id": "colpruebas managed project · home view proxy::HSS bundle declares HSS-01..HSS-04",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04"
+    ]
+  },
+  {
+    "id": "colpruebas managed project · home view proxy::HRM bundle declares HRM-01..HRM-02",
+    "status": "passed",
+    "durationMs": 0,
+    "criterionIds": [
+      "HSS-01",
+      "HSS-02",
+      "HSS-03",
+      "HSS-04"
+    ]
+  }
+]

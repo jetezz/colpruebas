@@ -1,0 +1,93 @@
+{
+  "run_id": "0a2b34c2-11d2-42d3-ade2-69e0b23b5a0c",
+  "started_at": "2026-07-06T20:43:13.962Z",
+  "finished_at": "2026-07-06T20:43:14.617Z",
+  "target": {
+    "view": "home",
+    "feature": "home-status-summary",
+    "method": "all"
+  },
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "HSS-01",
+      "status": "covered",
+      "duration_ms": 1
+    },
+    {
+      "id": "HSS-02",
+      "status": "covered",
+      "duration_ms": 1
+    },
+    {
+      "id": "HSS-03",
+      "status": "covered",
+      "duration_ms": 1
+    },
+    {
+      "id": "HSS-04",
+      "status": "covered",
+      "duration_ms": 1
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:43:13.962Z",
+      "finishedAt": "2026-07-06T20:43:14.061Z",
+      "exitCode": 0,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/0a2b34c2-11d2-42d3-ade2-69e0b23b5a0c/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · home view proxy::HOME bundle declares HOME-01..HOME-05",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HSS bundle declares HSS-01..HSS-04",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · home view proxy::HRM bundle declares HRM-01..HRM-02",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pwauto",
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:43:14.062Z",
+      "finishedAt": "2026-07-06T20:43:14.617Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": []
+    }
+  ]
+}

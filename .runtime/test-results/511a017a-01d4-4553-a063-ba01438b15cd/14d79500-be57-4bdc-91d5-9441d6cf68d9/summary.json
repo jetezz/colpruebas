@@ -1,0 +1,115 @@
+{
+  "run_id": "14d79500-be57-4bdc-91d5-9441d6cf68d9",
+  "started_at": "2026-07-06T20:42:13.558Z",
+  "finished_at": "2026-07-06T20:42:14.211Z",
+  "target": {
+    "view": "home",
+    "feature": "home-status-summary",
+    "method": "all"
+  },
+  "passed": 5,
+  "failed": 0,
+  "skipped": 0,
+  "criteria": [
+    {
+      "id": "HSS-01",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "HSS-02",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "HSS-03",
+      "status": "covered",
+      "duration_ms": 2
+    },
+    {
+      "id": "HSS-04",
+      "status": "covered",
+      "duration_ms": 2
+    }
+  ],
+  "methods": [
+    {
+      "method": "unit",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:42:13.558Z",
+      "finishedAt": "2026-07-06T20:42:13.647Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/.runtime/test-results/511a017a-01d4-4553-a063-ba01438b15cd/14d79500-be57-4bdc-91d5-9441d6cf68d9/unit/junit.xml",
+      "results": [
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home bundle declares HOME-01..HOME-05",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home-status-summary bundle declares HSS-01..HSS-04",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::home-runtime-metadata bundle declares HRM-01..HRM-02",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::project-workspace:test-tab bundle declares PWT-01..PWT-12",
+          "status": "passed",
+          "durationMs": 0,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        },
+        {
+          "id": "colpruebas managed project · mirror proxy (workspace=511a017a...)::docs/app-map returns state=valid via API",
+          "status": "passed",
+          "durationMs": 1,
+          "criterionIds": [
+            "HSS-01",
+            "HSS-02",
+            "HSS-03",
+            "HSS-04"
+          ]
+        }
+      ]
+    },
+    {
+      "method": "pwauto",
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "startedAt": "2026-07-06T20:42:13.649Z",
+      "finishedAt": "2026-07-06T20:42:14.211Z",
+      "exitCode": 1,
+      "junitPath": "/workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/playwright/test-results/.last-run.junit.xml",
+      "results": []
+    }
+  ]
+}
