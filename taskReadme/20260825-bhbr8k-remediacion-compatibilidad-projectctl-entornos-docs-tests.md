@@ -3,9 +3,9 @@ title: "Remediación compatibilidad /projectctl: entornos, docs, tests"
 task_id: "20260825-bhbr8k"
 task_slug: "remediacion-compatibilidad-projectctl-entornos-docs-tests"
 sdd_change_id: ""
-status: "documenting"
-phase: "fase_4_documentacion"
-state: "p4_started"
+status: "done"
+phase: "null"
+state: "done"
 source_branch: "develop"
 target_branch: "develop"
 branch_name: "feature/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests"
@@ -13,7 +13,7 @@ app_map: "docs/app-map/views/projectctl/index.md"
 task_type: "Runtime/config"
 pw_enabled: false
 browser_validation: "optional"
-pr_url: ""
+pr_url: "https://github.com/jetezz/colpruebas/pull/2"
 created_at: "2026-08-25T07:55:05.107Z"
 updated_at: "2026-08-25T07:55:05.107Z"
 ---
@@ -214,7 +214,11 @@ No hay adjuntos iniciales.
 
 ## 17. Documentación impactada
 
-Pendiente.
+- **Creada (AC-005/AC-001)**: `AGENTS.md`, `README.md`, `docs/00-context/{agents_skills,entornos,architecture}.md`, `docs/02-features/tunnel.md`, `docs/04-process/task.md`, `.atl/skill-registry.md` (regen canonical 20 skills), `.agents/skills/sandbox-runtime-policy/SKILL.md`.
+- **Creada (AC-002)**: `docs/app-map/views/projectctl/{index.md,index.mmd}` + `docs/app-map/navigation.yaml` (nodo `projectctl`).
+- **Eliminada (AC-002)**: `docs/01-product/quality-plan.md` y `quality-status.md` (superficie legacy prohibida).
+- **Fase 4 (WU-DOC-2)**: `agents_skills.md` (sandbox-runtime-policy instalada), bundle §4 tabla split (PCT-89 not-applicable + PCT-90..94 unit-covered). Coherencia verificada: task.md anti-drift ✓, navigation.yaml ✓, criteria[] 28/28 ✓.
+- **"Documentación actualizada"**: registrada en `apply-WU-{CRS-2,DOC-1,DOC-2,ENT-2}.md` + §15.
 
 ## 18. Problemas encontrados / riesgos
 
@@ -238,19 +242,19 @@ Pendiente.
 
 - **Rama actual**: `feature/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests` (activa, verificada `git branch --show-current`)
 - **Base de la rama**: `main`/HEAD `8805218` — **desviación documentada** (ver §18 ítem delivery): `develop` es legacy stale sin ambiente; se preserva traceabilidad sobre la rama viva de la plataforma.
-- **PR URL**: _(vacío — se creará en `final_pr_pending`)_
-- **Base target declarada (binding)**: `develop` — pero el board/repo vivo opera en `main` (único PR existente es fixture). A resolver en `final_pr_pending` con evidencia del board.
-- **Estado de PR**: `not_created`
-- **Working tree**: cambios preexistentes fuera de scope sin tocar (`.agents/skills/coordinador/SKILL.md`, `.opencode/*`, 2 fixtures taskReadme borrados); se excluirán del staging del commit de cierre salvo decisión explícita.
-- **Cierre (gate)**: commit → push → PR único; close evidence: `branch_name`, `pr_url`, `verification_revision`, `documentation_revision`, `criteria_covered_complete`, `all_work_units_terminal`.
+- **Commit de cierre**: `feat: remediación compatibilidad /projectctl (entornos, docs, tests)` — 208 cambios staged, excluidos `.env`/`.env.dev`/`.runtime/` (AD-02/03) y cambios out-of-scope preexistentes; `.atl/skill-registry.md` force-add (`force-add required` reportado); `.runtime/**` + `frontend/test-results/` destrackeados (`git rm --cached`).
+- **PR URL**: **https://github.com/jetezz/colpruebas/pull/2** (creado, base `main` — excepción documentada en el body del PR y en §18).
+- **Base target**: binding declara `develop`; usado **`main`** (realidad del repo: develop stale sin ambiente; diff limpio revisable). Registrado para el board.
+- **Estado de PR**: `open`
+- **Close evidence**: `branch_name` ✓ · `pr_url` ✓ · `verification_revision` = rev 3 · `documentation_revision` = rev 2 (3 ≥ 2 ✓) · `criteria_covered_complete` = 23/23 implemented + 5 not-applicable ✓ · `all_work_units_terminal` ✓. Gate `AC-009.app_map_close` ✓ (criterios sync en bundle, sin documentation debt).
 
 ## 20. Estado actual y siguiente paso
 
-- **Estado actual**: `testing`
-- **Fase / State**: `fase_3_verificacion` / `p3_complete` — **FASE 3 COMPLETA** ✅ (gate `coverage_gate_passed` certificado)
-- **Siguiente paso**: Entrada a fase 4 (`p4_started`): `sdd-apply-doc` para documentación restante (ver §17) + WU-REG (regen `.atl/skill-registry.md` coordinator-only) → delivery (`final_commit_pending` → `final_push_pending` → `final_pr_pending` → `done`).
-- **Handoff para resume**: Fase 1 ✓ (§4/§5), Fase 2 ✓ (§6/§7/§10/§15 — 9 WUs + code review passed), Fase 3 ✓ (§15 — 134 tests verdes, gate certificado, env validate passed, env set 4321 sindicado, WU-CLI-VAL done con residual plataforma). Riesgos/limitaciones en §18 (runtime trackeado → git rm --cached; residual platform model_unavailable; envío del PR). Retomar: leer §10 + §15 + §17 + §18/§19 + §20 antes de routing.
-- **Resume checkpoint**: fase en curso: `fase_4_documentacion` → `p4_started` (gate `functional_acceptance_recorded`/`coverage_gate_passed` satisfechos → `phase4_owned_dependencies_only` a evaluar); última acción confirmada: `p3_complete` + verificación consolidada en §15; siguiente acción atómica: transicionar frontmatter a `documenting`/`fase_4_documentacion`/`p4_started` y lanzar `sdd-apply-doc` (doc restante) + WU-REG.
+- **Estado actual**: `done` — **TAREA COMPLETA** ✅ (forma terminal única: `{phase: null, state: done, status: done}` per `binding.controls["done"]`)
+- **Fase / State**: `null` / `done`
+- **Siguiente paso**: **ninguno** — flujo SDD completo: fase 1 (propuesta ✓) → fase 2 (implementación + code review ✓) → fase 3 (verificación + gate ✓) → fase 4 (documentación ✓) → delivery (commit → push → PR #2 ✓). Pendiente externo: board/plataforma revisa PR (base `main`, excepción documentada) y re-registra runtime dev (`model_unavailable`).
+- **Handoff para resume (cerrado)**: Tarea entregada y cerrada. Evidencia completa: §4 (exploración), §5 (propuesta + AC-010), §6 (spec 30 REQs), §7 (design 10 ADs), §10 (16 WUs, todas terminales), §15 (verificación: code review passed + coverage_gate_passed certificado + WU-CLI-VAL), §17 (documentación), §18 (problemas: 2 residuales no bloqueantes), §19 (git/PR: PR #2), §20 (cierre).
+- **Residuales abiertos (no bloqueantes, para el board)**: (1) plataforma `model_unavailable` runtime dev + dev effective port stale 4324 → DRIFT hasta re-registro; (2) feauture branch base `main` vs binding `develop` (excepción coordinador, §18/§19/PR body).
 
 ## Task skill snapshot
 
