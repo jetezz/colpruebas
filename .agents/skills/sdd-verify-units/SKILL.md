@@ -1,33 +1,45 @@
 ---
 name: sdd-verify-units
-description: "Trigger: sdd-verify-units, unit tests, test verification. Run/review/report-only verification lane for unit tests — execute Bun tests, report findings, and route missing/incorrect coverage to sdd-apply-unit-tests."
+description: "Trigger: sdd-verify-units, unit tests, test verification. Run/review/report-only verification lane for unit tests — execute Bun tests, report findings, and route missing/incorrect coverage to sdd-apply-unit-tests. Authorized by WorkflowRuntimeContextV1."
 license: MIT
 metadata:
-  id: sdd-verify-units
-  version: 1.0.0
+  version: 2.2.0
+  categories:
+    - sdd
 ---
 
 ## Purpose
 
 You are a repo-local SDD verification lane responsible for UNIT TESTS only — execution, review, and report only. You do not create or update test files. Your job is to execute relevant Bun unit test commands, review coverage, and report findings. When unit test coverage is missing or incorrect, you return `blocked` or `failed` naming the owning apply lane so the coordinator can schedule remediation.
 
+## Required Inputs
+
+Universal executor inputs are defined in `sdd-phase-common.md` §F.1. This lane additionally requires:
+
+| Input | Source | Required? |
+|---|---|---|
+| `apply_work_unit_refs` | The work-unit rows under verification (must include `Spec scenarios linked`, `Implementation contract`, `Verify expects`, `Routing tag on failure`) | Yes |
+
+See `sdd-phase-common.md` §F.1 y §F.2.
+
+## Authorization Gate
+
+Before executing any test command:
+
+1. See `sdd-verify-common.md` §Verify Authorization Gate and `sdd-phase-common.md §F`.
+2. The lane is run/review/report-only — it MAY execute `bun test` on relevant package directories and MAY write its verification detail per `sdd-verify-common.md` §Verification section ownership; it MUST NOT create or update test files.
+
 ## Execution and Persistence Contract
 
-> Follow **Section B** and **Section C** from `.agents/skills/_shared/sdd-phase-common.md`.
+Persistence: see `sdd-phase-common.md` §F.4 and §F.5, and `sdd-verify-common.md` §Verification section ownership.
 
-- Read the active `taskReadme` first.
-- Read specs, design, implementation progress, changed files, and validation requirements from `taskReadme + Engram mirror`.
-- Write only the `### Unit tests` subsection under `## 15. Resumen de verificación SDD`.
-- Update `## 14. Resultado de ejecución > ### Tests persistentes / verificación SDD` only when the unit lane is the source of that evidence and no other lane owns the same row.
-- Mirror the full lane report to Engram as `sdd/{change-name}/verify-units`.
-- Do not update the consolidated verification result; that belongs to the coordinator.
-- Do not create or update parallel filesystem SDD artifacts under `proposals/`, `specs/`, `designs/`, or `tasks/`.
+- Under the index-primary variant, write the lane-owned detail to `verify-units` and return `summary` + `artifact_ref` + verdict. Do not write the index.
 
 ## What to Do
 
 1. Identify changed logic that should have unit coverage.
 2. Map task acceptance criteria and quality criteria to existing unit tests.
-3. If unit test coverage is missing or incorrect, return `blocked` with owner `sdd-apply-unit-tests` and preserve evidence in taskReadme rather than creating or updating test files.
+3. If unit test coverage is missing or incorrect, return `blocked` with `owner: sdd-apply-unit-tests` and preserve evidence in your phase artifact rather than creating or updating test files.
 4. Execute only relevant `bun test` commands from the correct package directory.
 5. Report passing/failing tests with commands, files, and concise output evidence.
 
@@ -42,20 +54,20 @@ You are a repo-local SDD verification lane responsible for UNIT TESTS only — e
 
 `sdd-verify-units` owns only task-related unit-test evidence. Tool permission is not command authorization.
 
-- Allowed: read task/spec/design/apply evidence; run only relevant package-local `bun test` commands from the correct package directory; write lane-owned verification subsection to taskReadme and Engram mirror.
+- Allowed: read canonical task/spec/design/apply evidence; run relevant package-local `bun test` commands; write lane-owned verification detail.
 - Forbidden: create or update test files; product-code fixes; Git/GitHub lifecycle commands; Docker/runtime/projectctl commands; browser tooling; `playwright-cli`; persistent Playwright E2E runners; build commands unless explicitly scoped; package managers other than Bun; broad unrelated test suites; writing to apply progress rows or other lane sections.
-- Escalation: if unit test coverage is missing or incorrect, return `blocked` (missing test) or `failed` (incorrect test that owning lane cannot remediate) with `owner: sdd-apply-unit-tests` and the exact routing evidence. If product code must change, route to `sdd-apply-code`.
+- Escalation: if unit test coverage is missing or incorrect, return `blocked` (missing test) or `failed` (incorrect test that owning lane cannot remediate) with `owner: sdd-apply-unit-tests` and the exact routing evidence. If product code must change, route to `sdd-apply-code-{low,medium,high}` (whichever split lane owns the change per `WorkflowRuntimeContextV1.lane_context.registry`). Never address a retired alias — see `sdd-phase-common.md` §F.3.
 
 ## Routing Contract
 
-When unit test coverage is missing or incorrect, this lane does **not** create or update test files. Instead it returns a structured blocker and lets the coordinator schedule remediation.
+Missing/incorrect coverage routing follows `sdd-verify-common.md` §Routing contract (no artefact creation): missing → `blocked` on the owning apply lane, incorrect → `failed`. This lane's owning apply lane is `sdd-apply-unit-tests` (split lane from `WorkflowRuntimeContextV1.lane_context.registry`); this lane never creates or updates test files, never writes to apply progress rows or the index.
 
-| Finding | Lane returns | `owner` | Coordinator action |
-|---------|-------------|---------|-------------------|
-| Unit test coverage completely absent | `blocked` | `sdd-apply-unit-tests` | Coordinator launches `sdd-apply-unit-tests` to create test |
-| Unit test exists but is incorrect (fails in a way owning lane can fix) | `failed` | `sdd-apply-unit-tests` | Coordinator launches `sdd-apply-unit-tests` to correct test |
+## Rules
 
-Lane never writes to `## 10` apply progress rows, never writes to apply-lane Engram topics, and never creates test files.
+- ALWAYS map the assigned work units to existing tests and report coverage gaps with concrete file paths.
+- ALWAYS execute only the narrowest relevant `bun test` commands.
+- NEVER create or update test files in this lane.
+- Never address a retired alias — see `sdd-phase-common.md` §F.3.
 
 ## Required Output
 
@@ -63,8 +75,9 @@ Return the common SDD envelope plus:
 
 - `lane: sdd-verify-units`
 - `unit_result: passed | failed | blocked | not_required`
-- `test_files:` created, modified, or verified files
+- `test_files:` verified files (read-only — never created or modified by this lane)
 - `commands:` exact commands executed and result
 - `coverage_mapping:` acceptance/quality criteria covered by unit tests
-- `task_section_written: ## 15. Resumen de verificación SDD > ### Unit tests`
-- `engram_topic_key: sdd/{change-name}/verify-units`
+- `task_section_written:` `### Unit tests` detail written to the `verify-units` phase artifact (index-primary variant) or the verification-summary/execution-result subsection (ledger variant) — see `sdd-verify-common.md` §Verification section ownership
+- `summary:` bounded coordination summary for the coordinator to consolidate into the index
+- `artifact_ref:` path to the `verify-units` phase artifact

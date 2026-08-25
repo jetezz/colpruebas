@@ -2,8 +2,9 @@
 name: engram-policy
 description: "Trigger: Engram, memory, taskReadme recovery, resume. Apply repo-local persistence and recall rules."
 metadata:
-  id: engram-policy
   version: 1.0.0
+  categories:
+    - sdd
 ---
 
 # Engram Policy Overlay

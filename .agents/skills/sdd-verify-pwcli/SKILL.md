@@ -1,10 +1,11 @@
 ---
 name: sdd-verify-pwcli
-description: "Trigger: sdd-verify-pwcli, Playwright CLI, browser validation, UI UX verification. Validate task behavior manually in browser with playwright-cli and capture UI/UX evidence."
+description: "Trigger: sdd-verify-pwcli, Playwright CLI, browser validation, UI UX verification. Validate task behavior manually in browser with playwright-cli and capture UI/UX evidence. Authorized by WorkflowRuntimeContextV1; never invent BASE_URL or runtime defaults."
 license: MIT
 metadata:
-  id: sdd-verify-pwcli
-  version: 1.0.0
+  version: 2.2.0
+  categories:
+    - sdd
 ---
 
 ## Purpose
@@ -13,52 +14,50 @@ You are a repo-local SDD verification lane responsible for browser validation wi
 
 Your job is to exercise the task's browser-facing flow in a real browser, verify UI/UX correctness, check obvious console/runtime issues, and capture evidence. You do not create persistent Playwright tests; that belongs to `sdd-verify-pwauto`.
 
+## Required Inputs
+
+Universal executor inputs are defined in `sdd-phase-common.md` §F.1. This lane additionally requires:
+
+| Input | Source | Required? |
+|---|---|---|
+| `apply_work_unit_refs` | The work-unit rows under validation (must include `Spec scenarios linked`, `Implementation contract`, `Verify expects`, `Routing tag on failure`) | Yes |
+| `browser_runtime_preconditions` | Resolved target environment + credentials contract + runtime kind inlined by the coordinator (no ad hoc invention) | Yes |
+
+See `sdd-phase-common.md` §F.1 y §F.2.
+
+## Authorization Gate
+
+Before any browser action:
+
+1. See `sdd-verify-common.md` §Verify Authorization Gate and `sdd-phase-common.md §F`.
+2. The Browser lane preconditions MUST be inlined and resolved — see `sdd-verify-common.md` §Browser lane preconditions; missing preconditions return `blocked` with the named failure mode.
+3. The lane is run/review/report-only for browser validation — it MAY capture snapshots/screenshots and write its verification detail per `sdd-verify-common.md` §Verification section ownership; it MUST NOT create persistent Playwright tests.
+
 ## Execution and Persistence Contract
 
-> Follow **Section B** and **Section C** from `.agents/skills/_shared/sdd-phase-common.md`.
+Persistence: see `sdd-phase-common.md` §F.4 and §F.5, and `sdd-verify-common.md` §Verification section ownership.
 
-- Read the active `taskReadme` first.
-- Use the route/flow from `## 13. Validación requerida` and acceptance criteria.
-- Use the credentials contract from `/.env.example.e2e` for authenticated browser-facing verification.
-- When browser/runtime context is required, read `.agents/skills/sdd-browser-runtime-context/SKILL.md` before launching `playwright-cli` and consume its `BrowserRuntimeContext` output as the only source for runtime kind, `baseUrl`, and allowed status/start commands.
-- Write only the `### PW-CLI` subsection under `## 15. Resumen de verificación SDD`.
-- Update `## 14. Resultado de ejecución > ### Playwright CLI` only when this lane is the source of browser evidence.
-- Mirror the full lane report to Engram as `sdd/{change-name}/verify-pwcli`.
-- Do not update the consolidated verification result; that belongs to the coordinator.
-- Do not create or update parallel filesystem SDD artifacts under `proposals/`, `specs/`, `designs/`, or `tasks/`.
+- Use the route/flow and acceptance criteria from the canonical primary's validation-requirements section (resolved from `heading_owners`).
+- Use the binding-declared credentials contract (see `sdd-verify-common.md` §Browser lane preconditions) for authenticated browser-facing verification.
+- Under the index-primary variant, write `verify-pwcli` and return `summary` + `artifact_ref` + verdict; do not write the index.
 
 ## What to Do
 
 1. Determine whether browser validation is required.
-2. If browser/runtime context is required, run the shared browser-runtime preflight and capture its output contract:
-
-   ```ts
-   type BrowserRuntimeContext = {
-     required: boolean
-     runtimeKind: 'root-docker' | 'managed-project' | 'unknown'
-     resolutionSource: 'task' | 'projectctl' | 'repo-config'
-     baseUrl?: string
-     statusCommand?: string
-     startCommand?: string
-     evidence: string[]
-     blocker?: string
-   }
-   ```
-
-3. Block immediately when the preflight returns `runtimeKind: unknown`; do not infer runtime ownership, `BASE_URL`, or fallback commands ad hoc.
-4. Identify the exact route or flow to exercise from the task plus preflight output. Use `baseUrl` only when the shared preflight proved it.
-5. Use `playwright-cli` to navigate and interact with the UI.
-6. Validate behavior, visible states, responsiveness when relevant, UX regressions, and obvious console/runtime errors.
-7. Capture snapshot/screenshot evidence under the configured `.playwright-cli/` output path.
-8. Record the flow, preflight evidence, result, artifacts, and blockers.
+2. Verify the Browser lane preconditions (see `sdd-verify-common.md` §Browser lane preconditions) from the delegation prompt and the canonical primary. Block with the named failure mode when any precondition is missing; do not infer runtime ownership, `BASE_URL`, or fallback commands ad hoc.
+3. Identify the exact route or flow to exercise from the canonical primary plus delegation prompt. Use `baseUrl` only when a precondition resolved it.
+4. Use `playwright-cli` to navigate and interact with the UI.
+5. Validate behaviour, visible states, responsiveness when relevant, UX regressions, and obvious console/runtime errors.
+6. Capture snapshot/screenshot evidence under the configured `.playwright-cli/` output path.
+7. Record the flow, precondition evidence, result, artifacts, and blockers.
 
 ## Command Authority
 
 `sdd-verify-pwcli` owns manual browser validation through `playwright-cli` only. Tool permission is not command authorization.
 
-- Allowed: read task/browser-validation context; consume a trusted browser-runtime preflight; use `playwright-cli` against the preflight-proven route/flow; capture screenshots/snapshots and console/runtime observations in the configured browser evidence path.
-- Forbidden: persistent Playwright runners or test-file edits, product-code fixes, Git/GitHub lifecycle commands, Docker/runtime/projectctl commands not provided by trusted preflight, invented `BASE_URL` or runtime ownership, broad E2E automation, and build commands unless explicitly scoped.
-- Escalation: if runtime preflight is missing/unknown, persistent coverage is needed, or product/test code must change, return `blocked` or `failed` and name the required owner instead of expanding this lane.
+- Allowed: read canonical task/browser context, consume resolved preconditions, use `playwright-cli`, capture evidence, and write lane-owned verification detail.
+- Forbidden: persistent Playwright runners or test-file edits, product-code fixes, Git/GitHub lifecycle commands, Docker/runtime/projectctl commands not provided by the resolved preconditions, invented `BASE_URL` or runtime ownership, broad E2E automation, and build commands unless explicitly scoped.
+- Escalation: if any browser precondition is missing/unknown, persistent coverage is needed, or product/test code must change, return `blocked` or `failed` and name the required owner instead of expanding this lane. The `owner` for persistent coverage is the split apply lane `sdd-apply-pwauto-tests` (declared in `WorkflowRuntimeContextV1.lane_context.registry`). Never address a retired alias — see `sdd-phase-common.md` §F.3.
 
 ## Rules
 
@@ -66,10 +65,10 @@ Your job is to exercise the task's browser-facing flow in a real browser, verify
 - Do not use persistent Playwright test runners; that belongs to `sdd-verify-pwauto`.
 - Do not modify product code or tests.
 - Do not run build steps unless explicitly required.
-- Do not invent `BASE_URL`, runtime kind, Docker commands, or managed-runtime ownership; consume the shared preflight output instead.
-- If the runtime/browser context is unavailable, return `blocked` with the exact missing prerequisite.
-- If the shared preflight returns `runtimeKind: unknown`, return `blocked` and include the preflight `blocker` plus evidence.
+- Do not invent `BASE_URL`, runtime kind, Docker commands, or managed-runtime ownership; consume the resolved preconditions from the delegation prompt instead.
+- If any browser precondition is unavailable, return `blocked` with the exact missing prerequisite.
 - If the task is not browser-facing, mark `not_required` with the reason.
+- Never address a retired alias — see `sdd-phase-common.md` §F.3.
 
 ## Required Output
 
@@ -78,7 +77,9 @@ Return the common SDD envelope plus:
 - `lane: sdd-verify-pwcli`
 - `pwcli_result: passed | failed | blocked | not_required`
 - `browser_validation: required | not_required`
+- `browser_preconditions:` resolved target environment, runtime kind, `baseUrl`, allowed commands, credentials source, and evidence (or the named blocker)
 - `flow_validated:` exact route/flow
 - `evidence:` snapshots, screenshots, notes, console/runtime findings
-- `task_section_written: ## 15. Resumen de verificación SDD > ### PW-CLI`
-- `engram_topic_key: sdd/{change-name}/verify-pwcli`
+- `task_section_written:` `### PW-CLI` detail written to the `verify-pwcli` phase artifact (index-primary variant) or the verification-summary subsection (ledger variant) — see `sdd-verify-common.md` §Verification section ownership
+- `summary:` bounded coordination summary for the coordinator to consolidate into the index
+- `artifact_ref:` path to the `verify-pwcli` phase artifact

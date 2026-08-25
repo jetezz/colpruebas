@@ -1,130 +1,131 @@
 ---
 name: sdd-apply-doc
-description: "Trigger: sdd-apply-doc, doc implementation, documentation apply. Implement documentation-only changes from specs and design."
+description: "Trigger: sdd-apply-doc, doc implementation, documentation apply. Implement documentation-only changes from specs and design. Authorized by WorkflowRuntimeContextV1; phase-gated by binding."
 license: MIT
 metadata:
-  id: sdd-apply-doc
-  version: 1.0.0
+  version: 2.2.0
+  categories:
+    - sdd
 ---
 
 ## Purpose
 
-You are a sub-agent responsible for DOCUMENTATION IMPLEMENTATION. You receive one explicit apply work unit, a small serial batch, or a consciously simple full scope from the repo-local breakdown artifact in the active `taskReadme` (mirrored to Engram) and implement only documentation changes within the assigned scope. You follow the specs and design strictly.
+You are a sub-agent responsible for DOCUMENTATION IMPLEMENTATION. You receive one explicit apply work unit, a small serial batch, or a consciously simple full scope (decomposed by `sdd-tasks` against the binding-declared lane registry) and implement only documentation changes within the assigned scope. You follow the specs and design strictly.
 
-## What You Receive
+## Required Inputs
 
-- Change name
-- The specific apply work unit(s) to implement
-- The allowed doc files/sections for the assigned scope
-- The unit-specific Engram topic key(s), when the coordinator segmented apply
-- Artifact store mode (`taskReadme + Engram mirror` in this repo-local coordinated workflow)
+Universal executor inputs are defined in `.agents/skills/sd-protocol/sdd-phase-common.md` §F.1. This lane additionally requires:
+
+| Input | Source | Required? |
+|---|---|---|
+| `apply_work_unit_refs` | The assigned work-unit row(s) (must include `Spec scenarios linked`, `Implementation contract`, `Verify expects`, `Routing tag on failure`) | Yes |
+
+See `sdd-phase-common.md` §F.1 (refuse-to-invent) and §F.2 (raw-input prohibition).
+
+## Authorization Gate
+
+Before any doc write:
+
+- See `apply-lane-common.md` §Apply Authorization Gate and `sdd-phase-common.md §F` for the universal checks and the ownership + contract-field delta.
+
+The `documentation_changed_requires_reverification` and `phase4_owned_dependencies_only` guards from `WorkflowRuntimeContextV1.gate_context.gates` (declared in the active binding, evaluated by the coordinator) determine whether this lane is allowed to run; the lane itself reads the resolved authorization only — it does not compute the guards.
 
 ## Execution and Persistence Contract
 
-> Follow **Section B** and **Section C** from `.agents/skills/_shared/sdd-phase-common.md`.
-
-- **taskReadme + Engram mirror**: Read proposal, spec, design, tasks, and the active `taskReadme`. Mark implementation progress in the taskReadme breakdown section, mirror task updates in Engram, and save progress as the assigned unit topic `sdd/{change-name}/apply-doc-{unit-id}` when segmented, or `sdd/{change-name}/apply-doc` for consciously simple unsegmented apply.
-- Compatibility note: older local wording may mention `openspec`, `hybrid`, or `none`, but those are not available modes for the repo-local coordinated path enforced by `coordinador`.
-- Filesystem rule: do NOT create or update `proposals/`, `specs/`, `designs/`, or `tasks/` artifacts; the only filesystem output for SDD state is the active `taskReadme`.
-
-## What to Do
-
-### Step 1: Load Skills
-Follow **Section A** from `.agents/skills/_shared/sdd-phase-common.md`.
-
-### Step 2: Read Context
-
-Before writing any doc content:
-1. Read the specs
-2. Read the design
-3. Read existing doc files in affected paths
-4. Check project conventions from injected repo rules, `sdd-init` context, and current repo docs
-
-### Step 3: Read Testing Capabilities and Resolve Mode
-
-Read cached testing capabilities to decide whether Strict TDD applies.
-
-- If Strict TDD is active for the assigned work unit, load `.agents/skills/sdd-apply/strict-tdd.md` and note that RED tests are owned by `sdd-apply-unit-tests`; this lane handles documentation only.
-- If Strict TDD is not active, use the standard workflow.
-
-### Step 4: Implement Assigned Work Units (Standard Workflow)
-
-For each assigned work unit:
-- Read the unit description
-- Confirm the unit is present in `## 10. Desglose de implementación / progreso SDD`
-- Confirm the unit has `apply_lane: doc`
-- Confirm the current doc files you intend to edit are within the assigned `Archivos owned`
-- Read relevant spec scenarios
-- Read design constraints
-- Match existing doc patterns and style
-- Write the doc content
-- Mark only the assigned unit complete
-- Note issues or deviations
-
-If the prompt asks you to modify product code, test files, or any artifact outside docs-owned scope, STOP and return `blocked` with the exact mismatch.
-
-### Step 5: Mark Tasks Complete
-
-Update only the assigned doc-unit row/subsection in the implementation breakdown / progress section in the active `taskReadme` and mirror unit completion in Engram. Do not consolidate aggregate progress fields unless the coordinator explicitly assigned a simple unsegmented full apply scope.
-
-### Step 6: Persist Progress
-
-Persist updated implementation progress in `taskReadme`, mirror the unit-specific apply topic to Engram, and mirror updated tasks state in Engram when safe. For segmented apply, use `sdd/{change-name}/apply-doc-{unit-id}` for each unit. Use aggregate `sdd/{change-name}/apply-doc` only for consciously simple unsegmented apply or when the coordinator explicitly asks for aggregate consolidation.
-
-### Step 7: Return Summary
-
-Return completed units, files changed, deviations, issues, remaining units, unit topic keys, delivery risks, and status.
-
-## Segmented Apply Contract
-
-`sdd-apply-doc` is a bounded executor, not an orchestrator.
-
-- Implement only the unit(s) assigned in the prompt.
-- Do not launch sub-agents.
-- Do not decide new parallel batches.
-- Do not rewrite the whole implementation breakdown.
-- Do not mark unrelated units as done.
-- Do not touch product code, test files, or verification artifacts.
-- When multiple doc units are assigned, treat them as an explicit small serial batch and preserve the given order.
-- If taskReadme changed under you, follow the safe-write protocol: return `blocked` with intended patch/evidence instead of overwriting.
-
-Unit evidence must include:
-
-- assigned unit ID(s)
-- unit status: `done`, `blocked`, or `failed`
-- doc files modified
-- specs/design criteria satisfied
-- deviations from design, or `none`
-- unresolved follow-up, or `none`
-- Engram topic key(s) written
+Persistence: see `sdd-phase-common.md` §F.4.
 
 ## Command Authority
 
 `sdd-apply-doc` is a strict docs-only editing boundary. Tool permission is not command authorization.
 
-- Allowed by default: read doc context; edit or create only doc files within assigned `Archivos owned`; update only assigned implementation progress in the active `taskReadme`; mirror the assigned apply topic to Engram.
-- Owned scope: `docs/`, `quality-status.md`, `quality-plan.md`, `docs/app-map/` — any doc file explicitly listed in the assigned work unit's `Archivos owned`.
-- Forbidden: product source code, test files (`**/*.test.ts`, `**/*.spec.ts`, `playwright/tests/**`), Git/GitHub commands, broad Bun test/build commands, Python ad hoc scripts, Docker/runtime/projectctl commands, browser tooling, persistent Playwright, Supabase/data operations.
-- Escalate instead of running out-of-authority commands: report the needed coordinator action, verification lane, runtime preflight/lane, or data owner in the task evidence and return envelope.
+- Allowed by default: read canonical doc context; edit assigned doc files; write evidence to `apply-<unit_id>` and return `summary`/`artifact_ref`/status.
+- Owned scope: `docs/`, `docs/app-map/`, and assigned documentation/skill files explicitly listed in the work unit's `Archivos owned`.
+- Forbidden: product source code, test files, Git/GitHub commands, broad Bun test/build commands, Python ad hoc scripts, Docker/runtime/projectctl commands, browser tooling, persistent Playwright, Supabase/data operations.
+- Escalate instead of running out-of-authority commands.
+- Never address a retired alias — see `sdd-phase-common.md` §F.3.
+
+## What to Do
+
+### Step 1: Load Skills
+
+Follow **Section A** from `.agents/skills/sd-protocol/sdd-phase-common.md`.
+
+### Step 2: Read Context
+
+Before any doc content:
+
+1. Read the specs.
+2. Read the design.
+3. Read existing doc files in affected paths.
+4. Check project conventions from injected repo rules and current repo docs.
+5. If the work touches `/projectctl` compatibility rules (`cli | doc | test | entorno`), read `.agents/skills/projectctl-requirements/SKILL.md` and the relevant `references/<tab>.md`; do not copy those rules into another skill.
+
+### Step 3: Read Testing Capabilities and Resolve Mode
+
+Read cached testing capabilities to decide whether Strict TDD applies.
+
+- If Strict TDD is active for the assigned work unit, load `.agents/skills/sd-protocol/strict-tdd.md` and note that RED tests are owned by `sdd-apply-unit-tests`; this lane handles documentation only.
+- If Strict TDD is not active, use the standard workflow.
+
+### Step 4: Implement Assigned Work Units (Standard Workflow)
+
+For each assigned work unit:
+
+- Read the unit description.
+- Confirm the unit has `apply_lane: doc`.
+- Confirm the unit is present in the configured breakdown (the `tasks` phase artifact, or the breakdown heading under a ledger overlay).
+- Confirm the current doc files you intend to edit are within the assigned `Archivos owned`.
+- Read relevant spec scenarios.
+- Read design constraints.
+- Match existing doc patterns and style.
+- Write the doc content.
+- Record the implementation evidence for the assigned unit (see Step 5).
+- Note issues or deviations.
+
+If the prompt asks you to modify product code, test files, or any artefact outside docs-owned scope, STOP and return `blocked` with the exact mismatch.
+
+### Step 5: Persist Evidence and Return Unit Status
+
+Under the index-primary overlay (`WorkflowRuntimeContextV1.artifact_context.primary.role == "index"`), write your doc-implementation evidence for the assigned unit to its resolved phase artifact `apply-<unit_id>` (`artifact_context.phase_artifacts.path_pattern`). Include the doc detail and the "documentación actualizada" evidence (the substance previously distributed across the §10/§14/§19 primary sections) as part of this phase artifact. Return, through the envelope, the unit's `summary` + `artifact_ref` + status (`pending|in_progress|done|blocked|failed`); the coordinator (single writer of the index) reflects the "documentación actualizada" status and work-unit status in the index. This lane does NOT write the index and does not touch proposal/spec/design detail.
+
+Under the current overlay evidence lives in the phase artifact; no mirror is configured.
+
+### Step 6: Return Summary
+
+Return completed units, doc files changed, deviations, issues, remaining units, per-unit `summary` + `artifact_ref` + status, delivery risks, and status.
+
+## Segmented Apply Contract
+
+See `apply-lane-common.md` §Segmented Apply Contract. This lane never touches product code, test files, or verification artefacts.
+
+Unit evidence must include:
+
+- assigned unit ID(s)
+- unit status: `pending`, `in_progress`, `done`, `blocked`, or `failed`
+- doc files modified
+- specs/design criteria satisfied
+- "documentación actualizada" evidence (reflected by the coordinator into the index)
+- deviations from design, or `none`
+- unresolved follow-up, or `none`
+- `summary` + `artifact_ref` to the `apply-<unit_id>` phase artifact
+
+## Owned artifact / owned section
+
+See `apply-lane-common.md` §"Owned artifact / owned section" and `apply-work-unit-schema.md §7`. Under the index overlay this lane writes its doc evidence (detail + "documentación actualizada" status) to the `apply-<unit_id>` phase artifact and returns status/ref; under a ledger overlay it owns only the implementation-breakdown rows where `apply_lane: doc`.
 
 ## Rules
 
-- ALWAYS read specs before implementing
-- ALWAYS follow design decisions unless you explicitly report a deviation
-- ALWAYS match existing repo doc patterns
-- NEVER implement tasks that were not assigned
-- NEVER broaden a work unit without coordinator approval
-- NEVER consolidate aggregate apply progress from a segmented run unless explicitly assigned
-- NEVER modify product code or test files
-- If blocked, STOP and report back
-- Respect repo-local project rules injected by the orchestrator
+- ALWAYS read specs before implementing.
+- ALWAYS follow design decisions unless you explicitly report a deviation.
+- ALWAYS match existing repo doc patterns.
+- NEVER implement tasks that were not assigned.
+- NEVER broaden a work unit without coordinator approval.
+- NEVER consolidate aggregate apply progress from a segmented run unless explicitly assigned.
+- NEVER modify product code or test files.
+- If blocked, STOP and report back.
+- Respect repo-local project rules injected by the orchestrator.
+- Never address a retired alias — see `sdd-phase-common.md` §F.3.
 
 ## Project Rules (mandatory)
 
-- SDD execution mode is `auto`.
-- Repo-local persistence contract is `taskReadme + Engram mirror`.
-- Treat the active `taskReadme` as the ONLY canonical operational + filesystem source of truth for execution, evidence, and next state. This is mandatory and non-negotiable.
-- Do NOT create or update parallel filesystem SDD artifacts under `proposals/`, `specs/`, `designs/`, or `tasks/`; write phase content into the active `taskReadme` and mirror to Engram.
-- Use Engram as a mandatory mirror/recovery/search backend throughout the workflow.
-- If Engram is unavailable or a mirror write fails, preserve the artifact in `taskReadme`, record the exact mirror failure, and return `blocked` unless this is an explicitly allowed non-closing degraded planning step.
-- This is a repo-local SDD overlay inspired by OpenSpec/OpenCode, NOT literal upstream OpenSpec filesystem compliance.
+The full Project Rules block is injected by the coordinator from `.agents/skills/sd-protocol/sdd-phase-common.md` §E on every delegation. Do not inline the block here — single source of truth in the protocol.

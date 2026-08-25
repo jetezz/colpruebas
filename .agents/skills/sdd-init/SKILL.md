@@ -1,87 +1,71 @@
 ---
 name: sdd-init
-description: "Trigger: sdd init, iniciar sdd, bootstrap SDD. Initialize repo SDD context, conventions, tests, and persistence."
+description: "Trigger: sdd init, iniciar sdd, bootstrap SDD. Initialize repo SDD context, conventions, tests, and persistence. Consumes WorkflowRuntimeContextV1 to discover bootstrap targets; does not assume project defaults."
 license: MIT
 metadata:
-  id: sdd-init
-  version: 1.0.0
+  version: 2.2.0
+  categories:
+    - sdd
 ---
 
 ## Purpose
 
-You are a sub-agent responsible for initializing the Spec-Driven Development (SDD) context in this repo. You detect the project stack, conventions, and testing capabilities, then bootstrap the repo-local coordinated backend: **`taskReadme` + Engram mirror**, with `taskReadme` as the only canonical operational/filesystem artifact under `coordinador`.
+You are a sub-agent responsible for initializing the Spec-Driven Development (SDD) context in a repository. You detect the project stack, conventions, and testing capabilities, then bootstrap persistence artefacts and the SDD runtime context discovered through the project locator and binding.
+
+Under the index-primary overlay, bootstrap creates the compact index primary plus the phase-artifact folder that lanes fill with their detail. These filesystem artifacts are sufficient for persistence and recovery; this overlay configures no mirrors.
 
 You are an EXECUTOR for this phase, not the orchestrator. Do the initialization work yourself. Do NOT launch sub-agents, do NOT call `delegate` or `task`, and do NOT hand execution back unless you hit a real blocker that must be reported upstream.
 
-## Execution and Persistence Contract
+This bootstrap lane still receives a resolver-produced `WorkflowRuntimeContextV1`. When the primary does not yet exist, `task_ref.active` is false but all bootstrap targets, ownership, lane authorization, persistence behavior, and identity are already materialized. The lane never reads the locator, raw binding, or projection itself.
 
-For the coordinated repo-local workflow, the effective mode is `taskReadme + Engram mirror`.
+## Required Inputs
 
-- Do NOT create `openspec/` directory.
-- Do NOT bootstrap `openspec/config.yaml` as part of the normal repo-local coordinated path.
-- Do NOT create or update parallel SDD artifact folders/files under `proposals/`, `specs/`, `designs/`, or `tasks/`.
-- Treat any older local references to `openspec`, `hybrid`, or `none` as compatibility vocabulary, not an available coordinated mode.
+Universal executor inputs are defined in `.agents/skills/sd-protocol/sdd-phase-common.md` §F.1. This lane additionally requires:
 
-## Command Authority
+| Input | Source | Required? |
+|---|---|---|
+| `artifact_refs` | Coordinator | Yes — primary path and any configured mirror |
+| `bootstrap_directives` | Binding or `references/tareas.md` (this lane is the only one allowed to bootstrap) | Optional — drives static + runtime preflight |
 
-`sdd-init` owns bootstrap discovery and SDD readiness only. Its existing `bun run sdd:doctor` static preflight and Engram write/search/retrieve round trip are init-owned exceptions for bootstrap context; they do not authorize other phases to run Bun commands or memory probes by default.
+The lane MUST refuse to invent `binding_id`, `binding_version`, primary path, mirror adapter, mirror key, branch base, status set, phase ids, or topic pattern; refuse-to-invent is defined in `sdd-phase-common.md §F.1`. Raw-input prohibition is defined in `sdd-phase-common.md §F.2`: this lane MUST NOT read `source.config_path`, `source.binding_path`, or `state_model_ref.path`; all workflow policy is consumed through bounded context accessors.
 
-- Allowed by default: file reads/search for project context, `.atl/skill-registry.md` refresh when assigned, `bun run sdd:doctor` for static SDD preflight, and Engram bootstrap/testing-capability mirrors.
+## Authorization Gate
+
+Before any bootstrap write, require a complete resolver-produced context. Locator/binding/projection validation failures are handled by the coordinator and suppress lane invocation; this lane only validates its bounded accessors:
+
+1. `workflow_context_ref.source` and `state_model_ref` carry validated identity.
+2. `lane_context.lane_id == "sdd-init"`, `lane_context.authorization == "allowed"`, and the id is present in `lane_context.registry`/`allowed_lanes`.
+3. Writes are limited to `task_ref.path`, resolved mirror keys, and explicitly supplied owned registry artifacts in `artifact_refs`.
+4. Missing required bounded fields return `blocked`; the lane MUST NOT open `source.config_path`, `source.binding_path`, or `state_model_ref.path` to repair the context.
+
+There is no silent fallback to a missing binding. The configured static preflight is the bootstrap readiness check; optional support tools are outside SDD correctness.
+
+## Lane Boundary (conserved)
+
+- Allowed by default: file reads/search for project context, `.atl/skill-registry.md` refresh when assigned, and the project-configured static SDD preflight.
 - Forbidden unless explicitly assigned by the coordinator: Git/GitHub lifecycle, builds, broad tests, Docker/runtime/projectctl control, browser tooling, persistent Playwright, Supabase/data operations, and product implementation edits.
 - If another phase needs these checks, record the required owner/action instead of treating init authority as inherited.
 
-**Save project context**:
-  ```
-  mem_save(
-    title: "sdd-init/{project-name}",
-    topic_key: "sdd-init/{project-name}",
-    type: "architecture",
-    project: "{project-name}",
-    content: "{detected project context markdown}"
-  )
-  ```
-`topic_key` enables upserts — re-running init updates the existing context, not duplicates.
+## Command Authority
 
-(See `.agents/skills/_shared/engram-convention.md` for full naming conventions.)
+`sdd-init` owns bootstrap discovery and SDD readiness only.
+
+- Reads: canonical filesystem reads governed by `WorkflowRuntimeContextV1.artifact_context`.
+- Writes: persistence order and mirror-failure handling per `sdd-phase-common.md §F.4`.
 
 ## What to Do
 
 ### Step 1: Detect Project Context
 
 Read the project to understand:
-- Tech stack (check package.json, bun.lock, go.mod, pyproject.toml, etc.)
+
+- Tech stack (check `package.json`, `bun.lock`, `go.mod`, `pyproject.toml`, etc.)
 - Existing conventions (linters, test frameworks, CI, docs, task files)
 - Architecture patterns in use
 
 ### Step 2: Detect Testing Capabilities
 
-Scan the project for ALL testing infrastructure. This determines what testing modes are available.
-
-```
-Detect testing capabilities:
-├── Test Runner
-│   ├── package.json / bun lock / scripts → bun test, vitest, jest, mocha, ava
-│   ├── pyproject.toml / pytest.ini / setup.cfg → pytest
-│   ├── go.mod → go test
-│   ├── Cargo.toml → cargo test
-│   ├── Makefile → make test
-│   └── Result: {framework name, command} or NOT FOUND
-│
-├── Test Layers
-│   ├── Unit: test runner exists → AVAILABLE
-│   ├── Integration: detect testing-library, httptest, equivalent helpers
-│   ├── E2E: detect playwright, cypress, selenium, chromedp
-│   └── Each layer → record tool name
-│
-├── Coverage Tool
-│   ├── vitest/jest/c8/nyc, pytest-cov, go test -cover, etc.
-│   └── Result: {command} or NOT AVAILABLE
-│
-└── Quality Tools
-    ├── Linter: eslint, biome, ruff, golangci-lint, etc.
-    ├── Type checker: tsc --noEmit, mypy, pyright, go vet, etc.
-    └── Formatter: prettier, biome, black, gofmt, rustfmt
-```
+Scan the repo's test infrastructure — test runner, test layers (unit/integration/E2E), coverage tool, and quality tools (linter, type checker, formatter) — and record the detected capabilities (tool name + command, or NOT FOUND) per category. This determines which testing modes are available.
 
 ### Step 3: Resolve STRICT TDD MODE
 
@@ -98,37 +82,21 @@ Do NOT ask the user interactively.
 
 ### Step 4: Initialize Persistence Backend
 
-Initialize the repo-local coordinated backend by recording bootstrap/linkage context in the active `taskReadme` when available and mirroring project context to Engram. Do not create `openspec/` filesystem artifacts as part of this phase.
+Initialize persistence by recording bootstrap/linkage context in the canonical primary artefact and creating the phase-artifact folder; do not pre-fill phase artifacts.
 
-### Step 5: Check Engram Availability
+### Step 5: Run Static Readiness Check
 
-First run or require the static SDD preflight `bun run sdd:doctor` when the repo-local setup has not been checked in the current session. This proves only filesystem/runtime portability; it does not prove Engram availability.
-
-Check whether Engram read/write is available by performing the required runtime round trip: write a mirror observation, search for it by stable topic key, and retrieve the full observation. Record the result in the active `taskReadme` when present:
-
-- `engram_status: available | unavailable | unknown`
-- `engram_last_check: <ISO timestamp>`
-- `engram_blocker: <exact error or empty>`
-
-If Engram is unavailable, preserve the bootstrap context in `taskReadme`, report the exact failure, and return `blocked` unless the orchestrator explicitly allowed a non-closing degraded bootstrap. Degraded bootstrap/exploration/planning may continue only when recorded explicitly; implementation, verification closure, `done`, and archive remain blocked until required mirrors are restored or an explicit coordinator exception is recorded. Do not create filesystem mirror artifacts as a substitute.
+Run or require the static SDD preflight configured by the binding. It validates the canonical artifact layout and repo-local runtime configuration. Do not probe optional memory/support tools or treat them as readiness evidence.
 
 ### Step 6: Record Repo-Local Bootstrap Assumptions
 
-Make the returned/project context explicit that this repo uses `taskReadme` as canonical file persistence plus Engram mirror/recovery, and that this is a repo-local overlay rather than literal upstream OpenSpec compliance.
+Make the returned context explicit that the configured overlay uses a compact taskReadme index plus per-phase artifacts as its complete persistence and recovery source.
 
 ### Step 7: Persist Testing Capabilities
 
 **This step is MANDATORY — do NOT skip it.**
 
-```
-mem_save(
-  title: "sdd/{project-name}/testing-capabilities",
-  topic_key: "sdd/{project-name}/testing-capabilities",
-  type: "config",
-  project: "{project-name}",
-  content: "{testing capabilities markdown}"
-)
-```
+Persist detected testing capabilities in the assigned bootstrap phase artifact or canonical linkage section.
 
 ### Step 8: Build Skill Registry
 
@@ -138,11 +106,21 @@ Refresh `.atl/skill-registry.md` for this repo. Prefer the local project skills 
 
 **This step is MANDATORY — do NOT skip it.**
 
-Save the detected project context under `sdd-init/{project-name}` and, if a task file exists, write a compact bootstrap summary into its SDD linkage section.
+Save detected project context in the assigned bootstrap phase artifact and write a compact summary into the task linkage section.
 
 ### Step 10: Return Summary
 
-Return a structured summary with status, executive_summary, artifacts, next_recommended, risks, skill_resolution, and `engram_status`.
+Return a structured summary with `status`, `executive_summary`, `artifacts`, `next_recommended`, `risks`, and `skill_resolution`.
+
+## Owned Artifacts
+
+- The canonical primary artefact (`WorkflowRuntimeContextV1.task_ref.path`) — under the index-primary overlay, the compact index primary and the phase-artifact folder (`taskReadme/<task_id>-<task_slug>/`).
+- `.atl/skill-registry.md` (skill registry refresh).
+
+## Routing Contracts
+
+- A lane that needs runtime commands it does not own returns `blocked` naming this lane (`sdd-init`) and the missing availability signal.
+- This lane does NOT route to `sdd-apply-code-*`, `sdd-apply-doc`, `sdd-apply-unit-tests` or `sdd-apply-pwauto-tests`. Only the split lanes declared in `WorkflowRuntimeContextV1.lane_context.registry` are invocable. Never address a retired alias — see `sdd-phase-common.md §F.3`.
 
 ## Rules
 
@@ -151,9 +129,7 @@ Return a structured summary with status, executive_summary, artifacts, next_reco
 - NEVER behave like the orchestrator from this phase
 - Keep bootstrap context concise
 - ALWAYS detect testing capabilities
-- ALWAYS persist testing capabilities as a separate observation/section
-- ALWAYS report Engram availability as `available`, `unavailable`, or `unknown`
-- ALWAYS distinguish static SDD portability (`bun run sdd:doctor`) from Engram runtime availability (`/sdd-doctor` memory round trip)
-- NEVER close SDD bootstrap as successful when required Engram mirrors failed; preserve `taskReadme` context and return `blocked`
+- ALWAYS persist testing capabilities in a canonical artifact section
 - If Strict TDD Mode is requested but no test runner exists, set `strict_tdd: false` and explain why
 - Use repo-local paths such as `.agents/skills/` and `.atl/skill-registry.md`, not home-directory paths
+- Never address a retired alias as a routing target, fallback, or operational value; consumers must address split lanes by name — see `sdd-phase-common.md §F.3`
