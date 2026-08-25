@@ -569,3 +569,179 @@ AC-003 (PCT-90/91/92/93/94 covered ×5; gate exit 0; run exit 0), AC-004/AC-005
 (PCT-106/107/109/110/112/121 covered ×6). PCT-89 not-applicable per doc-lane rev 2.
 **next_recommended**: `p3_complete` (gate `coverage_gate_passed` certificado) → coordinador
 WU-CLI-VAL (Manual/CLI PCT-95..100 + F4 delivery git rm) → fase 4.
+
+---
+
+# RE-VERIFICACIÓN rev 4 — runtime-fix (WU-TST-2 rev 4: `projectctl-entorno.test.ts` alineado al contrato REAL de plataforma)
+
+> Lane: `sdd-verify-units` · WU-VER-UNITS · re-verificación tras el runtime-fix del
+> coordinador (fase_3 re-open; coordinator records evidence). Corrección verificada:
+> topología compose movida al contrato REAL de plataforma (ground truth
+> webhook-listener `config.js` + `lib/paths.js`): `compose.yml` = BASE (solo `networks:`),
+> `compose.prod.yml` = overlay prod (`frontend-prod`/`api-prod`, target prod),
+> `compose.dev.yml` = overlay dev (`frontend-dev`/`api-dev`, target dev), puerto
+> `"${FRONTEND_PORT}:4321"`; `frontend/__tests__/projectctl-entorno.test.ts` (WU-TST-2 rev 4)
+> migrado del contrato legacy (services `frontend`/`api` en `compose.yml`) al corregido
+> (19 `it`). run/review/report-ONLY; NO se crearon/modificaron archivos de test ni producto;
+> la única escritura no-lane es el write-back del runner-under-test (reportado abajo).
+> Skill resolution: `injected-paths` (8 skill files, aggregate ordenado exacto; helpers
+> `[]` frozen). Estándar: `projectctl-requirements` v10 / binding `task-flow-binding` v9.0.0.
+> Framework: `bun test` v1.3.12.
+
+## 24. Verificación en disco previa a ejecución (read-only)
+
+| Hallazgo | Verificado | Evidencia |
+| --- | --- | --- |
+| WU-TST-2 rev 4 test alineado al contrato corregido | ✅ | `frontend/__tests__/projectctl-entorno.test.ts` 19 `it`: PCT-96×7 reescritos (base `compose.yml` networks-only + overlays prod/dev con `frontend-prod`/`api-prod`/`frontend-dev`/`api-dev`, targets, `"${FRONTEND_PORT}:4321"`/`"${API_PORT}:3000"`), PCT-98×3 reubicados a base+overlays, header `// @ac PCT-95 PCT-96 PCT-97 PCT-98 PCT-99 PCT-100` intacto L1, imports stdlib-only. Docs/tunnel/sandbox/env assertions conservadas. |
+| Compose real vs contrato corregido | ✅ | `compose.yml` L1-7: solo `networks:` (internal bridge + edge `name: mis-proyectos-edge` external true), sin `services:`. `compose.prod.yml`: `frontend-prod` (context `./frontend`, `Dockerfile.prod`, target `prod`, ports `"${FRONTEND_PORT}:4321"`, networks internal + edge alias `colpruebas-origin`) + `api-prod` (context `.`, `./backend/Dockerfile.prod`, `"${API_PORT}:3000"`). `compose.dev.yml`: `frontend-dev` (context `./frontend`, `Dockerfile.dev`, target `dev`, ports `"${FRONTEND_PORT}:4321"`, env `API_URL=http://api-dev:3000`, edge alias `test-colpruebas-origin`) + `api-dev` (context `./backend`, `Dockerfile.dev`, env `PORT=3000`). |
+| run-dirs antes | 48 | `.runtime/test-results/511a017a-.../` (48 dirs legacy preservados). |
+
+## 25. Comandos ejecutados (exactos, scope inyectado) + resultados
+
+### 25.1 `bun test frontend/__tests__/projectctl-entorno.test.ts`
+
+```text
+19 pass, 0 fail, 42 expect() calls, Ran 19 tests across 1 file. [108.00ms]
+EXIT=0
+```
+
+- PCT-95 ×2 (docs prerrequisitos) · PCT-96 ×7 (base + overlays prod/dev + targets + puertos +
+  env API_URL/PORT) · PCT-97 ×3 (`.env.example`/`.env`/`.env.dev` FRONTEND_PORT=4321) ·
+  PCT-98 ×3 (edge external en BASE + aliases `colpruebas-origin`/`test-colpruebas-origin` por
+  overlay) · PCT-99 ×3 (sandbox skill: projectctl exclusivo + no-docker) · PCT-100 ×1
+  (.env.example canónico 4321). **19/19 GREEN — contrato corregido verificado.**
+
+### 25.2 `bun test frontend/__tests__/` + `bun test tests/back/` (sin regresiones)
+
+```text
+frontend: 44 pass, 0 fail, 373 expect() calls, 5 files. EXIT=0
+back:     43 pass, 0 fail, 143 expect() calls, 4 files. EXIT=0
+```
+
+- frontend: entorno 19/19 + sot-coherence 12/12 + bundle 9/9 + proxy PWT-01..12 + home
+  (HOME-01..05/HSS-01..04/HRM-01..02) — sin regresiones (rev 3: 42 frontend → 44 con los
+  +2 `it` del entorno; 43 back idéntico).
+- **`tests/back/endpoints.test.ts` sigue cargando y pasando** (3 tests) — I6 resuelto se
+  mantiene. Cero regresiones.
+
+### 25.3 `bun run test:check` (gate TST-13)
+
+```text
+test:check OK: no implemented criterion missing Unit+PW-AUTO coverage
+EXIT=0
+```
+
+- Gate coverage-only verde: 23 criterios `implemented` con `Unit: covered`; PCT-79..82 y
+  PCT-89 `not-applicable` (28 total). Sin cambios vs rev 3 (el write-back no flipea valores).
+
+### 25.4 `bun run scripts/test-runner.ts run --method=unit --target=projectctl --persist`
+
+```text
+run c2eeeec9-7d3b-4f42-a56a-024bf00f04d5 persisted: .runtime/test-results/511a017a-.../c2eeeec9-...
+EXIT=0
+```
+
+- **EXIT=0** (rev 3: mismo resultado; rev 2: exit 1 I6; rev 1: exit 2 header).
+- **I5 efectivo**: `summary.json` criteria[] mapea **TODOS** los implemented a `covered`:
+  PCT-83..88, PCT-90/93, PCT-91/92/94, **PCT-95..100 (×6)**, PCT-106/107/109/110/112/121
+  (23/23); PCT-79..82, PCT-89 `not-applicable`. **0 missing** en implemented.
+- **Layout canónico creado**: root `summary.json` + `{unit,pwauto}/{junit.xml,results.json,
+  summary.json}`; junit real `tests="54"` `failures="0"` (52 en rev 3 → 54 con los +2 `it`
+  del entorno).
+- **48 runs legacy preservados**: 48 → **49** (solo run nuevo; 48 legacy intactos).
+- **Write-back ejecutado**: bundle `docs/app-map/views/projectctl/index.md` mtime
+  `11:33:03 → 17:04:53` (re-escrito por `patchBundleCoverage`, lazy import OK con gray-matter).
+
+## 26. Coverage mapping — rev 4 (todos los implemented ↔ archivo unit real)
+
+| Criterio | Archivo que declara el token (header `@ac`) | Resultado run rev 4 |
+| --- | --- | --- |
+| PCT-83..PCT-88 | `frontend/__tests__/projectctl-bundle.test.ts` | **covered ×6** |
+| PCT-90, PCT-93 | `tests/back/endpoints.test.ts` | **covered ×2** |
+| PCT-91, PCT-92, PCT-94 | `tests/back/test-runner-contract.test.ts` | **covered ×3** |
+| **PCT-95..PCT-100** | **`frontend/__tests__/projectctl-entorno.test.ts` (rev 4, contrato corregido)** | **covered ×6** |
+| PCT-106, PCT-107, PCT-109, PCT-110, PCT-112, PCT-121 | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | **covered ×6** |
+| PCT-79..82 | — (cli, `functional: not-applicable`) | not-applicable |
+| PCT-89 | — (plataforma, reclass doc-lane rev 2) | **not-applicable** |
+
+**23 implemented → 23 covered** en el run persistido; **0 missing** en criterios implemented.
+`buildInventory` (primitivo vivo del gate) mapea los 23 tokens a archivos reales.
+**Confirmación específica rev 4**: PCT-95..PCT-100 → `covered` en el run persistido
+`c2eeeec9-...` con el test alineado al contrato compose corregido (base/overlays
+prod/dev, servicios `*-prod`/`*-dev`, targets, `"${FRONTEND_PORT}:4321"`).
+
+## 27. Write-back report (runner-under-test — ejecución REAL rev 4)
+
+- **Comando**: `run --method=unit --target=projectctl --persist` → **exit 0**.
+- **Run-id nuevo**: `c2eeeec9-7d3b-4f42-a56a-024bf00f04d5`.
+- **criteria[].coverage ANTES ↔ DESPUÉS**: sin flips; los 23 implemented siguen
+  `Unit: covered` (verificado por YAML parse del frontmatter post-run: 23 implemented
+  con `coverage.Unit: covered`, 5 not-applicable, 28 total). `patchBundleCoverage` solo
+  escribe `covered`/`partial` (TST-11) → patches no-op/aligned. mtime del bundle re-escrito
+  (17:04:53); valores de coverage sin cambio semántico.
+- **Run-dirs**: 48 → **49** (solo añadido el nuevo; 48 legacy preservados).
+- **Gestión de estados del run**: `passed 54, failed 0`; `methods[].exitCode 0` → EXIT global 0.
+- **Flipped a `covered`**: ninguno (ya cubiertos). **Flipped a `missing`/`partial`**: ninguno.
+
+## 28. Gate `coverage_gate_passed` — checklist rev 4
+
+| Requisito hard_gate | Evidencia rev 4 | Estado |
+| --- | --- | --- |
+| `required_unit_or_pwauto_coverage_green` | **`bun test` (19+44+43 = 106 tests, 0 fail)** + **`bun run test:check` EXIT=0** + **`run --persist` EXIT=0** con criteria[] todos `covered` para implemented (23/23, incluidos PCT-95..100) y 0 missing. | ✅ **GREEN (ejecución real)** |
+| `coverage_file_test_command_and_result_recorded` | Coverage file = bundle `docs/app-map/views/projectctl/index.md` `criteria[].coverage` (28 ids: 5 not-applicable + 23 implemented `Unit: covered`) + **`summary.json` NUEVO del run `c2eeeec9-...`** (path canónico `.runtime/test-results/<projectId>/<run-id>/summary.json`, 23/23 covered, PCT-89 not-applicable) + junit real (54 tests, 0 failures). | ✅ **REGISTRADO (run nuevo, exit 0)** |
+
+**Veredicto del gate**: `coverage_gate_passed` **re-CERTIFICADO como PASSED** tras el
+runtime-fix. Todos los comandos del scope salen **exit 0**; el run persistido muestra los
+23 implemented `covered` (incluida la familia entorno PCT-95..100 con el test alineado al
+contrato compose REAL de plataforma) con 0 missing.
+
+## 29. File-surface check rev 4 (§D sdd-phase-common)
+
+- **Tocado por esta lane**: únicamente `taskReadme/20260825-bhbr8k-.../verify-units.md`
+  (phase artifact, commit normal). **Nada más** creado/escrito por la lane (run/review/report).
+- **Runner-under-test write-back (reportado, NO de esta lane)**: `docs/app-map/views/
+  projectctl/index.md` re-escrito por `patchBundleCoverage` (mtime 17:04:53) — coverage sin
+  cambio semántico (ver §27). Nuevo run-dir `.runtime/test-results/.../c2eeeec9-.../`
+  (gitignored AD-02; 49 dirs). Sin force-add.
+- **Riesgo delivery conocido (carried, rev 1 F4, sin cambio)**: `.runtime/**` +
+  `frontend/test-results/**` destrackeo pendiente → `git rm -r --cached` en WU-DELIVERY
+  (coordinador).
+- **Riesgo delivery WU-TST-2 §8.6 (carried, sin cambio)**: los 2 `it` PCT-97 dependen de
+  `.env`/`.env.dev` locales (gitignored; `exclude from commit` AD-03); firma commitada
+  `.env.example` igualmente asertada. En checkout limpio/CI sin los locales, esos 2 `it`
+  fallarían (decisión coordinador). Estado local actual verde (19/19).
+- **Advisory doc-lane (carried de apply-WU-TST-2 §8.5)**: `docs/00-context/entornos.md` §1,
+  `docs/02-features/tunnel.md` §2 y `references/entorno.md` (PCT-96/98) describen aún la
+  topología legacy (`compose.yml` prod con service `frontend`) → realinear por doc-lane al
+  contrato corregido. Nota adicional: la prosa del título PCT-96 del bundle
+  (`docs/app-map/views/projectctl/index.md`) dice "compose.yml (prod)" sin nombrar
+  `compose.prod.yml`; es prosa documental (no gate machine), no bloquea. Mismo routing
+  doc-lane.
+- No se ejecutaron comandos git/gh/docker/projectctl/browser (mecánica commit/PR =
+  coordinador).
+
+## 30. Conclusión rev 4
+
+- **unit_result**: **`passed`** — entorno 19/19 verde con el contrato corregido; sin
+  regresiones (44 frontend + 43 back = 87 tests, 0 fail); gate `test:check` exit 0;
+  `run --persist` **exit 0** con 23/23 implemented `covered` (PCT-95..100 incluidos), 0
+  missing.
+- **Runtime-fix verificado**: la topología compose corregida (BASE + overlays prod/dev con
+  `*-prod`/`*-dev`) está reflejada 1:1 en el test y pasa contra el repo real.
+- **Hallazgos previos cerrados (sin reabrir)**: F1, F2, I5, I6, F3/F5 (coverage-mapping),
+  F4 (delivery coord). PCT-89 not-applicable alineado.
+- **Gate**: `coverage_gate_passed` **re-certificado PASSED** → estado de cobertura vigente
+  para `p3_complete` tras runtime-fix.
+- **Remanente fuera de esta lane (no bloqueante)**: doc-lane realinear
+  `docs/00-context/entornos.md` + `docs/02-features/tunnel.md` + `references/entorno.md`
+  (PCT-96/98) (+ prosa título PCT-96 del bundle) a la topología base/overlays;
+  F4 `git rm -r --cached` (WU-DELIVERY); decisión PCT-97 `.env` local (coordinador);
+  re-registro runtime dev plataforma (`model_unavailable`, §18 residual).
+
+**criteria_covered (rev 4)**: AC-001 (PCT-95..100 covered ×6 — test alineado al contrato
+compose REAL), AC-002 (PCT-83..88 covered ×6), AC-003 (PCT-90/91/92/93/94 covered ×5;
+gate exit 0; run exit 0), AC-004/AC-005 (PCT-106/107/109/110/112/121 covered ×6).
+PCT-89 not-applicable. 23/23 implemented covered, 0 missing.
+**next_recommended (rev 4)**: coordinador: commit + PR update (runtime-fix + rev-4
+evidence); doc-lane realinear docs entorno al contrato corregido; WU-DELIVERY
+`git rm -r --cached`; runtime dev UP evidence cuando la plataforma re-registre.

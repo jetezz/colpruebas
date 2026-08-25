@@ -8,19 +8,39 @@
 > Este documento describe la **realidad de este repo** (los overlays concretos que genera esta
 > remediación) para que los agentes/mantenimiento sepan cómo operar los entornos.
 
-## 1. Overlays canónicos
+## 1. Overlays canónicos (compose de plataforma)
 
-Un solo repositorio con dos modos de ejecución, cada uno servido por un overlay Compose
-canónico en la raíz del proyecto:
+Un proyecto gestionado por la plataforma usa **tres archivos Compose canónicos** en la raíz,
+tal y como los valida el `webhook-listener` de la plataforma (ground truth del contrato):
 
-| Overlay | Modo | Servicio `frontend` | Uso |
-| --- | --- | --- | --- |
-| `compose.yml` | `prod` | `build.target: prod` (`frontend/Dockerfile.prod`) | Servidor/producción. |
-| `compose.dev.yml` | `dev` | `build.target: dev` (`frontend/Dockerfile.dev`) | Iteración local/dev con HMR/watch. |
+| Archivo | Rol | Contenido |
+| --- | --- | --- |
+| `compose.yml` | **BASE** | Solo las redes compartidas: `internal` (bridge) + `edge` (`name: mis-proyectos-edge`, `external: true`). No declara servicios. |
+| `compose.prod.yml` | **PROD overlay** | Servicios `frontend-prod` (target `prod`) + `api-prod`. |
+| `compose.dev.yml` | **DEV overlay** | Servicios `frontend-dev` (target `dev`, HMR/watch) + `api-dev`. |
 
-- Nombres de servicio estables por rol: `frontend`, `api`.
-- El `api` no se expone libremente al host en producción (solo el mapeo documentado del
-  overlay raíz), de acuerdo con la excepción operativa de `standard.md` §3.
+La plataforma ejecuta el rango de overlays como
+
+```
+docker compose -f compose.yml -f compose.<mode>.yml
+```
+
+(+ un overlay runtime escrito por la plataforma que añade `container_name`, `API_URL` y los
+bind-mounts de fuente `frontend/src` + `api/src`).
+
+### Nombres de servicio: NO colisionar con la raíz de la plataforma
+
+Los nombres de servicio **MUST NOT** colisionar con los del stack ROOT de la plataforma
+(`frontend`, `api`, `tunnel`, `sandbox`, `webhook-listener`, `root-tunnel-sync`). Por eso este
+proyecto usa nombres por entorno:
+
+| Entorno | Servicios |
+| --- | --- |
+| prod | `frontend-prod` + `api-prod` |
+| dev | `frontend-dev` + `api-dev` |
+
+- El `api-<env>` no se expone libremente al host en producción (solo el mapeo documentado del
+  overlay), de acuerdo con la excepción operativa de `standard.md` §3.
 - El servicio `tunnel` NO es el camino principal: queda solo como fallback legacy opt-in vía
   `profiles` explícito. El camino principal es el tunnel gestionado central (ver
   `docs/02-features/tunnel.md`).
@@ -35,21 +55,27 @@ canónico en la raíz del proyecto:
 ```
 
 - Valor canónico: `FRONTEND_PORT=4321`.
+- La plataforma aloja **prod en `4321`** y, si el puerto estuviera ocupado, **dev cae
+  automáticamente al siguiente puerto libre** (p. ej. `4324`) — la asignación del puerto efectivo
+  la resuelve el runtime de la plataforma, no el repo.
 - `.env` (prod) y `.env.dev` (dev) son **locales** y están excluidos del commit (gitignored);
   la referencia commitada es `.env.example` (`FRONTEND_PORT=4321`).
 - `projectctl env validate` reporta `missing/invalid FRONTEND_PORT` si falta o es inválido.
 
 ## 3. Contrato edge `mis-proyectos-edge`
 
-Para ser publicable por tunnel compartido, el servicio `frontend` se une a la red externa
-`mis-proyectos-edge` (`external: true`, no gestionada por el compose del proyecto) con un
-**alias por entorno** declarado en `services.frontend.networks.edge.aliases`:
+Para ser publicable por tunnel compartido, el servicio de frontend de cada entorno se une a la
+red externa `mis-proyectos-edge` (`external: true`, no gestionada por el compose del proyecto)
+con un **alias por entorno** declarado en `services.frontend-<env>.networks.edge.aliases`
+(`frontend-prod` / `frontend-dev`):
 
-| Entorno | Alias edge |
-| --- | --- |
-| prod | `colpruebas-origin` (el `service` real que Cloudflare resuelve) |
-| dev | `test-colpruebas-origin` |
+| Entorno | Alias edge | Servicio |
+| --- | --- | --- |
+| prod | `colpruebas-origin` (el `service` real que Cloudflare resuelve) | `frontend-prod` |
+| dev | `test-colpruebas-origin` | `frontend-dev` |
 
+- Hostnames por entorno: prod `test.colpruebas.online`, dev `colpruebas.online`; la activación
+  del token se hace vía `POST /tunnel-tokens/<id>/activate`.
 - No usar `host.docker.internal:<FRONTEND_PORT>` como camino estándar cuando existe alias edge
   gestionado; queda solo como compat/legacy.
 - Si faltara alias edge válido o el hostname no resolviera, `projectctl tunnel status` reporta

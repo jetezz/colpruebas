@@ -379,3 +379,123 @@ frontend/__tests__/projectctl-entorno.test.ts` (+ suite existente) → `bun run 
 (gate) → `bun run scripts/test-runner.ts run --method=unit --target=projectctl --persist`
 (write-back real con PCT-91/92/94 + PCT-95..100 mapeados) → `p3_coverage_pending` /
 `p3_complete` (`coverage_gate_passed`).
+
+---
+
+## 8. Rework rev 4 — runtime-fix: topología compose corregida al contrato REAL de plataforma
+
+> Re-lanzamiento de `WU-TST-2` (apply_lane `unit-tests`) en runtime-fix re-open (coordinator
+> records), driven por la corrección del coordinador de la topología compose al contrato REAL
+> de la plataforma (ground truth del webhook-listener: `config.js` + `lib/paths.js`):
+> `compose.yml` = **BASE** (solo `networks:`), `compose.prod.yml` = **overlay prod**
+> (`frontend-prod`/`api-prod`), `compose.dev.yml` = **overlay dev** (`frontend-dev`/`api-dev`).
+> El archivo `frontend/__tests__/projectctl-entorno.test.ts` (rev 3) asertaba el contrato
+> LEGACY (services `frontend`/`api` dentro de `compose.yml`) — ahora INCORRECTO. Unit status
+> rev 4: `done`. No se ejecutó `bun test` (prohibido en esta lane); verificación = estática
+> read-only contra el estado real del repo. No git/gh, no índice (coordinator), no código
+> producto, no docs.
+
+### 8.1 Alcance autorizado (coordinator, rev 4) — OWNED file único
+
+| Archivo | Header (línea 1) | Cambio |
+| --- | --- | --- |
+| `frontend/__tests__/projectctl-entorno.test.ts` (MODIFIED) | `// @ac PCT-95 PCT-96 PCT-97 PCT-98 PCT-99 PCT-100` (sin cambios) | Aserciones compose migradas del contrato legacy al corregido: base + overlays prod/dev, targets, puertos reales, aliases por overlay. Docs/tunnel/sandbox/env assertions conservadas intactas. |
+
+### 8.2 Contrato legacy (rev 3 — AHORA INCORRECTO) vs contrato corregido (rev 4 — realidad repo)
+
+| Aspecto | Legacy (rev 3 — lo que el test asertaba) | Corregido (rev 4 — realidad verificada del repo) |
+| --- | --- | --- |
+| `compose.yml` | overlay prod con services `frontend` + `api` | **BASE**: solo `networks:` — `internal` (driver bridge) + `edge` (`name: mis-proyectos-edge`, `external: true`). SIN services. |
+| `compose.prod.yml` | (no existía en el test) | **Overlay prod**: `frontend-prod` (build `./frontend`/`Dockerfile.prod`/`target: prod`, ports `"${FRONTEND_PORT}:4321"`, networks internal + edge alias `colpruebas-origin`) + `api-prod` (build `.`/`./backend/Dockerfile.prod`, ports `"${API_PORT}:3000"`, networks internal). |
+| `compose.dev.yml` | services `frontend` + `api`, target dev | **Overlay dev**: `frontend-dev` (build `./frontend`/`Dockerfile.dev`/`target: dev`, ports `"${FRONTEND_PORT}:4321"`, env `API_URL=http://api-dev:3000`, networks internal + edge alias `test-colpruebas-origin`) + `api-dev` (build `./backend`/`Dockerfile.dev`, env `PORT=3000`, networks internal). |
+| Red edge | declarada en cada overlay | declarada SOLO en la base `compose.yml`; los overlays la referencian vía service-networks. |
+
+### 8.3 Implementación — `frontend/__tests__/projectctl-entorno.test.ts` (19 `it`)
+
+- **PCT-95 (2 `it`, sin cambios)**: `docs/00-context/entornos.md` existe y menciona
+  `FRONTEND_PORT`; `docs/02-features/tunnel.md` existe.
+- **PCT-96 (7 `it`, reescritos al contrato corregido)**:
+  1. `compose.yml` es la BASE: parsea, `services` vacío (0 keys) y `networks` con
+     `internal` + `edge`.
+  2. `compose.prod.yml` (overlay prod) declara `frontend-prod` + `api-prod`.
+  3. `frontend-prod`: build context `./frontend`, dockerfile `Dockerfile.prod`,
+     `target: prod`, ports `"${FRONTEND_PORT}:4321"`.
+  4. `api-prod`: build context `.`, dockerfile `./backend/Dockerfile.prod`, ports
+     `"${API_PORT}:3000"`.
+  5. `compose.dev.yml` (overlay dev) declara `frontend-dev` + `api-dev`.
+  6. `frontend-dev`: build context `./frontend`, dockerfile `Dockerfile.dev`,
+     `target: dev`, ports `"${FRONTEND_PORT}:4321"`, env `API_URL=http://api-dev:3000`.
+  7. `api-dev`: build context `./backend`, dockerfile `Dockerfile.dev`, env `PORT=3000`.
+- **PCT-97 (3 `it`, sin cambios)**: `.env.example`, `.env` y `.env.dev` declaran
+  `FRONTEND_PORT=4321`.
+- **PCT-98 (3 `it`, reubicados al contrato corregido)**:
+  1. La red edge `mis-proyectos-edge` `external: true` se declara en la BASE
+     `compose.yml` (antes: en cada overlay).
+  2. `frontend-prod` (overlay prod) se une a edge con alias `colpruebas-origin`.
+  3. `frontend-dev` (overlay dev) se une a edge con alias `test-colpruebas-origin`.
+  (Eliminadas las aserciones legacy de `compose.yml` services `frontend`+`api` y de
+  `compose.dev.yml` declarando la red edge — inexistentes en el contrato corregido.)
+- **PCT-99 (3 `it`, sin cambios)**: sandbox skill existe, control exclusivo vía
+  `projectctl`, regla no-docker (`docker.sock`, `docker: command not found`).
+- **PCT-100 (1 `it`, sin cambios)**: `.env.example` declara `FRONTEND_PORT=4321` como
+  referencia canónica y ningún valor numérico distinto.
+
+Total: 19 `it` (rev 3 tenía 17; +2 por las aserciones nuevas de base/overlays).
+
+### 8.4 Verificación narrow (permitida — SIN `bun test`)
+
+> La ejecución de la suite es de `sdd-verify-units` (WU-VER-UNITS). Esta lane verifica
+> estáticamente (read-only) que cada aserción es REAL y pasa contra el estado actual.
+
+| Check | Resultado | Evidencia |
+| --- | --- | --- |
+| `compose.yml` = BASE networks-only | PASS | `compose.yml` L1-7: `networks:` → `internal` (driver bridge) + `edge` (`name: mis-proyectos-edge`, `external: true`); SIN key `services:`. `Bun.YAML.parse` → services `{}` → `Object.keys` = `[]`. |
+| `compose.prod.yml` services `frontend-prod`/`api-prod` | PASS | `compose.prod.yml` L2 (`frontend-prod`) y L26 (`api-prod`). |
+| `frontend-prod` build/target/port | PASS | L4 `context: ./frontend`, L5 `dockerfile: Dockerfile.prod`, L6 `target: prod`, L11 `ports: ["${FRONTEND_PORT}:4321"]`. |
+| `api-prod` build/port | PASS | L28 `context: .`, L29 `dockerfile: ./backend/Dockerfile.prod`, L31 `ports: ["${API_PORT}:3000"]`. |
+| `compose.dev.yml` services `frontend-dev`/`api-dev` | PASS | `compose.dev.yml` L2 (`frontend-dev`) y L23 (`api-dev`). |
+| `frontend-dev` build/target/port/env | PASS | L4 `context: ./frontend`, L5 `dockerfile: Dockerfile.dev`, L6 `target: dev`, L8 `ports: ["${FRONTEND_PORT}:4321"]`, L13 `API_URL=http://api-dev:3000`. |
+| `api-dev` build/env | PASS | L25 `context: ./backend`, L26 `dockerfile: Dockerfile.dev`, L31 `PORT=3000`. |
+| Red edge en BASE + aliases por overlay (PCT-98) | PASS | BASE `compose.yml` L4-6 (`edge` external + name); prod `frontend-prod.networks.edge.aliases` = `[colpruebas-origin]` (`compose.prod.yml` L19-23); dev `frontend-dev.networks.edge.aliases` = `[test-colpruebas-origin]` (`compose.dev.yml` L16-20). |
+| Env `FRONTEND_PORT=4321` (PCT-97/100) | PASS | `.env.example` L5, `.env` L5, `.env.dev` L5 — las 3 con `FRONTEND_PORT=4321` (regex multilinea). |
+| Docs prerrequisitos (PCT-95) | PASS | `docs/00-context/entornos.md` (menciona `FRONTEND_PORT`) + `docs/02-features/tunnel.md` presentes. |
+| Sandbox skill (PCT-99) | PASS | `sandbox-runtime-policy/SKILL.md` contiene `projectctl`, `docker.sock` (L25), `docker: command not found` (L27), `exclusivamente** vía \`projectctl\`` (L19). |
+| Header + load-safety | PASS | L1 `// @ac PCT-95 PCT-96 PCT-97 PCT-98 PCT-99 PCT-100` intacto; imports stdlib-only (`bun:test`, `node:fs`) + `Bun.YAML.parse` built-in → sin deps de `node_modules`. |
+
+### 8.5 Devueltos / entregables rev 4
+
+- **Archivo modificado** (owned, exacto — coordinator rev 4): `frontend/__tests__/projectctl-entorno.test.ts`
+  — aserciones compose migradas al contrato corregido (base + overlays), de 17 → 19 `it`.
+  Header y aserciones docs/tunnel/sandbox/env conservados. **Nada más** (no código producto,
+  no docs, no índice, no otros tests).
+- **Spec/design criteria satisfechos**: REQ-ENT-001..004/007 (PCT-95..100);
+  references/entorno.md §PCT-96/98 — ahora alineado el TEST al contrato REAL de plataforma
+  (overlays base/prod/dev y servicios `*-prod`/`*-dev` con targets y aliases por entorno).
+- **Deviations del diseño**: ninguna respecto a la instrucción inyectada (solo el test;
+  header intacto; aserciones alignadas al ground truth del webhook-listener).
+- **Unresolved follow-up (fuera de esta lane)**: los docs `docs/00-context/entornos.md`
+  (§1) y `docs/02-features/tunnel.md` (§2) y la referencia `references/entorno.md`
+  (PCT-96/98) describen todavía la topología legacy (`compose.yml` prod con service
+  `frontend`) → realinear por doc-lane con el contrato corregido. La re-ejecución del
+  run persistido y del gate `bun run test:check` pertenece a `sdd-verify-units` (la
+  cobertura previa 23/23 fue certificada con el test legacy; debe re-certificarse).
+
+### 8.6 File-surface check rev 4 (§D sdd-phase-common)
+
+- `frontend/__tests__/projectctl-entorno.test.ts` — superficie de commit normal (trackeado,
+  ya commiteado en `7da7117`; imports stdlib-only + `Bun.YAML.parse`).
+- Phase artifact `taskReadme/20260825-bhbr8k-.../apply-WU-TST-2.md` (esta sección) — commit normal.
+- Sin `force-add` requerido.
+- **Riesgo delivery-surface (carried, rev 3 §7.6 — sin cambio)**: los 2 `it` de PCT-97
+  dependen de `.env` y `.env.dev` LOCALES — gitignored, `exclude from commit` (AD-03). La
+  firma commitada `.env.example` está igualmente asertada; en checkout limpio/CI sin los
+  locales, esos 2 `it` fallarían (decisión del coordinador: mantener o parametrizar).
+- No se ejecutaron comandos git/gh ni de runtime (mecánica de commit/PR = coordinador).
+
+**criteria_covered (rev 4)**: AC-001 (PCT-95..100 — test alineado al contrato compose
+corregido de plataforma)
+**next_recommended (rev 4)**: re-lanzar `sdd-verify-units` (WU-VER-UNITS): `bun test
+frontend/__tests__/projectctl-entorno.test.ts` (esperado 19/19 verde) + `bun run test:check`
+(gate) + re-run `--persist` para re-certificar criteria[] PCT-95..100; doc-lane realinear
+`docs/00-context/entornos.md` + `docs/02-features/tunnel.md` (y `references/entorno.md`
+PCT-96/98) a la topología base/overlays corregida.

@@ -191,3 +191,101 @@ No se tocó `.atl/skill-registry.md` (coordinator-owned, WU-REG). No se tocó pr
 **artifact_ref**: `taskReadme/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests/apply-WU-DOC-2.md`
 **documentacion_actualizada**: sí — agents_skills.md (skill instalada), bundle §4 (split PCT-89/PCT-90..94); task.md/navigation.yaml/criteria[] verificados sin cambios
 **next_recommended**: `p4_reviewing` → `p4_complete` → delivery
+
+---
+
+# REV 3 — REWORK del contrato Compose del repo (ground truth plataforma)
+
+> Fase: `runtime-fix` re-open (registro del coordinador). REV 3 de **WU-DOC-2**.
+> Objetivo: actualizar la documentación del repo para reflejar el **contrato Compose real
+> que valida la plataforma** (ground truth del `webhook-listener` — `config.js` / `paths.js` /
+> `managed-dev.js`), en lugar del contrato de 2 overlays que documentaban las rev 1/2.
+> Docs-only: sin producto, sin tests, sin índice, sin git/gh.
+
+## 1. Contrato Compose corregido (ground truth de la plataforma)
+
+| Valor | Contrato real (webhook-listener) | Documentado por este rework |
+| --- | --- | --- |
+| Archivos Compose | `compose.yml` (BASE: redes `internal` + `edge` `mis-proyectos-edge`) + `compose.prod.yml` + `compose.dev.yml` | ✅ `docs/00-context/entornos.md` §1 |
+| Servicios prod | `frontend-prod` + `api-prod` | ✅ §1 |
+| Servicios dev | `frontend-dev` + `api-dev` | ✅ §1 |
+| Ejecución plataforma | `docker compose -f compose.yml -f compose.<mode>.yml` + overlay runtime (container_name, `API_URL`, bind-mounts `frontend/src` + `api/src`) | ✅ §1 |
+| No colisión con ROOT stack | nombres `frontend`/`api`/`tunnel`/`sandbox`/`webhook-listener`/`root-tunnel-sync` quedan para la plataforma | ✅ §1 |
+| Puerto | `FRONTEND_PORT=4321`; prod en `4321`, dev cae al siguiente libre (p. ej. `4324`) | ✅ §2 |
+| Edge | prod `colpruebas-origin`, dev `test-colpruebas-origin`; red `mis-proyectos-edge` | ✅ §3 |
+| Tunnel | hostnames prod `test.colpruebas.online` / dev `colpruebas.online`; activación `POST /tunnel-tokens/<id>/activate` | ✅ §3 |
+| Runtime | exclusivo vía `projectctl`; sandbox sin Docker | ✅ §4 (preservado) |
+
+## 2. Archivos owned (REV 3)
+
+| Archivo | Acción rev 3 |
+| --- | --- |
+| `docs/00-context/entornos.md` | **MODIFIED** — §1 reescrito al contrato real de 3 archivos + naming por entorno; §2 añade asignación de puerto por plataforma (prod 4321, dev fallback); §3 aliases/hostnames/activación por entorno; §4 preservado (projectctl-only) |
+| `docs/app-map/views/projectctl/index.md` | **NO modified** — condicional no activado: las `notes` de PCT-96 son genéricas y NO referencian la wording vieja `compose.yml→prod`; el `title` de PCT-96 sí menciona la wording vieja pero el scope rev 3 prohíbe tocar id/title/functional/coverage. Reportado (ver §5). |
+
+## 3. Documentación actualizada (REV 3)
+
+### 3.1 `docs/00-context/entornos.md` (MODIFIED)
+
+- **§1 Overlays canónicos**: de 2 overlays (`compose.yml` prod + `compose.dev.yml` dev, servicio
+  `frontend`) → **3 archivos canónicos**: `compose.yml` BASE (solo redes `internal` + `edge`
+  `mis-proyectos-edge`), `compose.prod.yml` (PROD overlay: `frontend-prod` + `api-prod`),
+  `compose.dev.yml` (DEV overlay: `frontend-dev` + `api-dev`). Añade el comando de ejecución de
+  la plataforma (`-f compose.yml -f compose.<mode>.yml` + overlay runtime) y la regla de NO
+  colisión de nombres de servicio con el stack ROOT.
+- **§2 `FRONTEND_PORT`**: añade la asignación por entorno de la plataforma (prod `4321`, dev
+  fallback automático al siguiente libre, p. ej. `4324`); conserva `FRONTEND_PORT=4321`
+  canónico, `.env`/`.env.dev` gitignored y `projectctl env validate`.
+- **§3 Contrato edge**: servicio por entorno (`frontend-prod`/`frontend-dev`) en la declaración
+  de aliases; hostnames por entorno (prod `test.colpruebas.online`, dev `colpruebas.online`) y
+  activación de token vía `POST /tunnel-tokens/<id>/activate`; conserva `mis-proyectos-edge`
+  external, alias `<app>-origin` / `test-<app>-origin` y el guardrail `TUNNEL_NOT_PUBLISHABLE`.
+- **§4 Runtime**: preservado sin cambios (exclusivo vía `projectctl`, sandbox sin Docker).
+
+### 3.2 `docs/app-map/views/projectctl/index.md` — NO modificado (reportado)
+
+Las `notes` del criterio **PCT-96** son genéricas:
+> "Entregado por AC-001 (AD-01). Manual vía projectctl status (coordinator-owned)."
+
+No referencian la wording vieja `compose.yml→prod` → per el scope rev 3
+("ONLY if the PCT-96 criteria notes/summary reference the old wording"), **no se activa la
+modificación**; se dejan intactas y se reporta. El `title` de PCT-96 sí cita `compose.yml (prod) /
+compose.dev.yml (dev)`, pero rev 3 prohíbe tocar id/title/functional/coverage del criterio, por lo
+que se conserva tal cual y queda señalado como riesgo de wording residual (ver §5).
+
+## 4. Verify expects (REV 3)
+
+| Expect | Resultado |
+| --- | --- |
+| `docs/00-context/entornos.md` describe base `compose.yml` + overlays `compose.prod.yml`/`compose.dev.yml` | ✅ §1 (3 archivos + rol BASE/overlays) |
+| Servicios `frontend-prod`/`api-prod` (prod) y `frontend-dev`/`api-dev` (dev) | ✅ §1 tabla por entorno |
+| No recomienda `frontend`/`api` como nombres de servicio del proyecto | ✅ §1 regla de no colisión con ROOT stack + nombres por entorno |
+| `FRONTEND_PORT=4321` + fallback de asignación | ✅ §2 (prod 4321, dev fallback libre) |
+| Edge aliases por entorno + hostnames + activación | ✅ §3 (alias + hostnames + `POST /tunnel-tokens/<id>/activate`) |
+| Runtime solo vía `projectctl` | ✅ §4 preservado |
+| YAML parsea si el bundle fue tocado | N/A — bundle NO tocado; `entornos.md` es Markdown plano |
+
+## 5. Desviaciones de diseño y riesgos (REV 3)
+
+- **Bundle no tocado (decisión de apply)**: las `notes` de PCT-96 son genéricas → condicional no
+  activado → `docs/app-map/views/projectctl/index.md` queda **sin cambios**, señalado como
+  report (`not modified`).
+- **Riesgo de wording residual (reportado)**: el `title` de PCT-96 del bundle preserva la wording
+  vieja `compose.yml (prod) / compose.dev.yml (dev)`; quedó intacto por la prohibición rev 3 de
+  cambiar id/title/functional/coverage. Si el coordinador/equipo decide alinear el `title` al
+  contrato real (3 archivos + naming por entorno), requiere una excepción de scope o WU dedicada
+  (no cabe en esta rev 3 con el scope estricto otorgado).
+- **Riesgo delivery**: mismo riesgo global ya registrado (§9 rev 1/2): artefactos `.runtime/` +
+  `frontend/test-results/.last-run.json` trackeados → `git rm -r --cached` en WU-DELIVERY
+  (coordinator). Documentación `docs/**` y phase artifact = commit normal (no gitignored).
+
+---
+
+**rev**: 3
+**criteria_covered**: [AC-001, AC-002, AC-005]
+**unit_status**: `done`
+**doc_files_modified**: `docs/00-context/entornos.md`
+**doc_files_reviewed_not_modified**: `docs/app-map/views/projectctl/index.md` (notes PCT-96 genéricas)
+**artifact_ref**: `taskReadme/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests/apply-WU-DOC-2.md`
+**next_recommended**: verify-units re-run (docs no impactan gate unit, confirmar) + commit/PR del coordinador
+**skill_resolution**: `injected-paths`

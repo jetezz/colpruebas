@@ -208,6 +208,21 @@ Pendiente.
 - **WU-CLI-VAL (coordinator-owned)**: `projectctl env validate` **Passed** (prod ✓, dev ✓); **env set sincronizado**: plataforma (fuente Supabase) `FRONTEND_PORT` 4323/4324 → **4321** en prod y dev (repo ya tenía 4321); `projectctl status` lista PROD+DEV con compose `colpruebas-...-prod/-dev` (stopped — sandbox); `projectctl doctor`: compose canónicos ✓, configured ports **4321/4321** ✓, tunnel `test.colpruebas.online` ✓, reachable yes, last error none; preflight/plan/start dev → **`model_unavailable`** (runtime managed-dev de plataforma no disponible en sandbox — limitación de plataforma, ver §18).
 - **Residual conocido**: dev Effective Port 4324 stale → DRIFT frontend dev flaggeado por el modelo de plataforma hasta que la plataforma re-registre el runtime (start bloqueado `model_unavailable`). No es defecto del repo (config canónica validada).
 
+### ✅ RUNTIME-FIX (post-fase 3, req. usuario 1) — ENTORNOS LEVANTADOS Y DOMINIOS 200
+
+**Causa raíz descubierta (ground truth del webhook-listener de la plataforma) y corregida:**
+1. **`compose_failed`**: la topología real de la plataforma es base+overlays: prod = `[compose.yml, compose.prod.yml]`, dev = `[compose.yml, compose.dev.yml]`. **Faltaba `compose.prod.yml`** → "No existe compose file".
+2. **`model_unavailable`**: el modelo managed-dev **excluye los servicios del stack ROOT** (`frontend`, `api`, `tunnel`, `sandbox`, `webhook-listener`, `root-tunnel-sync`). Los servicios canónicos correctos por entorno son **`frontend-prod`/`api-prod`** (prod) y **`frontend-dev`/`api-dev`** (dev, runtime spec con mounts `frontend/src` + `api/src`).
+3. **Corrección aplicada** (WU-ENT-1 rev 2/3): `compose.yml` = BASE (networks internal+edge external `mis-proyectos-edge`); `compose.prod.yml` = overlay prod (`frontend-prod` target prod, `${FRONTEND_PORT}:4321`, alias `colpruebas-origin`; `api-prod` `${API_PORT}:3000`); `compose.dev.yml` = overlay dev (`frontend-dev` target dev, alias `test-colpruebas-origin`; `api-dev` context ./backend). `backend/Dockerfile.dev` corre desde `/app/app-src` (el overlay de plataforma monta `api/src:/app/src` y `api/` raíz es root-owned vacío no removible sin root → workaround de path documentado).
+4. **Tunnel**: assignments existían pero hostname `not set` + desired `disabled` → se setearon hostnames (`test.colpruebas.online` prod / `colpruebas.online` dev) + enabled, y se activó el token vía `POST /tunnel-tokens/<id>/activate` (token estaba inactive → cloudflared no corría).
+
+**Evidencia final (verificada):**
+- `projectctl status`: **PROD running** (`frontend-prod` + `api-prod`, visible `https://test.colpruebas.online`, local 4321) · **DEV running** (`frontend-dev` + `api-dev`, visible `https://colpruebas.online`, local 4324 — fallback automático porque prod tomó 4321).
+- `projectctl check prod` → **`https://test.colpruebas.online/` 200 OK** ✓ · `projectctl check dev` → **`https://colpruebas.online/` 200 OK** ✓ (también `/health` 200).
+- `projectctl doctor`: compose ✓, configured ports 4321/4321 ✓, tunnel ✓, reachable ✓, last error none; Runtime Drift: prod ok, dev frontend **ok** (residual: dev api effective 3101 vs configured 3100 — asignación de plataforma, no bloqueante).
+- `WU-VER-UNITS rev 4`: re-certificación tras el fix — entorno test 19/19 al contrato corregido, 106 tests 0 fail, `test:check` EXIT 0, `run --persist` EXIT 0 (run `c2eeeec9-...`, 23/23 implemented covered, 0 missing). **Gate `coverage_gate_passed` re-certificado.**
+- Tests/docs actualizados al contrato real: `projectctl-entorno.test.ts` (WU-TST-2 rev 4), `docs/00-context/entornos.md` (WU-DOC-2 rev 3).
+
 ## 16. Adjuntos / referencias
 
 No hay adjuntos iniciales.
