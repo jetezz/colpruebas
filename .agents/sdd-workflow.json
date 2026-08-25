@@ -3,7 +3,7 @@
   "binding_path": ".agents/skills/projectctl-requirements/references/tareas.md",
   "machine_block_id": "task-flow-binding",
   "expected_binding_id": "projectctl-requirements.task-flow",
-  "binding_version": "8.0.0",
+  "binding_version": "9.0.0",
   "projections": {
     "state_model": ".agents/skills/projectctl-requirements/generated/phase-state-schema.json",
     "task_template": ".agents/skills/projectctl-requirements/assets/task-template.md",

@@ -1,8 +1,8 @@
 ---
 title: "Test task for state: verified"
-status: verified
+status: done
 created: "2026-04-17T10:02:16.250Z"
-updated: "2026-04-17T10:02:16.259Z"
+updated: "2026-08-25T09:03:14.000Z"
 source_branch: develop
 target_branch: develop
 branch_name: null

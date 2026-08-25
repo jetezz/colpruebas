@@ -8,7 +8,18 @@ export const PW_ANNOTATION_RE =
 export function extractAcTokensFromBun(source: string): string[] {
   const tokens = new Set<string>();
   const firstLineMatch = source.match(AC_HEADER_LINE_RE);
-  if (firstLineMatch) tokens.add(firstLineMatch[1]);
+  if (firstLineMatch) {
+    // Capture EVERY space-separated AC token on the @ac header line, not only the
+    // first one (multi-criteria headers like `// @ac PCT-83 PCT-84 PCT-85`).
+    const lineEnd = source.indexOf('\n', firstLineMatch.index);
+    const headerLine = source.slice(
+      firstLineMatch.index,
+      lineEnd === -1 ? undefined : lineEnd,
+    );
+    for (const tok of headerLine.matchAll(/\b[A-Z][\w-]*/g)) {
+      tokens.add(tok[0]);
+    }
+  }
   let m: RegExpExecArray | null;
   AC_RANGE_RE.lastIndex = 0;
   while ((m = AC_RANGE_RE.exec(source))) {

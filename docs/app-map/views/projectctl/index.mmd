@@ -1,0 +1,17 @@
+flowchart TD
+  pctl["/projectctl"] --> cli[Tab cli<br/>catálogo CLI (plataforma)]
+  pctl --> doc[Tab doc<br/>reglas documentales]
+  pctl --> test[Tab test<br/>sistema de testing]
+  pctl --> entorno[Tab entorno<br/>runtime / overlays]
+  pctl --> tareas[Tab tareas<br/>binding task-flow]
+
+  doc --> standard["projectctl-requirements<br/>references/standard.md"]
+  doc --> criteria["criteria[] PCT-*<br/>{id, title, functional, coverage}"]
+  criteria --> coverage["patchBundleCoverage<br/>write-back fase 3"]
+
+  test --> runner["scripts/test-runner.ts<br/>run / check"]
+  runner --> persist["patchBundleCoverage<br/>.runtime/test-results"]
+
+  entorno --> compose["compose.yml / compose.dev.yml<br/>frontend target prod / dev"]
+
+  tareas --> binding["task-flow-binding v9.0.0<br/>references/tareas.md"]
