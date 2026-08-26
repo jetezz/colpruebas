@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import {
-  AC_HEADER_LINE_RE,
+  extractAcTokensFromBun,
   PW_ANNOTATION_RE,
   PW_DESCRIBE_RE,
 } from './ac-header.ts';
@@ -116,8 +116,7 @@ function listPlaywrightSpecs(root: string, maxDepth = 4): string[] {
 function extractUnitAcFromFile(filePath: string): string[] {
   const source = readFileSync(filePath, 'utf8');
   const lines = source.split('\n').slice(0, 12).join('\n');
-  const m = lines.match(AC_HEADER_LINE_RE);
-  return m ? [m[1]] : [];
+  return extractAcTokensFromBun(lines);
 }
 
 function extractPwautoAcFromFile(filePath: string): string[] {
@@ -137,6 +136,7 @@ export function buildInventory(projectsRoot: string): Inventory {
   const unitRoots: string[] = [
     join(projectsRoot, 'tests', 'back'),
     join(projectsRoot, 'backend', 'src'),
+    join(projectsRoot, 'frontend', '__tests__'),
   ];
   const pwautoRoots: string[] = [
     join(projectsRoot, 'tests', 'front', 'tests'),

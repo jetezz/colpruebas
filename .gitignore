@@ -21,3 +21,8 @@ test/test-results/
 /*.png
 .env
 .env.dev
+# Runtime artifacts (AD-02 / PCT-92): canonical test persistence + local Playwright output
+.runtime/
+frontend/test-results/
+# Local AI runtime state
+.atl/

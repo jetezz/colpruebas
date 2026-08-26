@@ -2,9 +2,11 @@
 name: coordinador
 description: "Trigger: coordinator, orchestrator, SDD task flow. Resolve a validated WorkflowRuntimeContextV1 from the project locator and binding before routing or transition; never assume project defaults."
 metadata:
+  id: coordinador
   version: 3.4.0
   categories:
     - sdd
+  license: MIT
 ---
 
 ## Core role

@@ -5,8 +5,8 @@ WORKDIR /app
 COPY package.json ./
 RUN bun install --frozen-lockfile
 
-COPY src ./src
+COPY src ./app-src
 
 EXPOSE 3000
 
-CMD ["bun", "--watch", "run", "src/index.ts"]
+CMD ["bun", "--watch", "run", "app-src/index.ts"]
