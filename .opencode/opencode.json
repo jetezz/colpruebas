@@ -1,68 +1,33 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "agent": {
-    "sdd-init": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-spec": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-tasks": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-design": {
-      "model": "minimax/MiniMax-M3"
-    },
+    "sdd-init": {},
+    "sdd-spec": {},
+    "sdd-tasks": {},
+    "sdd-design": {},
     "sdd-archive": {
       "model": "inherit"
     },
     "sdd-onboard": {
       "model": "inherit"
     },
-    "sdd-apply-doc": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-verify-code": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-explore-code": {
-      "model": "minimax/MiniMax-M3"
-    },
+    "sdd-apply-doc": {},
+    "sdd-verify-code": {},
+    "sdd-explore-code": {},
     "sdd-orchestrator": {
-      "model": "openai/gpt-5.6-luna"
+      "model": "opencode-go/deepseek-v4-flash"
     },
-    "sdd-verify-pwcli": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-verify-units": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-explore-pwcli": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-verify-pwauto": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-apply-code-low": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-apply-code-high": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-apply-unit-tests": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-explore-research": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-apply-code-medium": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-apply-pwauto-tests": {
-      "model": "minimax/MiniMax-M3"
-    },
-    "sdd-propose": {
-      "model": "minimax/MiniMax-M3"
-    }
+    "sdd-verify-pwcli": {},
+    "sdd-verify-units": {},
+    "sdd-explore-pwcli": {},
+    "sdd-verify-pwauto": {},
+    "sdd-apply-code-low": {},
+    "sdd-apply-code-high": {},
+    "sdd-apply-unit-tests": {},
+    "sdd-explore-research": {},
+    "sdd-apply-code-medium": {},
+    "sdd-apply-pwauto-tests": {},
+    "sdd-propose": {},
+    "judgment-day": {}
   }
 }
