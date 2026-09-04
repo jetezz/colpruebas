@@ -6,11 +6,7 @@
 // @ac PWT-12
 import { test, expect } from '@playwright/test';
 
-test.describe('Tab Test funcional — colpruebas (PWT-12)', () => {
-  test.use({
-    baseURL: 'http://localhost:4323',
-  });
-
+test.describe('Tab Test funcional — @test-tab (PWT-12)', () => {
   test('la página /project/[id]?tab=test carga y muestra los 8 estados', async ({
     page,
   }, testInfo) => {
