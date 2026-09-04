@@ -18,9 +18,9 @@ criteria:
       renderiza la tab cli con el catálogo de comandos agrupado por familia.
     functional: not-applicable
     coverage:
-      Unit: not-applicable
+      Unit: missing
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       No aplicable a este repo consumidor: el catálogo y la tab cli son
@@ -31,9 +31,9 @@ criteria:
     title: La tab cli expone filtro por `name` y copia al portapapeles por comando.
     functional: not-applicable
     coverage:
-      Unit: not-applicable
+      Unit: missing
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: Superficie UI de la plataforma; no aplicable a este repo consumidor.
   - id: PCT-81
@@ -42,9 +42,9 @@ criteria:
       frontend/src/views/projectctl/data/projectctl-commands.ts (plataforma).
     functional: not-applicable
     coverage:
-      Unit: not-applicable
+      Unit: missing
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       SoT del catálogo en la plataforma; este repo referencia el estándar sin
@@ -55,9 +55,9 @@ criteria:
       manera navegable y consistente.
     functional: not-applicable
     coverage:
-      Unit: not-applicable
+      Unit: missing
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: Superficie UI de la plataforma; no aplicable a este repo consumidor.
   - id: PCT-83
@@ -70,7 +70,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Este bundle declara las 5 secciones MUST y el contrato criteria[]; la
@@ -85,7 +85,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Este index.md declara las 5 secciones MUST y su sibling index.mmd
@@ -100,7 +100,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Frontmatter criteria[] de este bundle sigue el contrato de
@@ -115,7 +115,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       navigation.yaml registra la vista; quality-*.md eliminadas (REQ-DOC-004).
@@ -128,7 +128,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Este bundle referencia
@@ -143,7 +143,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Todos los criterios de este bundle usan prefijo PCT-*; no hay prefijo
@@ -154,9 +154,9 @@ criteria:
       (scripts/test-runner.ts) con contrato 1:1 con projectctl test *.
     functional: not-applicable
     coverage:
-      Unit: not-applicable
+      Unit: missing
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       No aplicable a este repo consumidor: el panel/tab Test de /projectctl es
@@ -173,7 +173,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Entregado por AC-003. El runner assertAcHeader/assertAcHeaderSpec rechaza
@@ -184,7 +184,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: Entregado por AC-003. Manual vía CLI projectctl test (coordinator-owned).
   - id: PCT-92
@@ -196,7 +196,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Persistencia completada por AC-003 sobre layout existente (46 runs legacy
@@ -209,7 +209,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Entregado por AC-003/AC-005 (frontend/playwright.config.ts + test:check).
@@ -222,7 +222,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: Entregado por AC-003 (WU-TST-1).
   - id: PCT-95
@@ -234,7 +234,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: >-
       Entregado por AC-001 (env FRONTEND_PORT=4321 + compose canónicos). Manual
@@ -247,7 +247,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: >-
       Entregado por AC-001 (AD-01). Manual vía projectctl status
@@ -260,7 +260,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: >-
       Entregado por AC-001; validado en fase 3 vía projectctl env validate
@@ -273,7 +273,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: >-
       Entregado por AC-001 (AD-01, red/alias preservados de legacy sin cambio de
@@ -287,7 +287,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: >-
       Entregado por AC-001/REQ-ENT-006 (skill sandbox-runtime-policy instalada).
@@ -300,7 +300,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: covered
     notes: >-
       Entregado por AC-001 (docs entornos/architecture/tunnel); validado por
@@ -313,7 +313,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Entregado por AC-005/AC-004. Validado por
@@ -327,7 +327,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Entregado por AC-004 (locator v9 + retiro de estados de fixtures).
@@ -341,7 +341,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: Validado por sot-coherence gate R-007 en fase 3.
   - id: PCT-110
@@ -352,7 +352,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Gate AC-009.app_map_close en cierre evalúa este bundle
@@ -365,7 +365,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: Entregado por AC-004/AC-005; validado por sot-coherence gate R-007.
   - id: PCT-121
@@ -376,7 +376,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: not-applicable
-      PW-AUTO: not-applicable
+      PW-AUTO: missing
       Manual: not-applicable
     notes: >-
       Proceso de cierre del binding; validado por sot-coherence gate R-007.

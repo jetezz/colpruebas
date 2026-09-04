@@ -8,7 +8,7 @@
 // @ac HOME-05
 import { test, expect } from '@playwright/test';
 
-test.describe('Frontend Pages', () => {
+test.describe('Frontend Pages — @home', () => {
   test('index page loads correctly', async ({ page }, testInfo) => {
     testInfo.annotations.push(
       { type: 'ac', description: 'HOME-01' },
