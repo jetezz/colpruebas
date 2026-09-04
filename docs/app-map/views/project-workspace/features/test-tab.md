@@ -18,7 +18,11 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
+<<<<<<< Updated upstream
       PW-AUTO: covered
+=======
+      PW-AUTO: partial
+>>>>>>> Stashed changes
       Manual: missing
     notes: >-
       Implementado via frontend/src/pages/project/[id].astro y

@@ -3,8 +3,11 @@
 // `outputDir='playwright/test-results'` makes the runner's
 // readOrder[i]=<REPO_ROOT>/playwright/test-results/.last-run.junit.xml
 // hit and parse the JUnit XML.
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+const configDir = dirname(fileURLToPath(import.meta.url));
 const baseURL = process.env.BASE_URL || 'http://localhost:4321';
 
 export const PWAUTO_VIEWS = {
@@ -18,15 +21,15 @@ export const PWAUTO_VIEWS = {
 } as const;
 
 export default defineConfig({
-  testDir: './tests',
+  testDir: resolve(configDir, '../tests/front/tests'),
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: 0,
   workers: 1,
-  outputDir: 'playwright/test-results',
+  outputDir: resolve(configDir, 'playwright/test-results'),
   reporter: [
     ['list'],
-    ['junit', { outputFile: 'playwright/test-results/.last-run.junit.xml' }],
+    ['junit', { outputFile: resolve(configDir, 'playwright/test-results', '.last-run.junit.xml') }],
   ],
   use: {
     baseURL,
