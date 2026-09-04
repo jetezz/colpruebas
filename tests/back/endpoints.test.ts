@@ -1,3 +1,11 @@
+// @ac PCT-90 PCT-93
+//
+// Smoke tests for the canonical backend API endpoints (/, /health, /api/status).
+// Declares the test-standard criteria this file participates in: PCT-90 (mandatory
+// `// @ac <ID>` header contract enforced by the unified runner `assertAcHeader`,
+// TST-03/04 — a headerless file rejects the whole repo-wide unit run, exit 2) and
+// PCT-93 (canonical unit-test layout/discovery: this file lives under tests/back/,
+// one of the canonical unit discovery roots, TST-36).
 import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
 import express from 'express';
 import cors from 'cors';

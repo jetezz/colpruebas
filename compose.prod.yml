@@ -1,0 +1,39 @@
+services:
+  frontend-prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+      target: prod
+      args:
+        - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+        - PUBLIC_API_URL=${PUBLIC_API_URL}
+    ports:
+      - "${FRONTEND_PORT}:4321"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+      - PUBLIC_API_URL=${PUBLIC_API_URL}
+    depends_on:
+      - api-prod
+    networks:
+      internal:
+      edge:
+        aliases:
+          - colpruebas-origin
+    restart: unless-stopped
+
+  api-prod:
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile.prod
+    ports:
+      - "${API_PORT}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - PORT=3000
+    networks:
+      - internal
+    restart: unless-stopped

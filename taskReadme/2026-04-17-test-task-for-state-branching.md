@@ -1,8 +1,8 @@
 ---
 title: "Test task for state: branching"
-status: branching
+status: done
 created: "2026-04-17T10:02:16.136Z"
-updated: "2026-04-17T10:02:16.147Z"
+updated: "2026-08-25T09:03:14.000Z"
 source_branch: develop
 target_branch: develop
 branch_name: null

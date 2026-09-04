@@ -1,0 +1,7 @@
+networks:
+  internal:
+    driver: bridge
+  edge:
+    name: mis-proyectos-edge
+    external: true
+    driver: bridge

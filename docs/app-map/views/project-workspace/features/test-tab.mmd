@@ -1,0 +1,20 @@
+flowchart LR
+  tab["/project/{id}?tab=test"] --> panel[TestTabPanel]
+  panel --> legend["Leyenda 8 estados<br/>test-tab-quickrun-legend"]
+  panel --> rows["Lista de criterios<br/>test-tab-quickrun-criterion-{id}"]
+  rows --> chips["Chip por método<br/>data-state data-color"]
+  rows --> pwcliBtn["PW-CLI per-criterio"]
+  rows --> manualBtn["Manual per-criterio"]
+  pwcliBtn --> pwapi[POST /test-pwcli/run]
+  manualBtn --> manualModal[Modal afirmación]
+  manualModal --> manualapi[POST /coverage/manual]
+  panel --> resetBtn["Reset coverage"]
+  resetBtn --> resetModal[Modal con matiz disponibilidad]
+  resetModal --> resetapi[POST /coverage/reset]
+  pwapi --> writer[coverage-writer patchBundleCoverage]
+  manualapi --> writer
+  resetapi --> writer
+  writer --> bundle[docs/app-map/views/project-workspace/features/test-tab.md]
+  invapi[GET /test-inventory] --> writer
+  bundle --> api[GET /docs/app-map]
+  api --> panel

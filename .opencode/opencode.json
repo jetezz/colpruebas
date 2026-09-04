@@ -1,0 +1,33 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "sdd-init": {},
+    "sdd-spec": {},
+    "sdd-tasks": {},
+    "sdd-design": {},
+    "sdd-archive": {
+      "model": "inherit"
+    },
+    "sdd-onboard": {
+      "model": "inherit"
+    },
+    "sdd-apply-doc": {},
+    "sdd-verify-code": {},
+    "sdd-explore-code": {},
+    "sdd-orchestrator": {
+      "model": "opencode-go/deepseek-v4-flash"
+    },
+    "sdd-verify-pwcli": {},
+    "sdd-verify-units": {},
+    "sdd-explore-pwcli": {},
+    "sdd-verify-pwauto": {},
+    "sdd-apply-code-low": {},
+    "sdd-apply-code-high": {},
+    "sdd-apply-unit-tests": {},
+    "sdd-explore-research": {},
+    "sdd-apply-code-medium": {},
+    "sdd-apply-pwauto-tests": {},
+    "sdd-propose": {},
+    "judgment-day": {}
+  }
+}

@@ -1,0 +1,617 @@
+{
+  "artifact_role": "generated",
+  "model_version": 1,
+  "source": {
+    "binding_id": "projectctl-requirements.task-flow",
+    "binding_version": "9.0.0",
+    "generated_at": "2026-07-31",
+    "source_path": ".agents/skills/projectctl-requirements/references/tareas.md",
+    "source_sha256": "992a1873af726d152e50100ffef50cbd1aa6aa106698d39e857bf1afc52e7101"
+  },
+  "state_model": {
+    "controls": [
+      {
+        "id": "branch_creation_pending",
+        "kind": "action",
+        "owner": "coordinator",
+        "transitions": [
+          {
+            "from": "branch_creation_pending",
+            "guard": "AC-010.passed_and_branch_available",
+            "id": "branch_creation_pending_to_p2_planning",
+            "to": "p2_planning"
+          }
+        ],
+        "value": {
+          "phase": "fase_1_propuesta",
+          "state": "branch_creation_pending",
+          "status": "planning"
+        },
+        "writes_state": true
+      },
+      {
+        "id": "final_commit_pending",
+        "kind": "action",
+        "owner": "coordinator",
+        "transitions": [
+          {
+            "from": "final_commit_pending",
+            "guard": "commit_recorded",
+            "id": "final_commit_pending_to_final_push_pending",
+            "to": "final_push_pending"
+          },
+          {
+            "from": "final_commit_pending",
+            "guard": "code_review_failed",
+            "id": "final_commit_pending_code_review_reentry",
+            "to": "p2_revision_requested"
+          }
+        ],
+        "value": {
+          "phase": "fase_4_documentacion",
+          "state": "final_commit_pending",
+          "status": "documenting"
+        },
+        "writes_state": true
+      },
+      {
+        "id": "final_push_pending",
+        "kind": "action",
+        "owner": "coordinator",
+        "transitions": [
+          {
+            "from": "final_push_pending",
+            "guard": "push_recorded",
+            "id": "final_push_pending_to_final_pr_pending",
+            "to": "final_pr_pending"
+          }
+        ],
+        "value": {
+          "phase": "fase_4_documentacion",
+          "state": "final_push_pending",
+          "status": "documenting"
+        },
+        "writes_state": true
+      },
+      {
+        "id": "final_pr_pending",
+        "kind": "action",
+        "owner": "coordinator",
+        "transitions": [
+          {
+            "from": "final_pr_pending",
+            "guard": "pr_url_recorded",
+            "id": "final_pr_pending_to_done",
+            "to": "done"
+          }
+        ],
+        "value": {
+          "phase": "fase_4_documentacion",
+          "state": "final_pr_pending",
+          "status": "documenting"
+        },
+        "writes_state": true
+      },
+      {
+        "id": "done",
+        "kind": "terminal",
+        "owner": "coordinator",
+        "transitions": [],
+        "value": {
+          "phase": null,
+          "state": "done",
+          "status": "done"
+        },
+        "writes_state": true
+      },
+      {
+        "id": "blocked",
+        "kind": "outcome",
+        "owner": "coordinator",
+        "preserves": [
+          "phase",
+          "state"
+        ],
+        "status": "blocked",
+        "transitions": [],
+        "writes_state": false
+      },
+      {
+        "id": "failed",
+        "kind": "outcome",
+        "owner": "coordinator",
+        "preserves": [
+          "phase",
+          "state"
+        ],
+        "status": "failed",
+        "transitions": [],
+        "writes_state": false
+      }
+    ],
+    "guards": {
+      "AC-006.criteria_covered": {
+        "failure": "reject_phase_envelope",
+        "requires": [
+          "criteria_covered_non_empty_approved_ac_ids"
+        ],
+        "type": "envelope_gate"
+      },
+      "AC-009.app_map_close": {
+        "failure": "block_transition_to_done",
+        "requires": [
+          "app_map_criteria_synced_for_all_approved_acs",
+          "no_documentation_debt"
+        ],
+        "type": "app_map_close_gate"
+      },
+      "AC-010.explicit_approval": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "approval_actor",
+          "approval_literal_message",
+          "approval_utc_timestamp",
+          "approved_revision",
+          "approved_criteria_ids"
+        ],
+        "type": "transition_gate"
+      },
+      "AC-010.passed": {
+        "failure": "retain_phase_and_state_and_do_not_enter_phase_2",
+        "requires": [
+          "canonical_task_exists",
+          "required_inputs_valid",
+          "proposal_complete",
+          "explicit_user_approval_recorded",
+          "p1_accepted",
+          "phase_2_hold_released"
+        ],
+        "type": "transition_gate"
+      },
+      "AC-010.passed_and_branch_available": {
+        "failure": "retain_phase_and_state_and_do_not_enter_phase_2",
+        "requires": [
+          "AC-010.passed",
+          "branch_created_from_source_branch",
+          "canonical_branch_active"
+        ],
+        "type": "transition_gate"
+      },
+      "code_apply_evidence_complete": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "assigned_code_work_units_complete"
+        ],
+        "type": "evidence"
+      },
+      "code_review_failed": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "code_review_defect_recorded",
+          "code_or_contract_defect_recorded",
+          "final_commit_not_recorded"
+        ],
+        "type": "evidence"
+      },
+      "code_review_passed": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "sdd_verify_code_green",
+          "no_known_functional_or_code_quality_defect",
+          "functional_summary_complete"
+        ],
+        "type": "hard_gate"
+      },
+      "commit_recorded": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "final_commit_recorded"
+        ],
+        "type": "evidence"
+      },
+      "coverage_gate_passed": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "required_unit_or_pwauto_coverage_green",
+          "coverage_file_test_command_and_result_recorded"
+        ],
+        "type": "hard_gate"
+      },
+      "coverage_incomplete": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "partial_coverage_mapping_recorded"
+        ],
+        "type": "evidence"
+      },
+      "coverage_matrix_ready": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "acceptance_criteria_to_coverage_matrix"
+        ],
+        "type": "evidence"
+      },
+      "documentation_apply_evidence_complete": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "sdd_apply_doc_evidence_recorded"
+        ],
+        "type": "evidence"
+      },
+      "documentation_changed_requires_reverification": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "documentation_revision_gt_verification_revision"
+        ],
+        "type": "revision_gate"
+      },
+      "documentation_gate_failed": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "documentation_gap_recorded"
+        ],
+        "type": "evidence"
+      },
+      "documentation_gate_passed": {
+        "failure": "retain_phase_and_state_and_do_not_complete_phase_4",
+        "requires": [
+          "agent_binding_client_surface_app_map_criteria_sources_and_mirrors_coherent",
+          "replaced_normative_material_and_duplicated_catalogs_removed",
+          "no_documentation_debt",
+          "verification_revision_gte_documentation_revision",
+          "deferred_documentation_checks_empty",
+          "full_verification_green"
+        ],
+        "type": "hard_gate"
+      },
+      "functional_acceptance_explicit": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "explicit_user_functional_acceptance_recorded"
+        ],
+        "type": "hard_gate"
+      },
+      "functional_acceptance_recorded": {
+        "failure": "retain_phase_and_state_and_do_not_enter_phase_3",
+        "requires": [
+          "p2_accepted",
+          "functional_implementation_accepted",
+          "canonical_branch_active",
+          "acceptance_criteria_to_coverage_matrix"
+        ],
+        "type": "hard_gate"
+      },
+      "functional_acceptance_rejected": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "functional_rejection_recorded"
+        ],
+        "type": "evidence"
+      },
+      "functional_defect_found": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "functional_defect_recorded"
+        ],
+        "type": "evidence"
+      },
+      "phase4_owned_dependencies_only": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "pending_work_units_are_phase_4_doc_only",
+          "no_functional_defect",
+          "code_review_green",
+          "core_verification_green",
+          "deferred_documentation_checks_recorded",
+          "deferred_checks_owner_command_and_dependent_work_units_recorded",
+          "verification_revision_recorded",
+          "documentation_revision_recorded",
+          "return_to_p3_test_preparing_required_after_documentation_write"
+        ],
+        "type": "hard_gate"
+      },
+      "planning_artifacts_complete": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "spec_complete",
+          "design_complete",
+          "tasks_complete"
+        ],
+        "type": "evidence"
+      },
+      "pr_url_recorded": {
+        "failure": "retain_phase_and_state_and_do_not_enter_done",
+        "requires": [
+          "pr_url",
+          "branch_name",
+          "final_evidence_recorded"
+        ],
+        "type": "hard_gate"
+      },
+      "proposal_feedback_or_rejection": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "proposal_feedback_or_rejection_recorded"
+        ],
+        "type": "evidence"
+      },
+      "push_recorded": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "final_push_recorded"
+        ],
+        "type": "evidence"
+      },
+      "test_failure_or_missing_test": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "test_failure_or_missing_test_recorded"
+        ],
+        "type": "evidence"
+      }
+    },
+    "lanes": [
+      "judgment-day",
+      "sdd-apply-code-high",
+      "sdd-apply-code-low",
+      "sdd-apply-code-medium",
+      "sdd-apply-doc",
+      "sdd-apply-pwauto-tests",
+      "sdd-apply-unit-tests",
+      "sdd-design",
+      "sdd-explore-code",
+      "sdd-explore-pwcli",
+      "sdd-explore-research",
+      "sdd-init",
+      "sdd-propose",
+      "sdd-spec",
+      "sdd-tasks",
+      "sdd-verify-code",
+      "sdd-verify-pwauto",
+      "sdd-verify-pwcli",
+      "sdd-verify-units"
+    ],
+    "phases": [
+      {
+        "allowed_lanes": [
+          "sdd-init",
+          "sdd-explore-code",
+          "sdd-explore-research",
+          "sdd-explore-pwcli",
+          "sdd-propose"
+        ],
+        "id": "fase_1_propuesta",
+        "states": [
+          "p1_started",
+          "p1_exploring",
+          "p1_drafting",
+          "p1_awaiting_acceptance",
+          "p1_revision_requested",
+          "p1_accepted"
+        ],
+        "status": "planning",
+        "transitions": [
+          {
+            "from": "p1_started",
+            "to": "p1_exploring"
+          },
+          {
+            "from": "p1_exploring",
+            "to": "p1_drafting"
+          },
+          {
+            "from": "p1_drafting",
+            "to": "p1_awaiting_acceptance"
+          },
+          {
+            "from": "p1_awaiting_acceptance",
+            "guard": "proposal_feedback_or_rejection",
+            "to": "p1_revision_requested"
+          },
+          {
+            "from": "p1_revision_requested",
+            "to": "p1_drafting"
+          },
+          {
+            "from": "p1_awaiting_acceptance",
+            "guard": "AC-010.explicit_approval",
+            "to": "p1_accepted"
+          },
+          {
+            "from": "p1_accepted",
+            "guard": "AC-010.passed",
+            "to": "branch_creation_pending"
+          }
+        ]
+      },
+      {
+        "allowed_lanes": [
+          "sdd-spec",
+          "sdd-design",
+          "sdd-tasks",
+          "sdd-apply-code-low",
+          "sdd-apply-code-medium",
+          "sdd-apply-code-high",
+          "sdd-verify-code",
+          "judgment-day"
+        ],
+        "id": "fase_2_implementacion",
+        "states": [
+          "p2_planning",
+          "p2_implementing",
+          "p2_code_review",
+          "p2_awaiting_acceptance",
+          "p2_revision_requested",
+          "p2_accepted"
+        ],
+        "status": "implementing",
+        "transitions": [
+          {
+            "from": "p2_planning",
+            "guard": "planning_artifacts_complete",
+            "to": "p2_implementing"
+          },
+          {
+            "from": "p2_implementing",
+            "guard": "code_apply_evidence_complete",
+            "to": "p2_code_review"
+          },
+          {
+            "from": "p2_code_review",
+            "guard": "code_review_failed",
+            "to": "p2_revision_requested"
+          },
+          {
+            "from": "p2_revision_requested",
+            "to": "p2_implementing"
+          },
+          {
+            "from": "p2_code_review",
+            "guard": "code_review_passed",
+            "to": "p2_awaiting_acceptance"
+          },
+          {
+            "from": "p2_awaiting_acceptance",
+            "guard": "functional_acceptance_rejected",
+            "to": "p2_revision_requested"
+          },
+          {
+            "from": "p2_awaiting_acceptance",
+            "guard": "functional_acceptance_explicit",
+            "to": "p2_accepted"
+          },
+          {
+            "from": "p2_accepted",
+            "guard": "functional_acceptance_recorded",
+            "to": "p3_test_preparing"
+          }
+        ]
+      },
+      {
+        "allowed_lanes": [
+          "sdd-apply-unit-tests",
+          "sdd-apply-pwauto-tests",
+          "sdd-verify-units",
+          "sdd-verify-pwauto",
+          "sdd-verify-pwcli"
+        ],
+        "id": "fase_3_verificacion",
+        "states": [
+          "p3_test_preparing",
+          "p3_test_running",
+          "p3_test_fixing",
+          "p3_coverage_pending",
+          "p3_complete"
+        ],
+        "status": "testing",
+        "transitions": [
+          {
+            "from": "p3_test_preparing",
+            "guard": "coverage_matrix_ready",
+            "to": "p3_test_running"
+          },
+          {
+            "from": "p3_test_running",
+            "guard": "test_failure_or_missing_test",
+            "to": "p3_test_fixing"
+          },
+          {
+            "from": "p3_test_fixing",
+            "to": "p3_test_running"
+          },
+          {
+            "from": "p3_test_running",
+            "guard": "coverage_incomplete",
+            "to": "p3_coverage_pending"
+          },
+          {
+            "from": "p3_coverage_pending",
+            "to": "p3_test_preparing"
+          },
+          {
+            "from": "p3_coverage_pending",
+            "guard": "phase4_owned_dependencies_only",
+            "to": "p4_started"
+          },
+          {
+            "from": "p3_test_running",
+            "guard": "functional_defect_found",
+            "to": "p2_revision_requested"
+          },
+          {
+            "from": "p3_test_running",
+            "guard": "coverage_gate_passed",
+            "to": "p3_complete"
+          },
+          {
+            "from": "p3_complete",
+            "guard": "coverage_gate_passed",
+            "to": "p4_started"
+          }
+        ]
+      },
+      {
+        "allowed_lanes": [
+          "sdd-apply-doc"
+        ],
+        "id": "fase_4_documentacion",
+        "states": [
+          "p4_started",
+          "p4_documenting",
+          "p4_reviewing",
+          "p4_revision_requested",
+          "p4_complete"
+        ],
+        "status": "documenting",
+        "transitions": [
+          {
+            "from": "p4_started",
+            "to": "p4_documenting"
+          },
+          {
+            "from": "p4_documenting",
+            "guard": "documentation_apply_evidence_complete",
+            "to": "p4_reviewing"
+          },
+          {
+            "from": "p4_reviewing",
+            "guard": "documentation_gate_failed",
+            "to": "p4_revision_requested"
+          },
+          {
+            "from": "p4_revision_requested",
+            "to": "p4_documenting"
+          },
+          {
+            "from": "p4_reviewing",
+            "guard": "documentation_changed_requires_reverification",
+            "to": "p3_test_preparing"
+          },
+          {
+            "from": "p4_reviewing",
+            "guard": "documentation_gate_passed",
+            "to": "p4_complete"
+          },
+          {
+            "from": "p4_complete",
+            "to": "final_commit_pending"
+          }
+        ]
+      }
+    ],
+    "status": {
+      "pre_bootstrap": "pending",
+      "terminal": "done",
+      "writable": [
+        "pending",
+        "planning",
+        "implementing",
+        "testing",
+        "documenting",
+        "done",
+        "blocked",
+        "failed"
+      ]
+    }
+  }
+}
