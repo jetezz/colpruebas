@@ -18,11 +18,8 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-<<<<<<< Updated upstream
+      PW-AUTO: missing
       PW-AUTO: covered
-=======
-      PW-AUTO: partial
->>>>>>> Stashed changes
       Manual: missing
     notes: >-
       Implementado via frontend/src/pages/project/[id].astro y
@@ -36,7 +33,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Cada sección se renderiza con data-testid (test-tab-section-config,
@@ -51,7 +48,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Helper puro frontend/src/lib/test-status.ts#resolveStatus(). Cobertura
@@ -66,7 +63,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Lee docs/app-map/views/project-workspace/features/test-tab.md con
@@ -81,7 +78,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       backend/src/coverage-writer.ts#manualMark(): gray-matter parse → SHA-256
@@ -97,7 +94,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       backend/src/coverage-writer.ts#resetCoverage(): por cada criterio y método
@@ -114,7 +111,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Mock determinístico: read criteria current state, decide covered vs
@@ -130,7 +127,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Renderizada entre summaryChips y la lista de criterios. 8 celdas con su
@@ -147,7 +144,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       data-testid test-tab-validate-pwcli-<criterionId> → POST /test-pwcli/run.
@@ -165,7 +162,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       data-testid test-tab-quickrun-reset-coverage → modal con
@@ -182,7 +179,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       tests/back/test-status.test.ts. Cada estado tiene al menos 1 assertion.
@@ -197,7 +194,7 @@ criteria:
     coverage:
       Unit: covered
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       tests/front/tests/test-tab.spec.ts usa test.info().annotations con
