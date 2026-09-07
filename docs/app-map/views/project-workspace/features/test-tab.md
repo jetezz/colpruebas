@@ -19,6 +19,7 @@ criteria:
       Unit: covered
       PW-CLI: missing
       PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Implementado via frontend/src/pages/project/[id].astro y
