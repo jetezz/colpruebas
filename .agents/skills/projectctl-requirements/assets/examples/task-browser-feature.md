@@ -4,8 +4,9 @@ task_id: "20260417-a1b2c3"
 task_slug: "rename-project"
 sdd_change_id: "20260417-a1b2c3-rename-project"
 binding_id: "projectctl-requirements.task-flow"
-binding_version: "9.0.0"
-binding_path: ".agents/skills/projectctl-requirements/references/tareas.md"
+binding_version: "10.0.0"
+rdd_mode: disabled
+binding_path: ".agents/skills/projectctl-requirements/references/tasks/binding.md"
 sdd_persistence: "taskReadme index + phase artifacts"
 phase_artifacts_dir: "taskReadme/20260417-a1b2c3-rename-project/"
 status: done
@@ -28,7 +29,7 @@ blocked_reason: ""
 
 # Task: Validar renombrado de proyecto desde dashboard
 
-> **Origen de los valores**: este ejemplo es un asset del binding `projectctl-requirements.task-flow` v9.0.0. El índice y sus phase artifacts son las fuentes canónicas.
+> **Origen de los valores**: este ejemplo es un asset del binding `projectctl-requirements.task-flow` v10.0.0 / `TaskFlowBindingV2` (model `2`). El índice y sus phase artifacts son las fuentes canónicas; `rdd-report.md` sería solo una proyección no autoritativa, nunca autoridad o recovery backend.
 
 ## 1. Objetivo
 
@@ -76,7 +77,7 @@ Prosa completa en `taskReadme/20260417-a1b2c3-rename-project/spec.md`.
 
 ## 5. Work units
 
-Desglose full (13 columnas + campos contractuales) en `taskReadme/20260417-a1b2c3-rename-project/tasks.md`; schema en `.agents/skills/sd-protocol/apply-work-unit-schema.md`.
+Desglose full (13 columnas + campos contractuales) en `taskReadme/20260417-a1b2c3-rename-project/tasks.md`; schema en `.agents/skills/projectctl-requirements/modules/sd-protocol/apply-work-unit-schema.md`.
 
 | WU-id | Lane | apply_lane | Estado | Artefacto de evidencia |
 | --- | --- | --- | --- | --- |
@@ -97,7 +98,7 @@ Desglose full (13 columnas + campos contractuales) en `taskReadme/20260417-a1b2c
   - PW-AUTO → `taskReadme/20260417-a1b2c3-rename-project/verify-pwauto.md` (`passed`, `bun run test:e2e:smoke-ui`)
   - PW-CLI → `taskReadme/20260417-a1b2c3-rename-project/verify-pwcli.md` (`passed`, flujo `login → dashboard → renombrar → ver nuevo nombre`)
   - Consolidado → `taskReadme/20260417-a1b2c3-rename-project/verify-report.md`
-- **Validación browser/runtime**: contrato (`target_environment: dev`, `runtime_kind: managed-project`, credentials `.env.example.e2e`) en el phase artifact `tasks`; gate **Browser lane preconditions** en `.agents/skills/coordinador/SKILL.md`.
+- **Validación browser/runtime**: contrato (`target_environment: dev`, `runtime_kind: managed-project`, credentials `.env.example.e2e`) en el phase artifact `tasks`; gate **Browser lane preconditions** en `.agents/skills/projectctl-requirements/modules/coordinator/module.md`.
 
 > **Ownership**: `coordinator` (per `binding.task.heading_owners["6_verificacion"]`).
 

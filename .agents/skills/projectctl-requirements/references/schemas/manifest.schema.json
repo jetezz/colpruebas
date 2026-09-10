@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "projectctl-manifest/v1",
+  "title": "Projectctl capability manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source_revision", "capabilities"],
+  "properties": {
+    "schema": { "const": "projectctl-manifest/v1" },
+    "source_revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["core", "web-browser", "managed-docker"],
+      "properties": {
+        "core": { "$ref": "#/$defs/coreCapability" },
+        "web-browser": { "$ref": "#/$defs/optionalCapability" },
+        "managed-docker": { "$ref": "#/$defs/optionalCapability" }
+      }
+    }
+  },
+  "$defs": {
+    "status": { "enum": ["enabled", "disabled"] },
+    "sourceRevision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "coreCapability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "required", "status", "requirements", "source_revision", "validation"],
+      "properties": {
+        "id": { "const": "core" },
+        "required": { "const": true },
+        "status": { "$ref": "#/$defs/status" },
+        "requirements": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["locator", "binding-v2", "artifact-store", "resolver", "docs", "test"]
+          }
+        },
+        "source_revision": { "$ref": "#/$defs/sourceRevision" },
+        "validation": { "$ref": "#/$defs/validation" }
+      }
+    },
+    "optionalCapability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "required", "status", "requirements", "source_revision", "validation"],
+      "properties": {
+        "id": { "enum": ["web-browser", "managed-docker"] },
+        "required": { "const": false },
+        "status": { "$ref": "#/$defs/status" },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "source_revision": { "$ref": "#/$defs/sourceRevision" },
+        "validation": { "$ref": "#/$defs/validation" }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checks"],
+      "properties": {
+        "checked_at": { "type": "string", "minLength": 1 },
+        "checks": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

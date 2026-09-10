@@ -4,8 +4,9 @@ task_id: "<YYYYMMDD-shortid>"
 task_slug: "<kebab-case-slug>"
 sdd_change_id: "<YYYYMMDD-shortid-slug o vacío>"
 binding_id: "projectctl-requirements.task-flow"
-binding_version: "9.0.0"
-binding_path: ".agents/skills/projectctl-requirements/references/tareas.md"
+binding_version: "10.0.0"
+rdd_mode: disabled
+binding_path: ".agents/skills/projectctl-requirements/references/tasks/binding.md"
 sdd_persistence: "taskReadme index + phase artifacts"
 phase_artifacts_dir: "taskReadme/<task_id>-<task_slug>/"
 status: planning
@@ -28,9 +29,9 @@ blocked_reason: ""
 
 # Task: <Nombre claro de la tarea>
 
-> **Origen de los valores**: este template es un **asset del binding `projectctl-requirements.task-flow` v9.0.0** y vive en `.agents/skills/projectctl-requirements/assets/task-template.md`. Todo valor escribible se valida contra el binding canónico.
+> **Origen de los valores**: este template es un **asset del binding `projectctl-requirements.task-flow` v10.0.0** y vive en `.agents/skills/projectctl-requirements/assets/task-template.md`. Todo valor escribible se valida contra el binding canónico `TaskFlowBindingV2` (model `2`).
 >
-> **Modelo de persistencia v9.** Este archivo es el índice compacto de coordinación y el detalle completo vive en los phase artifacts referenciados. Ambos son la fuente canónica y suficiente de persistencia y recuperación. El binding configura `mirrors: []`; herramientas opcionales de soporte no son evidencia ni fuente de verdad SDD.
+> **Modelo de persistencia v10.** Este archivo es el índice compacto de coordinación y el detalle completo vive en los phase artifacts referenciados. Ambos son la fuente canónica y suficiente de persistencia y recuperación. El binding configura `mirrors: []`; herramientas opcionales de soporte no son evidencia ni fuente de verdad SDD. `rdd-report.md` es una proyección no autoritativa: nunca sustituye receipts, autoridad ni recovery backend.
 
 ## 1. Objetivo
 
@@ -47,6 +48,7 @@ Describir en 2-4 líneas qué problema se resuelve, por qué importa y cuál es 
   - `binding.artifact_store.mirrors` está vacío; ninguna herramienta opcional participa en recovery, evidencia o cierre.
   - Cierre exitoso siempre en `status.terminal` (`done`, forma única `{ phase: null, state: "done", status: "done" }`).
   - `phase`/`state` se resuelven desde `binding.phases[]` y `binding.controls[]`; los `retired_aliases` **no** son escribibles.
+  - `rdd_mode` es explícito. `disabled` conserva entrega ordinaria; `receipt-driven` exige guards y gates del binding. `rdd-report.md` no es autoridad ni recovery backend.
 
 > **Ownership**: `coordinator` (per `binding.task.heading_owners["2_contexto_operativo"]`).
 
@@ -78,7 +80,7 @@ Una fila por fase ejecutada. `summary` ≤ `index_budget.max_phase_summary_lines
 
 ## 5. Work units
 
-El desglose full (13 columnas + 4 campos contractuales, complejidad, parallel-safety) vive en el phase artifact `tasks` (`taskReadme/<task_id>-<task_slug>/tasks.md`) — schema en `.agents/skills/sd-protocol/apply-work-unit-schema.md`. Aquí solo la tabla de estado que mantiene el coordinador:
+El desglose full (13 columnas + 4 campos contractuales, complejidad, parallel-safety) vive en el phase artifact `tasks` (`taskReadme/<task_id>-<task_slug>/tasks.md`) — schema en `.agents/skills/projectctl-requirements/modules/sd-protocol/apply-work-unit-schema.md`. Aquí solo la tabla de estado que mantiene el coordinador:
 
 | WU-id | Lane | apply_lane | Estado | Artefacto de evidencia |
 | --- | --- | --- | --- | --- |
@@ -99,7 +101,8 @@ Veredicto consolidado + refs a los phase artifacts `verify-*`. El detalle de cad
   - PW-AUTO → `taskReadme/<task_id>-<task_slug>/verify-pwauto.md`
   - PW-CLI → `taskReadme/<task_id>-<task_slug>/verify-pwcli.md`
   - Consolidado → `taskReadme/<task_id>-<task_slug>/verify-report.md`
-- **Validación browser/runtime**: contrato (target_environment, runtime_kind, credentials) en el phase artifact `tasks`; gate **Browser lane preconditions** en `.agents/skills/coordinador/SKILL.md`.
+  - RDD (si aplica) → `taskReadme/<task_id>-<task_slug>/rdd-report.md` (**proyección no autoritativa; no es autoridad ni recovery backend**)
+- **Validación browser/runtime**: contrato (target_environment, runtime_kind, credentials) en el phase artifact `tasks`; gate **Browser lane preconditions** en `.agents/skills/projectctl-requirements/modules/coordinator/module.md`.
 
 > **Ownership**: `coordinator` (per `binding.task.heading_owners["6_verificacion"]`). Las verify lanes escriben su `verify-<kind>.md` y devuelven veredicto + `artifact_ref`.
 

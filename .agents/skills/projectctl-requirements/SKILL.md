@@ -3,7 +3,7 @@ name: projectctl-requirements
 description: "Trigger: projectctl rules, project onboarding, requirements checklist, docs governance, testing policy, runtime policy, task flow, projectctl operation. Cross-repo portable standard for `/projectctl` compatibility (cli | doc | test | entorno | tareas)."
 metadata:
   id: projectctl-requirements
-  version: 10.0.0
+  version: 12.0.0
   layer: repo
   type: standard
   sot_policy: canonical-standard
@@ -60,7 +60,7 @@ Esta skill cubre las 5 tabs internas de `/projectctl` que un proyecto nuevo debe
 | **doc** | `/projectctl?tab=doc` | Reglas documentales que un proyecto debe cumplir para que su `docs/app-map/` se renderice bien. 5 secciones MUST por bundle, contrato `criteria[]` inline, prefix discipline, SoT única, eliminación de archivos legacy. Cubre PCT-83..88. | [`references/doc.md`](references/doc.md) |
 | **test** | `/projectctl?tab=test` | Reglas del sistema de testing: AC mandatorio (`// @ac <ID>`), runner unificado, persistencia atómica + write-back via `patchBundleCoverage`, gate `bun run test:check`, layout canónico. Cubre PCT-89..94. | `references/test.md` (scope de WU-SKILL-2) |
 | **entorno** | `/projectctl?tab=entorno` | Reglas para que un proyecto gestionado arranque, sea publicable y conecte al tunnel compartido: overlays canónicos, `FRONTEND_PORT` obligatorio, contrato edge `mis-proyectos-edge`, sandbox sin Docker. Cubre PCT-95..100. | `references/entorno.md` (scope de WU-SKILL-2) |
-| **tareas** | `/projectctl?tab=tareas` | Guía informativa de creación, cuatro fases, estados, agentes, gates, errores y entrega; el binding ejecutable vive en `references/tareas.md` (v9.0.0) y es la única SoT normativa. Cubre PCT-106..121. | `references/tareas.md` (binding `TaskFlowBindingV1` integral) |
+| **tareas** | `/projectctl?tab=tareas` | Guía informativa del flujo; el binding ejecutable vive en `references/tareas.md` (v10.0.0) y es la única SoT normativa. Cubre PCT-106..121. | `references/tareas.md` (binding `TaskFlowBindingV2` integral) |
 
 ## References (índice navegable)
 
@@ -68,11 +68,11 @@ Esta skill incluye los siguientes archivos:
 
 - `references/cli.md` — requisitos tab CLI (PCT-79..82 + referencia cruzada PCT-08..78) — **presente** (WU-SKILL-1).
 - `references/doc.md` — requisitos tab Doc (PCT-83..88) — **presente** (WU-SKILL-1).
-- `references/tareas.md` — **única SoT normativa** del flujo SDD. Contiene el bloque delimitado `task-flow-binding` (`TaskFlowBindingV1`, v9.0.0) con task/naming, selección opcional de helpers, artifact store, fases, states/status, controls, lanes, gates, ownership, delivery, active sources y cierre. Otras referencias solo lo citan.
+- `references/tareas.md` — **única SoT normativa** del flujo SDD. Contiene el bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2) con task/naming, selección opcional de helpers, RDD, artifact store, fases, states/status, controls, lanes, gates, ownership, delivery, active sources y cierre. Otras referencias solo lo citan y no republican sus machine values.
 - `references/standard.md` — reglas integradas de documentación, testing, runtime y operación `projectctl`; **citan** el binding y NO redefinen machine values.
 - `references/sources.md` — tabla SoT completa por requisito, machine-grepeable (gate `sot-coherence.test.ts`); **traza** el bloque `task-flow-binding` y NO inventa machine values.
 - `references/maintenance.md` — contrato anti-drift detallado (last-verified, R-006, R-007, semver cross-repo y safeguards de taskReadme); **traza** el bloque y NO inventa machine values.
-- `references/decisions.md` — decisiones binding D-1..D-21 y D'1..D'10 que rigen la skill; confirma `TaskFlowBindingV1` como la única SoT normativa.
+- `references/decisions.md` — decisiones binding D-1..D-22 y D'1..D'11 que rigen la skill; confirma `TaskFlowBindingV2` como la única SoT normativa.
 
 > **Nota de portabilidad**: el contrato de instalación es `copy-tree-no-mods` — la carpeta completa (`SKILL.md`, `references/`, `assets/` y `generated/`) se copia tal cual a `.agents/skills/` de cualquier repo destino. NO se deben editar archivos dentro de la skill copiada sin bumpear `metadata.version` per el contrato semver de `references/maintenance.md`. Un cambio contractual del bloque `task-flow-binding` obliga a recopiar el árbol completo de la skill en los repos destino.
 
@@ -126,5 +126,5 @@ La copia contiene un paquete documental completo, no una instalación operaciona
 
 ---
 
-**Status**: estándar canónico de compatibilidad `/projectctl`, package v10.0.0, binding v9.0.0, scope `repo` (no global), `sot_policy: canonical-standard`. El bloque `task-flow-binding` (`TaskFlowBindingV1`) dentro de `references/tareas.md` es la única SoT normativa del flujo de tareas; cualquier referencia que cite machine values divergentes es drift y debe regenerarse.
+**Status**: estándar canónico de compatibilidad `/projectctl`, package v12.0.0, binding v10.0.0, scope `repo` (no global), `sot_policy: canonical-standard`. El bloque `task-flow-binding` (`TaskFlowBindingV2`) dentro de `references/tareas.md` es la única SoT normativa; una instalación V1/V2 o v8/v9/v10 mezclada bloquea y requiere reemplazo `copy-tree-no-mods` completo.
 **Cumple**: PCT-105 (skill portability + Maintenance contract + anti-drift + installability); PCT-106..PCT-121 (binding operativo de tareas).

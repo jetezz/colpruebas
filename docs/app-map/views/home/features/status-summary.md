@@ -8,6 +8,7 @@ summary: >-
 source_of_truth: app-map
 criteria:
   - id: HSS-01
+    type: ui
     title: >-
       El nombre de la aplicacion es visible dentro de la tarjeta central
       `Resumen de estado` con la etiqueta `Aplicacion:`.
@@ -22,6 +23,7 @@ criteria:
       Aplicacion:` + `info-card contiene colpruebas`. Anota `@ac HSS-01` en el
       primer test del archivo.
   - id: HSS-02
+    type: ui
     title: >-
       El estado del frontend se muestra dentro de la misma tarjeta, alineado a
       la derecha del label `Frontend:`, diferenciado por entorno (production
@@ -37,6 +39,7 @@ criteria:
       Frontend:`. Estilo de color vive en InfoCard.astro `.value.production` /
       `.value.test`.
   - id: HSS-03
+    type: ui
     title: >-
       El estado de la API se muestra dentro de la tarjeta con la etiqueta `API:`
       y replica el patron de color por entorno.
@@ -50,6 +53,7 @@ criteria:
       Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
       API:`.
   - id: HSS-04
+    type: ui
     title: >-
       La rama git operativa se renderiza con la etiqueta `Rama Git:` en la misma
       tarjeta y respeta el color del entorno actual.

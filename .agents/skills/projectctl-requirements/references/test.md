@@ -87,7 +87,7 @@ El panel Test MUST explicar el **runner unificado** y el mapping 1:1 entre los c
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §4 + `scripts/test-runner.ts` + `docs/app-map/views/projectctl/index.md` + `docs/app-map/views/project-workspace/features/test-tab.md`.
 > **Cumple**: PCT-91.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §4 familia `projectctl test *`, en `scripts/test-runner.ts`, o en los entry points del mapping CLI ↔ runner.
+> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §4 familia `projectctl test *`, en `scripts/test-runner.ts`, o en los entry points del mapping CLI ↔ runner.
 
 ---
 

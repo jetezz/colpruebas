@@ -8,6 +8,7 @@ summary: >-
 source_of_truth: app-map
 criteria:
   - id: HRM-01
+    type: ui
     title: >-
       La referencia visible de la rama git coincide con el branch resuelto en
       tiempo de render del servidor (no se muestra un placeholder generico si el
@@ -24,6 +25,7 @@ criteria:
       label y la presencia son contractuales. Anota `@ac HRM-01` en
       tests/front/tests/index.spec.ts.
   - id: HRM-02
+    type: ui
     title: >-
       El timestamp visible en el pie de la landing esta en formato ISO 8601 y
       refleja el momento del render SSR, no del cliente.

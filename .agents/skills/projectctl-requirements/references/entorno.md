@@ -34,13 +34,13 @@ Para cada requisito:
 `/projectctl?tab=entorno` MUST renderizar el panel Entorno listando las reglas del repo para que un proyecto gestionado arranque, sea publicable y se conecte al tunnel compartido:
 
 1. Overlays canónicos (`compose.yml` + `compose.dev.yml`).
-2. Puertos canónicos + `FRONTEND_PORT` obligatorio en `.env` y `.env.dev`.
+2. Puertos canónicos por overlay: `FRONTEND_PORT`/`API_PORT` obligatorios en `.env` para prod y `FRONTEND_DEV_PORT`/`API_DEV_PORT` obligatorios en `.env.dev` para dev.
 3. Contrato edge `mis-proyectos-edge` external + alias por entorno + guardrail `TUNNEL_NOT_PUBLISHABLE`.
 4. Sandbox sin Docker CLI/socket — control de runtime exclusivamente via `projectctl`.
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §3 + `docs/00-context/entornos.md` + `.agents/skills/sandbox-runtime-policy/SKILL.md`.
 > **Cumple**: PCT-95.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §3, `docs/00-context/entornos.md` o `.agents/skills/sandbox-runtime-policy/SKILL.md`.
+> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §3, `docs/00-context/entornos.md` o `.agents/skills/sandbox-runtime-policy/SKILL.md`.
 
 ---
 
@@ -58,23 +58,23 @@ El panel Entorno MUST explicar el **layout canónico de overlays**:
 
 > **SoT original**: `compose.yml` + `compose.dev.yml` + `.env.example` + `.agents/skills/projectctl-requirements/references/standard.md` §3 + `docs/00-context/entornos.md` + `docs/00-context/architecture.md`.
 > **Cumple**: PCT-96.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `compose.yml`, `compose.dev.yml`, `.env.example`, `.agents/skills/projectctl-requirements/references/standard.md` §3 o `docs/00-context/entornos.md` (especialmente la regla del servicio `tunnel` como fallback legacy).
+> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en `compose.yml`, `compose.dev.yml`, `.env.example`/`.env.dev.example`, `.agents/skills/projectctl-requirements/references/standard.md` §3 o `docs/00-context/entornos.md` (especialmente la regla del servicio `tunnel` como fallback legacy).
 
 ---
 
-## PCT-97 — Puertos canónicos + `FRONTEND_PORT` obligatorio en `.env` y `.env.dev`
+## PCT-97 — Puertos canónicos por overlay y configuración local explícita
 
 ### Requisito
 
-El panel Entorno MUST declarar la **obligatoriedad de `FRONTEND_PORT`** y los puertos canónicos:
+El panel Entorno MUST declarar la **obligatoriedad de los puertos por overlay** y la presencia explícita de los archivos locales:
 
-1. `FRONTEND_PORT` (host) → `4321` (contenedor). **OBLIGATORIO** en `.env` y `.env.dev`; sin eso, el runtime gestionado NO arranca (regla de `standard.md` §3).
-2. `API_PORT`, `WEBHOOK_PORT` siguiendo la convención existente del repo (referenciados por `compose.yml` / `compose.dev.yml` / `.env.example`).
-3. `projectctl env validate` (PCT-35) MUST reportar `missing/invalid FRONTEND_PORT` y el campo `configExists` cuando corresponda.
+1. Prod (`compose.yml` + `.env`): `FRONTEND_PORT` (host) → `4321` (contenedor) y `API_PORT` son **OBLIGATORIOS**; sin esas claves explícitas, la validación local falla.
+2. Dev (`compose.dev.yml` + `.env.dev`): `FRONTEND_DEV_PORT` (host) → `4321` (contenedor) y `API_DEV_PORT` son **OBLIGATORIOS**; no son aliases de las claves prod.
+3. Un archivo ausente, `.env.example`/`.env.dev.example` o un default `${VAR:-default}` de Compose NO cuenta como configuración local presente. `projectctl env validate` (PCT-35) MUST reportar el archivo o la clave ausente y los valores inválidos sin exponer valores.
 
 > **SoT original**: `compose.yml` + `compose.dev.yml` + `.env.example` + `.agents/skills/projectctl-requirements/references/standard.md` §3 + `docs/app-map/views/projectctl/index.md`.
 > **Cumple**: PCT-97.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en cualquier overlay Compose (`compose.yml` o `compose.dev.yml`), en `.env.example`, en `.agents/skills/projectctl-requirements/references/standard.md` §3 o en `PCT-35` en `docs/app-map/views/projectctl/index.md`.
+> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en cualquier overlay Compose (`compose.yml` o `compose.dev.yml`), en `.env.example`/`.env.dev.example`, en `.agents/skills/projectctl-requirements/references/standard.md` §3 o en `PCT-35` en `docs/app-map/views/projectctl/index.md`.
 
 ---
 
@@ -93,7 +93,7 @@ El panel Entorno MUST explicar el **contrato edge** `mis-proyectos-edge`:
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §3 + `compose.yml` + `compose.dev.yml` + `docs/00-context/architecture.md` + `docs/02-features/tunnel.md` + `docs/app-map/views/projectctl/index.md`.
 > **Cumple**: PCT-98.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §3, en los overlays compose del proyecto destino, en `docs/02-features/tunnel.md`, en `PCT-38/PCT-42/PCT-43/PCT-44/PCT-45` o en el guardrail `TUNNEL_NOT_PUBLISHABLE`.
+> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §3, en los overlays compose del proyecto destino, en `docs/02-features/tunnel.md`, en `PCT-38/PCT-42/PCT-43/PCT-44/PCT-45` o en el guardrail `TUNNEL_NOT_PUBLISHABLE`.
 
 ---
 
@@ -112,7 +112,7 @@ El panel Entorno MUST declarar la **regla sandbox**:
 
 > **SoT original**: `.agents/skills/sandbox-runtime-policy/SKILL.md` + `.agents/skills/projectctl-requirements/references/standard.md` §3 + `.agents/skills/projectctl-requirements/references/standard.md` §4 + `docs/app-map/views/projectctl/index.md` + `sandbox/src/bin/projectctl.ts`.
 > **Cumple**: PCT-99.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `.agents/skills/sandbox-runtime-policy/SKILL.md`, `.agents/skills/projectctl-requirements/references/standard.md` §4, en `sandbox/src/bin/projectctl.ts`, o en cualquier PCT-30..PCT-45 del bundle `docs/app-map/views/projectctl/index.md`.
+> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en `.agents/skills/sandbox-runtime-policy/SKILL.md`, `.agents/skills/projectctl-requirements/references/standard.md` §4, en `sandbox/src/bin/projectctl.ts`, o en cualquier PCT-30..PCT-45 del bundle `docs/app-map/views/projectctl/index.md`.
 
 ---
 
@@ -136,7 +136,7 @@ El panel Entorno MUST declarar `projectctl-requirements` como policy operativa i
 | --- | --- |
 | PCT-95 | Panel Entorno existe y lista reglas para arrancar + ser publicable + tunnel |
 | PCT-96 | Overlays canónicos (`compose.yml` prod + `compose.dev.yml` dev) + `tunnel` como fallback legacy opt-in |
-| PCT-97 | Puertos canónicos + `FRONTEND_PORT` obligatorio en `.env` y `.env.dev` |
+| PCT-97 | Puertos canónicos por overlay + archivos `.env`/`.env.dev` y claves explícitas |
 | PCT-98 | Contrato edge `mis-proyectos-edge` + alias por entorno + guardrail `TUNNEL_NOT_PUBLISHABLE` |
 | PCT-99 | Sandbox sin Docker CLI/socket — control de runtime exclusivamente via `projectctl` |
 | PCT-100 | References entorno: estándar integrado en `projectctl-requirements` |

@@ -1,9 +1,9 @@
 {
-  "contract_version": 1,
-  "binding_path": ".agents/skills/projectctl-requirements/references/tareas.md",
+  "contract_version": 2,
+  "binding_path": ".agents/skills/projectctl-requirements/references/tasks/binding.md",
   "machine_block_id": "task-flow-binding",
   "expected_binding_id": "projectctl-requirements.task-flow",
-  "binding_version": "9.0.0",
+  "expected_binding_version": "10.0.0",
   "projections": {
     "state_model": ".agents/skills/projectctl-requirements/generated/phase-state-schema.json",
     "task_template": ".agents/skills/projectctl-requirements/assets/task-template.md",

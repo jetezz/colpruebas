@@ -10,6 +10,7 @@ summary: >-
 source_of_truth: app-map
 criteria:
   - id: PWT-01
+    type: functionality
     title: >-
       Existe la ruta /project/[id] con layout de tabs (commands, skills, agents,
       scheduled, environments, preview, test) sin crear ruta Astro paralela
@@ -26,6 +27,7 @@ criteria:
       frontend/src/components/ProjectTabs.astro. La URL canónica es
       /project/{id}?tab=test. data-testid del shell: project-shell-tabs.
   - id: PWT-02
+    type: functionality
     title: >-
       La tab test renderiza secciones 5.1 Configuración, 5.2 Sistema de testeo
       rápido y 5.3 Tareas programadas con semántica mínima
@@ -41,6 +43,7 @@ criteria:
       acordeón de cards y los criterios del proyecto. 5.3 muestra un panel
       placeholder (no es objetivo del scope).
   - id: PWT-03
+    type: functionality
     title: >-
       El resolver visual de cobertura combina disponibilidad × resultado y emite
       uno de los 8 estados derivados sin colapsar `missing`
@@ -56,6 +59,7 @@ criteria:
       casos borde. Sin acceso a filesystem ni DOM. Chip renderiza {state, color,
       label}.
   - id: PWT-04
+    type: backend
     title: >-
       Backend expone GET /api/projects/[id]/docs/app-map que retorna el bundle
       test-tab.md parseado con criterios y coverage
@@ -71,6 +75,7 @@ criteria:
       requerida en este managed project (sin login). Test Bun en
       tests/back/coverage-endpoints.test.ts.
   - id: PWT-05
+    type: backend
     title: >-
       Backend expone POST /api/projects/[id]/docs/app-map/coverage/manual que
       actualiza exactamente UN criterio via writer atómico
@@ -86,6 +91,7 @@ criteria:
       tmp + fs.renameSync + SHA-256 post. 1 acción = 1 criterio. Shape response
       {ok, criterionId, sha256}. body byte region preservada.
   - id: PWT-06
+    type: backend
     title: >-
       Backend expone POST /api/projects/[id]/docs/app-map/coverage/reset que
       respeta disponibilidad: con test → Pendiente (missing), sin test → no-test
@@ -104,6 +110,7 @@ criteria:
       Unit/PW-AUTO sin @ac). Response shape {ok, bundlesTouched, criteriaReset,
       failed}.
   - id: PWT-07
+    type: backend
     title: >-
       Backend expone POST /api/projects/[id]/test-pwcli/run que simula un agente
       OpenCode y escribe coverage.PW-CLI=covered para el criterio solicitado
@@ -120,6 +127,7 @@ criteria:
       atomically. En producción real abriría spawn contra sdd-verify-pwcli; aquí
       es simulado. Response {ok, criterionId, verdict, agent: 'mock-pwcli'}.
   - id: PWT-08
+    type: ui
     title: >-
       Frontend renderiza leyenda visible con data-testid
       test-tab-quickrun-legend que documenta los 8 estados derivados
@@ -136,6 +144,7 @@ criteria:
       not-applicable/gray No aplica, manual-evidence/blue Evidencia,
       manual-missing/gray Sin evidencia.
   - id: PWT-09
+    type: ui
     title: >-
       Frontend expone botones per-criterio Validar con PW-CLI y Manual con modal
       de afirmación que dispara los endpoints correctos y actualiza el chip
@@ -154,6 +163,7 @@ criteria:
       /docs/app-map y re-render de chips. PW-CLI fallback clipboard cuando el
       endpoint retorne 503 (test-tab-pwcli-fallback).
   - id: PWT-10
+    type: ui
     title: >-
       Frontend expone botón Reset coverage global en 5.2 con modal de
       confirmación con texto "vuelve a Pendiente o Sin test según corresponda"
@@ -171,6 +181,7 @@ criteria:
       test definido vuelven a Pendiente y los métodos sin test definido vuelven
       a Sin test)". Confirmar → POST .../coverage/reset.
   - id: PWT-11
+    type: tooling
     title: >-
       Test unitario Bun del resolver cubre los 8 estados derivados (no-test,
       not-applicable, not-run, passed, failed, partial, manual-evidence,
@@ -186,6 +197,7 @@ criteria:
       Casos borde: manualMandatory true/false, coverage not-applicable, lastRun
       undefined.
   - id: PWT-12
+    type: ui
     title: >-
       Test E2E Playwright del test tab UI contra localhost:4323 verifica que la
       pestaña carga, la leyenda muestra los 8 estados, los chips resuelven

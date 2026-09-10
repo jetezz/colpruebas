@@ -66,7 +66,7 @@ La UI del frontend NO importa el registry backend (regla FSD-2 + sandbox-fronten
 
 > **SoT original**: `sandbox/src/bin/projectctl.ts` + `sandbox/src/lib/projectctl-registry.ts` (PCT-53/PCT-54) + `frontend/src/views/projectctl/data/projectctl-commands.ts` + `.agents/skills/projectctl-requirements/references/tareas.md` JSON Pointer `/task_skill_selection/cli`.
 > **Cumple**: PCT-53, PCT-54, PCT-103.
-> **last-verified**: 2026-07-31.
+> **last-verified**: 2026-09-06.
 
 `projectctl tasks create` usa exclusivamente el template profesional y exige `--title`, `--problem`, `--expected`, `--app-map`, `--change-type` y `--criteria-json`; `--context` y `--related-task` son opcionales. Create y update aceptan exactamente un modo entre `--skills`, `--no-skills` y `--interactive`. Sin modo, create delega defaults al servidor y update preserva el snapshot. La interacción es opt-in, requiere TTY y es incompatible con `--json`; cancelar no realiza la mutación. Los IDs PCT-53/PCT-54 y el total de comandos permanecen estables.
 

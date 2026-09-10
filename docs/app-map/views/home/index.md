@@ -8,6 +8,7 @@ summary: >-
 source_of_truth: app-map
 criteria:
   - id: HOME-01
+    type: functionality
     title: >-
       La aplicacion se identifica visiblemente apenas carga la landing con su
       nombre en el titulo del documento y en la tarjeta principal.
@@ -23,6 +24,7 @@ criteria:
       PW-AUTO del titulo + tarjeta en tests/front/tests/index.spec.ts con `@ac
       home-01`.
   - id: HOME-02
+    type: functionality
     title: >-
       El estado visible del frontend y de la API se muestra simultaneamente y se
       diferencia por entorno (production = verde, test = amarillo).
@@ -37,6 +39,7 @@ criteria:
       (colores verde `#28a745` y amarillo `#ffc107`). Cobertura delegada al
       feature home-status-summary.
   - id: HOME-03
+    type: ui
     title: >-
       La rama git activa es visible en la tarjeta principal para contextualizar
       el despliegue observado.
@@ -50,6 +53,7 @@ criteria:
       `Rama Git:` label en InfoCard.astro. Cobertura delegada a
       home-runtime-metadata para el dato dinamico.
   - id: HOME-04
+    type: ui
     title: >-
       La marca temporal (timestamp ISO 8601) es visible en el pie de la landing
       para dar contexto del momento de carga.
@@ -63,6 +67,7 @@ criteria:
       Implementado via Footer.astro que renderiza `new Date().toISOString()`.
       Cobertura delegada al feature home-runtime-metadata.
   - id: HOME-05
+    type: functionality
     title: >-
       La carga inicial de la landing no produce errores de consola (browser
       console clean).

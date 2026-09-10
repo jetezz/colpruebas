@@ -4,9 +4,9 @@ parent_skill: projectctl-requirements
 owner: WU-04 (apply-code-high)
 purpose: anti-drift contract + cross-repo semver + SoT coherence + task-flow binding safeguards
 sot_policy: canonical-standard
-version: 10.0.0
-last_full_regen: 2026-07-31
-generated_by: sdd-apply-code-high (WU-PKG-01) — taskReadme/20260731-skltsk-seleccion-de-skills-por-tarea/apply-WU-PKG-01.md
+version: 12.0.0
+last_full_regen: 2026-09-07
+generated_by: merge resolution after develop integration
 binding_role: traces_task_flow_binding_block_only
 ---
 
@@ -14,13 +14,13 @@ binding_role: traces_task_flow_binding_block_only
 
 > **Archivo referente**: contrato operativo que rige la regeneración, verificación de coherencia y versionado cross-repo de la skill `projectctl-requirements`. Este archivo es la **forma detallada** del bloque `Maintenance contract` declarado en `.agents/skills/projectctl-requirements/SKILL.md`. Cualquier agente, humano o script que toque la skill debe leer este archivo antes de tomar decisiones de cambio.
 >
-> **Rol respecto al bloque `task-flow-binding`**: este archivo traza el bloque delimitado en `.agents/skills/projectctl-requirements/references/tareas.md` v9.0.0 sin redefinirlo.
+> **Rol respecto al bloque `task-flow-binding`**: este archivo traza `TaskFlowBindingV2` v10.0.0 sin redefinir sus machine values.
 
 ## 1. Estándar canónico de compatibilidad `/projectctl`
 
 > **SoT original**: `.agents/skills/skill-creator/SKILL.md` (regla principal: "una skill debe poder explicarse en una oración").
 
-La skill `projectctl-requirements` es el **estándar canónico de compatibilidad `/projectctl`** del repo. Absorbe las reglas de valor de `docs-governance`, `testing-policy`, `ops-runtime-policy` y `projectctl-operator`, y mantiene el **binding integral** de flujo de tareas (bloque delimitado `task-flow-binding`, `TaskFlowBindingV1`) en `references/tareas.md` para que viajen juntos. Toda entry cita rutas de trazabilidad en formato inline-code (machine-grepeable) y se limita a:
+La skill `projectctl-requirements` es el **estándar canónico de compatibilidad `/projectctl`** del repo. Absorbe las reglas integradas y mantiene el **binding integral** (bloque `task-flow-binding`, `TaskFlowBindingV2`) en `references/tareas.md` para que viajen juntos. Toda entry cita rutas de trazabilidad y se limita a:
 
 - Listar el path original (`<skill-path>` o `<bundle-path>` o `<CLI/API/runtime>` o `<test-path>`).
 - Resumir el requisito en 1-2 frases.
@@ -125,13 +125,13 @@ Las citas con URLs, paths absolutos, placeholders o globs no están sujetas a un
 
 ### `metadata.version` semver interno
 
-La skill declara `metadata.version` semver en `.agents/skills/projectctl-requirements/SKILL.md` (package actual: `10.0.0`; binding machine: `9.0.0`).
+La skill declara `metadata.version` semver en `.agents/skills/projectctl-requirements/SKILL.md` (package actual: `12.0.0`; binding machine: `9.0.0`).
 
 ### Reglas de bump
 
 | Cambio | Bump | Justificación |
 | --- | --- | --- |
-| Cambio contractual en `.agents/skills/projectctl-requirements/SKILL.md` o en el binding integral de `references/tareas.md` (Purpose, Maintenance contract, estructura de frontmatter, `metadata.sot_policy`, bloque `task-flow-binding`/`TaskFlowBindingV1` — su shape, sus `task` (incl. `heading_owners`), `artifact_store`, `status`, `phases`, `controls`, `lanes`, `gates`, `modes`, `delivery`, `active_sources` o `retired_aliases` —); también la eliminación de un campo del binding o cualquier deduplicación del shape | **MAJOR** (`N.x.y` → `(N+1).0.0`) | Breaking: los repos destino deben reemplazar el árbol completo de la skill. Mezclar versiones produciría projections incompatibles. |
+| Cambio contractual en `.agents/skills/projectctl-requirements/SKILL.md` o en el bloque `task-flow-binding` (`TaskFlowBindingV2`) | **MAJOR** (`N.x.y` → `(N+1).0.0`) | Breaking: los repos destino deben reemplazar el árbol completo. Mezclar V1/V2, v8/v9 o package 9/10 bloquea. |
 | Adición o modificación no-breaking de un archivo `references/` o de un campo opcional del bloque (p. ej. una nueva `lane` con `owner_phase` ya presente, un nuevo `gate.evaluator` sin cambiar los existentes) | **MINOR** | Las entradas existentes mantienen sus IDs y contrato. |
 | Bumpear `last-verified` per entry o corregir texto sin cambio de contrato | **PATCH** | Cero impacto semántico. |
 
@@ -146,6 +146,14 @@ La skill declara `metadata.version` semver en `.agents/skills/projectctl-require
 > **Bump vigente package v8.0.0 → v9.0.0 (MAJOR; binding permanece v8.0.0)**: corrige el contrato público de cinco tabs, portabilidad y prerequisitos externos, añade D-20 y alinea las garantías anti-drift con los checks acotados reales. `modes` ya estaba en el machine block v8; documentarlo y validarlo no cambia sus valores ni su `binding_version`.
 
 > **Bump vigente package v9.0.0 → v10.0.0 / binding v8.0.0 → v9.0.0 (MAJOR)**: añade `/task_skill_selection` al machine block para snapshots `task-skills/v1`, resolución project-installed y orden obligatorio lane → surfaces → optional helpers; también publica el contrato profesional PCT-53/PCT-54. Los repos destino deben reemplazar el árbol completo, actualizar el pin locator y regenerar todas las proyecciones.
+
+> **Bump vigente package v10.0.0 → v10.1.0 (MINOR; binding permanece v9.0.0)**: el generador del skill-registry emite una nueva project skill (`projectctl-root`), cambiando el conteo de filas emitidas de 39 a 40 rows (24 project + 16 workflow + 0 global). Es un cambio no-breaking del scope del output documentado en §10; los repos destino actualizan las citas de conteo y el pin del test de coherencia sin reemplazar el árbol.
+
+> **Bump vigente package v10.1.0 → v11.0.0 (MAJOR; binding permanece v9.0.0)**: el contrato del criterio `criteria[]` del app-map gana el campo opcional `type` (enum cerrado de 9: `ui | functionality | a11y | backend | data | integration | security | performance | tooling`), documentado en `references/doc.md` PCT-85 y `references/standard.md` §1 (árbol de clasificación T-5 + verificación por defecto). Es un cambio contractual del shape del criterio (additivo, opcional durante rollout por fases) ⇒ MAJOR: los repos destino deben reemplazar el árbol completo. El bloque `task-flow-binding` (`TaskFlowBindingV1`) NO cambia; `binding_version` permanece `9.0.0` y no se regeneran proyecciones del bloque.
+
+> **Bump vigente package v10.0.0 → v11.0.0 / binding v9.0.0 → v10.0.0 (MAJOR)**: publica `TaskFlowBindingV2`, model 2, modo RDD default disabled, fase/lanes/guards/gates RDD, `rdd-report` y delivery condicional, conservando `task_skill_selection`. V1 queda solo como lectura legacy disabled-only. El árbol se reemplaza completo con `copy-tree-no-mods`; cualquier instalación híbrida falla cerrada.
+
+> **Bump vigente package v11.0.0 → v12.0.0 (MAJOR; binding permanece v10.0.0)**: `criteria[].type` pasa a ser obligatorio y se incorporan las reglas bidireccionales código⇒criterio y delta de criterios en proposals, junto con PCT-149..PCT-155, TST-38 y AC-329. El binding `TaskFlowBindingV2` no cambia.
 
 ### Audit trail cross-repo
 
@@ -223,19 +231,19 @@ Per cambio upstream detectado:
 
 - Un reset, eliminación o renombrado de un taskReadme o phase artifact requiere confirmación del coordinador y preservación de la evidencia de estado.
 - Nunca se restaura un taskReadme ausente desde una memoria stale ni se usa una memoria anterior para reservar IDs, reemplazar decisiones o reconstruir una fuente normativa.
-- Cualquier cambio en el bloque `task-flow-binding` (`TaskFlowBindingV1`, v9.0.0) delimitado en `.agents/skills/projectctl-requirements/references/tareas.md` obliga a:
+- Cualquier cambio en el bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0) delimitado en `.agents/skills/projectctl-requirements/references/tareas.md` obliga a:
   1. Regenerar `.agents/skills/projectctl-requirements/generated/phase-state-schema.json` mediante `taskflow:generate` (owned by `sdd-apply-code-high-WU-11`).
   2. Revisar `.agents/skills/projectctl-requirements/references/sources.md` para asegurar que la tabla `PCT-106..PCT-121` sigue trazando el bloque (solo identificadores) sin reproducir machine values.
   3. Revisar `.agents/skills/projectctl-requirements/references/decisions.md` para mantener las decisiones D-N y D'-N alineadas con la nueva forma del binding.
   4. Bumpear `metadata.version` per §5 antes del siguiente cierre de ciclo.
   5. Bumpear `last-verified` por entry de la tabla SoT afectada.
-- La copia cross-repo es de árbol completo y sin modificaciones locales; una versión anterior se reemplaza, no se mezcla. Mezclar versiones incompatibles del árbol produce projections incompatibles y se considera drift.
+- La copia cross-repo es de árbol completo y sin modificaciones locales; una versión anterior se reemplaza, no se mezcla. Mezclar `TaskFlowBindingV1`/`TaskFlowBindingV2`, v8/v9 o package 9/10 es una instalación híbrida y MUST bloquear antes de ejecutar lanes, transiciones o delivery.
 
 ## 9. Criterios cubiertos por este archivo
 
 `PCT-105` (cross-repo + anti-drift + installability), `PCT-106..PCT-121` (binding de tareas) y elementos contractuales de `PCT-83..PCT-100` referenciados desde este archivo.
 
-(Véase `.agents/skills/projectctl-requirements/references/sources.md` para la tabla SoT machine-grepeable completa, `references/{test,entorno}.md` para los contratos operativos de cada tab y `.agents/skills/projectctl-requirements/references/tareas.md` v9.0.0 §`task-flow-binding` para el bloque integral `TaskFlowBindingV1`.)
+(Véase `.agents/skills/projectctl-requirements/references/sources.md` para la tabla SoT machine-grepeable completa, `references/{test,entorno}.md` para los contratos operativos de cada tab y `.agents/skills/projectctl-requirements/references/tareas.md` v10.0.0 §`task-flow-binding` para el bloque integral `TaskFlowBindingV2`.)
 
 ---
 
@@ -272,11 +280,13 @@ gentle-ai skill-registry refresh --force
 
 `.atl/skill-registry.md` es **salida generada**: no se edita a mano, no se reconstruye desde memoria y no se sustituye por otro generador sin revisar el contrato de formato. Una edición manual o un output de otro generador producen RED loud en el test, no una excepción. La regeneración es una acción `coordinator-only` (WU-REG-1 de `20260804-drift-cleanup-projectctl`), no una unidad de apply.
 
-### Las 22 project skills emitidas
+### Las 24 project skills emitidas
 
-El generador emite exactamente estas 22 project skills (nombres tal como aparecen en el output, uno por fila):
+El generador emite exactamente estas 24 project skills (nombres tal como aparecen en el output, uno por fila):
 
-`astro`, `backend-api-policy`, `bun-runtime`, `chained-pr`, `cloudflare-tunnel`, `coordinador`, `find-skills`, `frontend-policy`, `fsd-architecture`, `git-commit`, `judgment-day`, `playwright-cli`, `playwright-e2e-testing`, `projectctl-requirements`, `sandbox-runtime-policy`, `sd-protocol`, `skill-creator`, `solidjs`, `supabase-data-policy`, `supabase-postgres-best-practices`, `webhook-development`, `work-unit-commits`
+`frontend-policy`, `backend-api-policy`, `sandbox-runtime-policy`, `projectctl-requirements`, `projectctl-root`, `supabase-data-policy`, `coordinador`, `skill-creator`, `astro`, `bun-runtime`, `chained-pr`, `cloudflare-tunnel`, `engram-policy`, `find-skills`, `fsd-architecture`, `git-commit`, `judgment-day`, `playwright-cli`, `playwright-e2e-testing`, `sd-protocol`, `solidjs`, `supabase-postgres-best-practices`, `webhook-development`, `work-unit-commits`
+
+> **last-verified**: 2026-09-07 (regenerar ante cualquier cambio en el output generado).
 
 ### Exclusión de workflow skills `sdd-*` (contrato del generador)
 
@@ -284,4 +294,4 @@ El generador **excluye deliberadamente** del índice las workflow skills `sdd-*`
 
 ### Regla semver anti-drift
 
-Cualquier cambio futuro del generador que altere el **formato** o el **scope** del output — row shape (columnas, backticks discipline, derivación del path), header `Auto-generated`, conteo de filas emitidas (hoy exactamente 22) o la exclusión de `sdd-*` — **MUST bumpear `metadata.version`** del package `projectctl-requirements` per la tabla de bump de §5 (Versionado cross-repo) antes del siguiente cierre de ciclo (R-MAINT-4). El test `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` es la guarda: ante un cambio de formato o scope, Check B produce RED loud (sin `skip`, `it.skip` ni `if (...) return` silencioso) hasta que el contrato se actualice y el bump se registre. El cambio que introduce esta sección (`20260804-drift-cleanup-projectctl`) se clasifica como **PATCH semver** (design §9.2): documenta un contrato ya emitido por el generador sin alterar su formato; el bump efectivo de `metadata.version` lo aplica el autor de la PR al cierre del ciclo per R-MAINT-4.
+Cualquier cambio futuro del generador que altere el **formato** o el **scope** del output — row shape (columnas, backticks discipline, derivación del path), header `Auto-generated`, conteo de filas emitidas (hoy exactamente 24 project + 16 workflow + 0 global = 40 rows) o la exclusión de `sdd-*` — **MUST bumpear `metadata.version`** del package `projectctl-requirements` per la tabla de bump de §5 (Versionado cross-repo) antes del siguiente cierre de ciclo (R-MAINT-4). El test `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` es la guarda: ante un cambio de formato o scope, Check B produce RED loud (sin `skip`, `it.skip` ni `if (...) return` silencioso) hasta que el contrato se actualice y el bump se registre. El cambio que introduce esta sección (`20260804-drift-cleanup-projectctl`) se clasifica como **PATCH semver** (design §9.2): documenta un contrato ya emitido por el generador sin alterar su formato; el bump efectivo de `metadata.version` lo aplica el autor de la PR al cierre del ciclo per R-MAINT-4.

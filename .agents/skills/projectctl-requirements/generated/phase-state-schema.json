@@ -1,12 +1,235 @@
 {
   "artifact_role": "generated",
-  "model_version": 1,
+  "artifacts": {
+    "mirrors": [],
+    "phase_artifacts": {
+      "artifact_keys": [
+        "explore-code",
+        "explore-research",
+        "explore-pwcli",
+        "proposal",
+        "spec",
+        "design",
+        "tasks",
+        "apply-<unit_id>",
+        "verify-code",
+        "verify-units",
+        "verify-pwauto",
+        "verify-pwcli",
+        "verify-report",
+        "archive",
+        "rdd-report"
+      ],
+      "path_pattern": "taskReadme/<task_id>-<task_slug>/<artifact>.md"
+    },
+    "primary": {
+      "adapter": "filesystem",
+      "index_budget": {
+        "max_lines": 400,
+        "max_phase_summary_lines": 10
+      },
+      "owner": "taskReadme <task_id>-<task_slug>.md",
+      "path_pattern": "taskReadme/<task_id>-<task_slug>.md",
+      "role": "index"
+    },
+    "write_order": [
+      "primary"
+    ]
+  },
+  "contract_kind": "TaskFlowBindingV2",
+  "environment_deferral": {
+    "active_methods_policy": "non_empty_subset_after_evidence_bound_completion",
+    "admission_gate_id": "environment_verification_deferred",
+    "allowed_methods": [
+      "Go",
+      "Docker",
+      "PW",
+      "Git-real"
+    ],
+    "close_block_gate_id": "pending_environment_close_block",
+    "document_write_gate_id": "p4_document_candidate_written",
+    "initial_methods_policy": "exact_allowed_set_non_empty_unique",
+    "invalid_record": "fail_closed_preserve_position",
+    "legacy_absent_record": "preserve_existing_behavior",
+    "pending_record_section": "pending_environment",
+    "record_owner": "coordinator",
+    "record_status": "pending_environment",
+    "recording_location": "task.index.coordinator_owned_sections",
+    "transitions": [
+      {
+        "from": "p3_coverage_pending",
+        "guard": "environment_verification_deferred",
+        "owner_id": "fase_3_verificacion",
+        "owner_kind": "phase",
+        "to": "p4_started"
+      },
+      {
+        "from": "p4_started",
+        "guard": "p4_document_candidate_written",
+        "owner_id": "fase_4_documentacion",
+        "owner_kind": "phase",
+        "to": "p3_test_preparing"
+      },
+      {
+        "from": "p4_documenting",
+        "guard": "p4_document_candidate_written",
+        "owner_id": "fase_4_documentacion",
+        "owner_kind": "phase",
+        "to": "p3_test_preparing"
+      },
+      {
+        "from": "p4_reviewing",
+        "guard": "p4_document_candidate_written",
+        "owner_id": "fase_4_documentacion",
+        "owner_kind": "phase",
+        "to": "p3_test_preparing"
+      },
+      {
+        "blocking_gates": [
+          "pending_environment_close_block"
+        ],
+        "from": "p4_reviewing",
+        "guard": "documentation_gate_passed",
+        "owner_id": "fase_4_documentacion",
+        "owner_kind": "phase",
+        "to": "p4_complete"
+      },
+      {
+        "blocking_gates": [
+          "pending_environment_close_block"
+        ],
+        "from": "p4_complete",
+        "guard": "rdd_mode_disabled",
+        "owner_id": "fase_4_documentacion",
+        "owner_kind": "phase",
+        "to": "final_commit_pending"
+      },
+      {
+        "blocking_gates": [
+          "pending_environment_close_block"
+        ],
+        "from": "p4_complete",
+        "guard": "rdd_mode_receipt_driven",
+        "owner_id": "fase_4_documentacion",
+        "owner_kind": "phase",
+        "to": "p5_started"
+      },
+      {
+        "blocking_gates": [
+          "pending_environment_close_block"
+        ],
+        "from": "final_commit_pending",
+        "guard": "commit_recorded",
+        "id": "final_commit_pending_to_final_push_pending",
+        "owner_id": "final_commit_pending",
+        "owner_kind": "control",
+        "to": "final_push_pending"
+      },
+      {
+        "blocking_gates": [
+          "pending_environment_close_block"
+        ],
+        "from": "final_push_pending",
+        "guard": "push_recorded",
+        "id": "final_push_pending_to_final_pr_pending",
+        "owner_id": "final_push_pending",
+        "owner_kind": "control",
+        "to": "final_pr_pending"
+      },
+      {
+        "blocking_gates": [
+          "pending_environment_close_block"
+        ],
+        "from": "final_pr_pending",
+        "guard": "pr_url_recorded",
+        "id": "final_pr_pending_to_done",
+        "owner_id": "final_pr_pending",
+        "owner_kind": "control",
+        "to": "done"
+      }
+    ]
+  },
+  "model_version": 2,
+  "modes": {
+    "delivery_mode": {
+      "allowed": [
+        "single-pr",
+        "work-unit-commits"
+      ],
+      "default": "single-pr",
+      "description": "Selecciona la estrategia de entrega. Default single-pr: un único PR. Opt-in work-unit-commits: commits/PRs por unidad de trabajo con encadenamiento (chained-pr) y guard de tamaño de PR. Se activa por frontmatter de la task."
+    },
+    "environment_deferral": {
+      "active_methods_policy": "non_empty_subset_after_evidence_bound_completion",
+      "allowed_methods": [
+        "Go",
+        "Docker",
+        "PW",
+        "Git-real"
+      ],
+      "audit_actions": [
+        "deferred",
+        "method_completed",
+        "revoked"
+      ],
+      "documentation_candidate_values": [
+        "not_started",
+        "allowed",
+        "written_returned_to_p3"
+      ],
+      "initial_methods_policy": "exact_allowed_set_non_empty_unique",
+      "invalid_record": "fail_closed_preserve_position",
+      "legacy_absent_record": "preserve_existing_behavior",
+      "pending_record_section": "pending_environment",
+      "positive_result_values_forbidden": [
+        "pass",
+        "not_required",
+        "approved"
+      ],
+      "record_owner": "coordinator",
+      "record_required_fields": [
+        "status",
+        "actor",
+        "reason",
+        "recorded_at",
+        "verification_revision",
+        "methods",
+        "audit"
+      ],
+      "record_status": "pending_environment",
+      "recording_location": "task.index.coordinator_owned_sections"
+    },
+    "rdd_mode": {
+      "allowed": [
+        "disabled",
+        "receipt-driven"
+      ],
+      "default": "disabled",
+      "description": "Opt-in task-scoped Receipt-Driven Development. Disabled preserves ordinary delivery; receipt-driven requires authority-backed Phase 5 and live delivery gates.",
+      "legacy_v1_read": "disabled-only",
+      "skills": [
+        "rdd-phase",
+        "rdd-review",
+        "rdd-correct",
+        "rdd-validate"
+      ],
+      "unknown_value": "block"
+    },
+    "review_mode": {
+      "allowed": [
+        "sdd-verify-code",
+        "judgment-day"
+      ],
+      "default": "sdd-verify-code",
+      "description": "Selecciona el mecanismo de revisión de código. Default: revisor único sdd-verify-code. Opt-in judgment-day: doble juez ciego adversarial para tareas de mayor ROI. Se activa por frontmatter de la task."
+    }
+  },
   "source": {
     "binding_id": "projectctl-requirements.task-flow",
-    "binding_version": "9.0.0",
-    "generated_at": "2026-07-31",
-    "source_path": ".agents/skills/projectctl-requirements/references/tareas.md",
-    "source_sha256": "992a1873af726d152e50100ffef50cbd1aa6aa106698d39e857bf1afc52e7101"
+    "binding_version": "10.0.0",
+    "generated_at": "2026-09-08",
+    "source_path": ".agents/skills/projectctl-requirements/references/tasks/binding.md",
+    "source_sha256": "06d45ec9ce38f39917a47c45d4c14815d13bdf8f73d2e67170ba74f4c12b7ad2"
   },
   "state_model": {
     "controls": [
@@ -35,6 +258,9 @@
         "owner": "coordinator",
         "transitions": [
           {
+            "blocking_gates": [
+              "pending_environment_close_block"
+            ],
             "from": "final_commit_pending",
             "guard": "commit_recorded",
             "id": "final_commit_pending_to_final_push_pending",
@@ -60,6 +286,9 @@
         "owner": "coordinator",
         "transitions": [
           {
+            "blocking_gates": [
+              "pending_environment_close_block"
+            ],
             "from": "final_push_pending",
             "guard": "push_recorded",
             "id": "final_push_pending_to_final_pr_pending",
@@ -79,6 +308,9 @@
         "owner": "coordinator",
         "transitions": [
           {
+            "blocking_gates": [
+              "pending_environment_close_block"
+            ],
             "from": "final_pr_pending",
             "guard": "pr_url_recorded",
             "id": "final_pr_pending_to_done",
@@ -264,6 +496,17 @@
         ],
         "type": "hard_gate"
       },
+      "environment_verification_deferred": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "pending_environment_record_valid",
+          "pending_environment_revision_matches_current_verification_revision",
+          "pending_environment_methods_within_allowed_set",
+          "pending_environment_methods_non_empty",
+          "no_non_environment_pending_work"
+        ],
+        "type": "hard_gate"
+      },
       "functional_acceptance_explicit": {
         "failure": "retain_phase_and_state",
         "requires": [
@@ -295,6 +538,23 @@
         ],
         "type": "evidence"
       },
+      "p4_document_candidate_written": {
+        "failure": "retain_phase_and_state_without_documentation_completion",
+        "requires": [
+          "environment_verification_deferred_entry_recorded",
+          "phase_4_document_candidate_write_verified",
+          "pending_environment_methods_preserved",
+          "return_target_p3_test_preparing"
+        ],
+        "type": "revision_gate"
+      },
+      "pending_environment_close_block": {
+        "failure": "environment_verification_deferred",
+        "requires": [
+          "pending_environment_active_methods_empty_or_record_absent"
+        ],
+        "type": "hard_gate"
+      },
       "phase4_owned_dependencies_only": {
         "failure": "retain_phase_and_state",
         "requires": [
@@ -319,6 +579,15 @@
         ],
         "type": "evidence"
       },
+      "post-apply": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "authority_gate_result_current",
+          "allowed_true",
+          "live_target_identity_match"
+        ],
+        "type": "rdd_delivery_gate"
+      },
       "pr_url_recorded": {
         "failure": "retain_phase_and_state_and_do_not_enter_done",
         "requires": [
@@ -327,6 +596,36 @@
           "final_evidence_recorded"
         ],
         "type": "hard_gate"
+      },
+      "pre-commit": {
+        "failure": "retain_final_commit_pending",
+        "requires": [
+          "authority_gate_result_current",
+          "allowed_true",
+          "approved_receipt_applicable",
+          "live_target_identity_match"
+        ],
+        "type": "rdd_delivery_gate"
+      },
+      "pre-pr": {
+        "failure": "retain_final_pr_pending",
+        "requires": [
+          "authority_gate_result_current",
+          "allowed_true",
+          "approved_receipt_applicable",
+          "delivery_target_branch_used_as_base_ref"
+        ],
+        "type": "rdd_delivery_gate"
+      },
+      "pre-push": {
+        "failure": "retain_final_push_pending",
+        "requires": [
+          "authority_gate_result_current",
+          "allowed_true",
+          "approved_receipt_applicable",
+          "live_target_identity_match"
+        ],
+        "type": "rdd_delivery_gate"
       },
       "proposal_feedback_or_rejection": {
         "failure": "retain_phase_and_state",
@@ -342,6 +641,127 @@
         ],
         "type": "evidence"
       },
+      "rdd_authority_started": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_provider_result_current",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_correction_required": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_provider_result_current",
+          "rdd_correction_request",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_correction_validated": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_provider_result_current",
+          "rdd_post_apply_allowed",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_escalated": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_provider_result_current",
+          "rdd_escalation_recorded",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_mode_disabled": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "mode_context.rdd.selected_disabled"
+        ],
+        "type": "transition_gate"
+      },
+      "rdd_mode_receipt_driven": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "mode_context.rdd.selected_receipt_driven",
+          "rdd_authority_available_and_managed"
+        ],
+        "type": "transition_gate"
+      },
+      "rdd_precommit_gate_allowed": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_pre_commit_allowed",
+          "rdd_receipt_applies_to_live_target",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_receipt_approved": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_provider_result_current",
+          "rdd_receipt_outcome_approved",
+          "rdd_receipt_applies_to_live_target",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_recovery_authorized": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "explicit_rdd_recovery_authorization",
+          "rdd_provider_recovery_transition_current",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "rdd_review_results_complete": {
+        "failure": "retain_phase_and_state",
+        "requires": [
+          "rdd_provider_result_current",
+          "rdd_required_results_complete",
+          "rdd_lineage_id",
+          "rdd_authority_revision",
+          "rdd_target_identity",
+          "task_revision"
+        ],
+        "type": "hard_gate"
+      },
+      "release": {
+        "failure": "block_transition_to_done",
+        "requires": [
+          "authority_gate_result_current",
+          "allowed_true",
+          "approved_receipt_applicable",
+          "live_target_identity_match"
+        ],
+        "type": "rdd_delivery_gate"
+      },
       "test_failure_or_missing_test": {
         "failure": "retain_phase_and_state",
         "requires": [
@@ -352,6 +772,13 @@
     },
     "lanes": [
       "judgment-day",
+      "rdd-correct",
+      "rdd-refuter",
+      "rdd-review-readability",
+      "rdd-review-reliability",
+      "rdd-review-resilience",
+      "rdd-review-risk",
+      "rdd-validate",
       "sdd-apply-code-high",
       "sdd-apply-code-low",
       "sdd-apply-code-medium",
@@ -530,6 +957,11 @@
           },
           {
             "from": "p3_coverage_pending",
+            "guard": "environment_verification_deferred",
+            "to": "p4_started"
+          },
+          {
+            "from": "p3_coverage_pending",
             "guard": "phase4_owned_dependencies_only",
             "to": "p4_started"
           },
@@ -569,9 +1001,19 @@
             "to": "p4_documenting"
           },
           {
+            "from": "p4_started",
+            "guard": "p4_document_candidate_written",
+            "to": "p3_test_preparing"
+          },
+          {
             "from": "p4_documenting",
             "guard": "documentation_apply_evidence_complete",
             "to": "p4_reviewing"
+          },
+          {
+            "from": "p4_documenting",
+            "guard": "p4_document_candidate_written",
+            "to": "p3_test_preparing"
           },
           {
             "from": "p4_reviewing",
@@ -589,11 +1031,104 @@
           },
           {
             "from": "p4_reviewing",
+            "guard": "p4_document_candidate_written",
+            "to": "p3_test_preparing"
+          },
+          {
+            "blocking_gates": [
+              "pending_environment_close_block"
+            ],
+            "from": "p4_reviewing",
             "guard": "documentation_gate_passed",
             "to": "p4_complete"
           },
           {
+            "blocking_gates": [
+              "pending_environment_close_block"
+            ],
             "from": "p4_complete",
+            "guard": "rdd_mode_disabled",
+            "to": "final_commit_pending"
+          },
+          {
+            "blocking_gates": [
+              "pending_environment_close_block"
+            ],
+            "from": "p4_complete",
+            "guard": "rdd_mode_receipt_driven",
+            "to": "p5_started"
+          }
+        ]
+      },
+      {
+        "allowed_lanes": [
+          "rdd-review-risk",
+          "rdd-review-readability",
+          "rdd-review-reliability",
+          "rdd-review-resilience",
+          "rdd-refuter",
+          "rdd-correct",
+          "rdd-validate"
+        ],
+        "id": "fase_5_rdd",
+        "states": [
+          "p5_started",
+          "p5_reviewing",
+          "p5_correction_required",
+          "p5_validating",
+          "p5_complete",
+          "p5_escalated"
+        ],
+        "status": "reviewing",
+        "transitions": [
+          {
+            "from": "p5_started",
+            "guard": "rdd_authority_started",
+            "to": "p5_reviewing"
+          },
+          {
+            "from": "p5_reviewing",
+            "guard": "rdd_correction_required",
+            "to": "p5_correction_required"
+          },
+          {
+            "from": "p5_reviewing",
+            "guard": "rdd_review_results_complete",
+            "to": "p5_validating"
+          },
+          {
+            "from": "p5_correction_required",
+            "guard": "rdd_correction_validated",
+            "to": "p5_validating"
+          },
+          {
+            "from": "p5_validating",
+            "guard": "rdd_receipt_approved",
+            "to": "p5_complete"
+          },
+          {
+            "from": "p5_reviewing",
+            "guard": "rdd_escalated",
+            "to": "p5_escalated"
+          },
+          {
+            "from": "p5_correction_required",
+            "guard": "rdd_escalated",
+            "to": "p5_escalated"
+          },
+          {
+            "from": "p5_validating",
+            "guard": "rdd_escalated",
+            "to": "p5_escalated"
+          },
+          {
+            "from": "p5_escalated",
+            "guard": "rdd_recovery_authorized",
+            "to": "p5_started"
+          },
+          {
+            "from": "p5_complete",
+            "guard": "rdd_precommit_gate_allowed",
             "to": "final_commit_pending"
           }
         ]
@@ -608,6 +1143,7 @@
         "implementing",
         "testing",
         "documenting",
+        "reviewing",
         "done",
         "blocked",
         "failed"

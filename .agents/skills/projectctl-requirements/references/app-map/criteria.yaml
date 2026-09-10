@@ -1,0 +1,1594 @@
+schema: projectctl-criteria/v1
+source_revision: 1974658b7792de4de6a2af0664af64650642b69bf5f2c944a7e7205cbbee6c69
+criteria:
+  - id: PCT-01
+    type: contract
+    title: "Ruta `/projectctl` autenticada server-side; redirige a `/login` sin sesión"
+    requirement: "Ruta `/projectctl` autenticada server-side; redirige a `/login` sin sesión"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c555ea89a1e57c80130660763da9d25fff952f22cc8f12bff0dc3bf967361f6b
+    status: active
+  - id: PCT-02
+    type: visual
+    title: "Dashboard expone botón que navega a `/projectctl`"
+    requirement: "Dashboard expone botón que navega a `/projectctl`"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 112caf1f35a048748eba9d5cabb39e3ffac0e6053588e0387f8f147fdb79b58a
+    status: active
+  - id: PCT-03
+    type: visual
+    title: "Vista expone botón/link \"← Volver al dashboard\" en la cabecera"
+    requirement: "Vista expone botón/link \"← Volver al dashboard\" en la cabecera"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: d8200a34a1633fe0b9e801587b50a8bc1f8338e5d996e76873843500014b6bb9
+    status: active
+  - id: PCT-04
+    type: tooling
+    title: "Fuente única reusable de metadata en `data/projectctl-commands.ts`; cero duplicación"
+    requirement: "Fuente única reusable de metadata en `data/projectctl-commands.ts`; cero duplicación"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 75ca02d35d8458c30ce026e8184e7282ec71e53767acb7123a709fe6d25213d4
+    status: active
+  - id: PCT-05
+    type: visual
+    title: "Comandos agrupados visualmente por `family`"
+    requirement: "Comandos agrupados visualmente por `family`"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 0ca14bf1a6f084ec8a2e8fa7ddc848b26892c8a7ca5fb321884b9b1aabcf57d8
+    status: active
+  - id: PCT-06
+    type: visual
+    title: "Filtro `<input>` filtra solo por `name` (case-insensitive, substring)"
+    requirement: "Filtro `<input>` filtra solo por `name` (case-insensitive, substring)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 3c11c07ad5b105a318eeff516cd8a062a0a876e48a73d7e6fbc34400d430345c
+    status: active
+  - id: PCT-07
+    type: visual
+    title: "Botón copiar muestra feedback `✓ Copiado` durante ~1.5s preservando placeholders"
+    requirement: "Botón copiar muestra feedback `✓ Copiado` durante ~1.5s preservando placeholders"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c165f340bd0a2630e76bb80343f03f8a44b30b90e99e55fa200748e9809d8a7c
+    status: active
+  - id: PCT-08
+    type: tooling
+    title: "runtime: `projectctl status [env]` — Show runtime status (dev/prod/both)"
+    requirement: "runtime: `projectctl status [env]` — Show runtime status (dev/prod/both)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 443274d98306e5299618be4d21c4c16578977903f33552782d2e6f71200a4c26
+    status: active
+  - id: PCT-09
+    type: tooling
+    title: "runtime: `projectctl ps [env]` — List containers for an environment"
+    requirement: "runtime: `projectctl ps [env]` — List containers for an environment"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: cf0eb7d0851db4be20d8e780f3abe7a6f8b7f7f8fbbad1a31f1e9f0c32d60816
+    status: active
+  - id: PCT-10
+    type: tooling
+    title: "runtime: `projectctl logs env [service]` — Show logs (--tail N, --since DURATION, --follow)"
+    requirement: "runtime: `projectctl logs env [service]` — Show logs (--tail N, --since DURATION, --follow)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c6249c112cfab75a54983e82d6f48b575b5ed2df19303d6bc86e0a8a6fd481d0
+    status: active
+  - id: PCT-11
+    type: tooling
+    title: "runtime: `projectctl start env` — Start dev or prod"
+    requirement: "runtime: `projectctl start env` — Start dev or prod"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: e4cfb066e8735d437cd0d9d41a933969300c871a14b92034f211fe35be51c5cf
+    status: active
+  - id: PCT-12
+    type: tooling
+    title: "runtime: `projectctl stop env` — Stop dev or prod"
+    requirement: "runtime: `projectctl stop env` — Stop dev or prod"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 4bc8e6f33d9a899eb867bbcd6978aa4098ed0c1ae0be617f36d47af2f958bc0b
+    status: active
+  - id: PCT-13
+    type: tooling
+    title: "runtime: `projectctl restart env [service]` — Restart dev, or restart a specific service; prod restart requires --yes"
+    requirement: "runtime: `projectctl restart env [service]` — Restart dev, or restart a specific service; prod restart requires --yes"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 5daab853fde5e42086762ae6220e95940719ea4fb6562895fcf387685eea3035
+    status: active
+  - id: PCT-14
+    type: tooling
+    title: "runtime: `projectctl restart prod --yes` — Restart all production services with explicit confirmation"
+    requirement: "runtime: `projectctl restart prod --yes` — Restart all production services with explicit confirmation"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 606bff5ff4e32f2dcbd799240329fa444b13002d4504fbafcb0fc60ada9b1a04
+    status: active
+  - id: PCT-15
+    type: tooling
+    title: "runtime: `projectctl rebuild env` — Rebuild environment (dev only)"
+    requirement: "runtime: `projectctl rebuild env` — Rebuild environment (dev only)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8ace7cd099cc759c697ced2b6953bbc3a0916f31783b2f4ca6efb0f84f675002
+    status: active
+  - id: PCT-16
+    type: tooling
+    title: "runtime: `projectctl deploy prod` — Alias for promote prod"
+    requirement: "runtime: `projectctl deploy prod` — Alias for promote prod"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 4363ba72b3e9f64748bd0732c0d097bf27eeebd9242f8783f2f41f660a97d68f
+    status: active
+  - id: PCT-17
+    type: tooling
+    title: "runtime: `projectctl promote prod` — Promote prod from deploy branch"
+    requirement: "runtime: `projectctl promote prod` — Promote prod from deploy branch"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 308661a32db8995d8d6f7fa93b64eca240ca95294cf6c6764ddd6131d56cc937
+    status: active
+  - id: PCT-18
+    type: tooling
+    title: "runtime: `projectctl doctor` — Show managed/API-backed diagnostics (config, runtime, tunnel, drift and other authenticated project state). This command retains its existing project resolution, API calls, ownership boundary and `OPENCODE_API_TOKEN` fail-closed behavior; it is not local when credentials or a project id are absent. Filesystem-only diagnostics are exposed separately as `projectctl local doctor` and are not equivalent."
+    requirement: "runtime: `projectctl doctor` — Show managed/API-backed diagnostics (config, runtime, tunnel, drift and other authenticated project state). This command retains its existing project resolution, API calls, ownership boundary and `OPENCODE_API_TOKEN` fail-closed behavior; it is not local when credentials or a project id are absent. Filesystem-only diagnostics are exposed separately as `projectctl local doctor` and are not equivalent."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 24237b765ae2b7935aa2776dca96879deb3acc77b2037bf752d5310568ddfdf6
+    status: active
+  - id: PCT-19
+    type: tooling
+    title: "runtime: `projectctl check env` — Verify HTTP readiness of tunnel endpoint (--path, --expect, --timeout)"
+    requirement: "runtime: `projectctl check env` — Verify HTTP readiness of tunnel endpoint (--path, --expect, --timeout)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 7ffb1d2f28eb0d4a7ea2966c6708eea8ef83e032bedd191d1d0bd426e2c9f817
+    status: active
+  - id: PCT-20
+    type: tooling
+    title: "runtime: `projectctl metrics runtime [env]` — Show runtime metrics (containers, restarts, running state)"
+    requirement: "runtime: `projectctl metrics runtime [env]` — Show runtime metrics (containers, restarts, running state)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 67812057a0baebac41109fddc2c987aa70885f34b1b457d447ca5c91686d2749
+    status: active
+  - id: PCT-21
+    type: tooling
+    title: "runtime: `projectctl metrics resources [env]` — Show CPU/memory usage for dev or prod"
+    requirement: "runtime: `projectctl metrics resources [env]` — Show CPU/memory usage for dev or prod"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 1e0fc791c2248e2a76429cb91f072ebacf6302d1fa02fcbebfd3583096a5b014
+    status: active
+  - id: PCT-22
+    type: tooling
+    title: "runtime: `projectctl metrics errors [env]` — Show error metrics availability for dev or prod"
+    requirement: "runtime: `projectctl metrics errors [env]` — Show error metrics availability for dev or prod"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c82e51078d1172c8020f4abfadef20626e77b8e01afab78ff7699365054b67ba
+    status: active
+  - id: PCT-23
+    type: tooling
+    title: "runtime: `projectctl run dev -- <command> [args...]` — Execute dev command with best-effort audit attempt (spawn, 30s timeout, 64KB output)"
+    requirement: "runtime: `projectctl run dev -- <command> [args...]` — Execute dev command with best-effort audit attempt (spawn, 30s timeout, 64KB output)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 1b42da9f7dce5b929b842db8f554c12405b761060499d119335fd03ed15bf085
+    status: active
+  - id: PCT-24
+    type: tooling
+    title: "runtime: `projectctl help` — Show all available commands"
+    requirement: "runtime: `projectctl help` — Show all available commands"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 834ca864b2cbcc8104993d5ae671930f7ca39378d65e9f5e1615d3b3bc2942c3
+    status: active
+  - id: PCT-25
+    type: tooling
+    title: "runtime: `projectctl version` — Show CLI version"
+    requirement: "runtime: `projectctl version` — Show CLI version"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 0d4d5ada23bdacc2321de350ca725617c7e0501e5f03d62e399c4ef91fd0cccc
+    status: active
+  - id: PCT-26
+    type: tooling
+    title: "runtime: `projectctl whoami` — Show current user and project context (no token leak)"
+    requirement: "runtime: `projectctl whoami` — Show current user and project context (no token leak)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8af92cd1cedc2a75b1dae79336a15e30e73ecf7ea634993b9c2e255af8e7aedf
+    status: active
+  - id: PCT-27
+    type: tooling
+    title: "runtime: `projectctl completion bash` — Generate bash completion script"
+    requirement: "runtime: `projectctl completion bash` — Generate bash completion script"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 88e9cd9ab3470fb74e3639abcd50faf361163a25d10c1d38c39962292e75faaf
+    status: active
+  - id: PCT-28
+    type: tooling
+    title: "runtime: `projectctl completion zsh` — Generate zsh completion script"
+    requirement: "runtime: `projectctl completion zsh` — Generate zsh completion script"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 678a1788dac559b2cc8445feb254f14d258eb5b2ae7fa9c9fb4402634a833eba
+    status: active
+  - id: PCT-29
+    type: tooling
+    title: "runtime: `projectctl help [command|family]` — Show all commands or help for a specific command/family"
+    requirement: "runtime: `projectctl help [command|family]` — Show all commands or help for a specific command/family"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: ecd4bff7d05e5989f98ba1c5c16d02ec5d0e94663d9d934b7060004e9d4430ac
+    status: active
+  - id: PCT-30
+    type: tooling
+    title: "env: `projectctl env status` — Show environment config status for dev and prod"
+    requirement: "env: `projectctl env status` — Show environment config status for dev and prod"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: e893ee16cd9c1aa41016c181c227c4198bf93f0f80a6f53a785f2132b4b7a093
+    status: active
+  - id: PCT-31
+    type: tooling
+    title: "env: `projectctl env get env` — Get .env or .env.dev content (explicit user intent)"
+    requirement: "env: `projectctl env get env` — Get .env or .env.dev content (explicit user intent)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 2296822d0f182f608a18062645a7154b0124ebebbc29ed33d25fd3dfdcab30da
+    status: active
+  - id: PCT-32
+    type: tooling
+    title: "env: `projectctl env set env KEY=value` — Set a KEY=value in .env or .env.dev (preserves rest)"
+    requirement: "env: `projectctl env set env KEY=value` — Set a KEY=value in .env or .env.dev (preserves rest)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 3fe4933f4bf6475d067819684be88d63da27cbb7c2496bf869aaa21c7c1d5f28
+    status: active
+  - id: PCT-33
+    type: tooling
+    title: "env: `projectctl env unset env KEY` — Remove KEY from .env or .env.dev"
+    requirement: "env: `projectctl env unset env KEY` — Remove KEY from .env or .env.dev"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: f13b0ac16be256c5a346e18c431c25185daa816d857f43aaaab7478e6eb5cfb2
+    status: active
+  - id: PCT-34
+    type: tooling
+    title: "env: `projectctl env edit env` — Print config to stdout for redirect editing (no interactive editor)"
+    requirement: "env: `projectctl env edit env` — Print config to stdout for redirect editing (no interactive editor)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 684cd27449d9711b37a550b41aa1b5dde1b6fd5f09585228a9ee06fe96ab212c
+    status: active
+  - id: PCT-35
+    type: tooling
+    title: "env: `projectctl env validate` — Report managed/API-backed missing/invalid FRONTEND_PORT/API_PORT and configExists. This command retains its existing API-backed project context and authentication guard and does not silently read the current checkout as a fallback. `projectctl local env validate` is the distinct local-static capability for local files."
+    requirement: "env: `projectctl env validate` — Report managed/API-backed missing/invalid FRONTEND_PORT/API_PORT and configExists. This command retains its existing API-backed project context and authentication guard and does not silently read the current checkout as a fallback. `projectctl local env validate` is the distinct local-static capability for local files."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 3c55c9cf6dae6046eee8d46762fbf12cdc6c2c2676af4c2346e3638b36c00148
+    status: active
+  - id: PCT-36
+    type: tooling
+    title: "env: `projectctl env pull env --out <path>` — Pull env config and write to a file in /workspace/projects/<id>/"
+    requirement: "env: `projectctl env pull env --out <path>` — Pull env config and write to a file in /workspace/projects/<id>/"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: efe366b7a6ed08f6dd54f414d52fad65f33b801a4f3a881dd810c46894c31c91
+    status: active
+  - id: PCT-37
+    type: tooling
+    title: "env: `projectctl env run env -- <command> [args...]` — Run a command with managed env vars (no shell, -- separator mandatory)"
+    requirement: "env: `projectctl env run env -- <command> [args...]` — Run a command with managed env vars (no shell, -- separator mandatory)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 86a058f9fa9c6fb8495b7489c02fb1b49f62e0a6334a67af980a61e70bca2b15
+    status: active
+  - id: PCT-38
+    type: tooling
+    title: "tunnel: `projectctl tunnel status` — Show tunnel configuration, publishability and remediation"
+    requirement: "tunnel: `projectctl tunnel status` — Show tunnel configuration, publishability and remediation"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 957a2c784a834e75d9db483c53a4afae592a8432859cf25398edf7d420c28ba3
+    status: active
+  - id: PCT-39
+    type: tooling
+    title: "tunnel: `projectctl tunnel tokens` — List active tunnel tokens"
+    requirement: "tunnel: `projectctl tunnel tokens` — List active tunnel tokens"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 388f9fdf8ceff681995623a3cef9ba867e5eb4f1254c15bc80bd476f56dab2ce
+    status: active
+  - id: PCT-40
+    type: tooling
+    title: "tunnel: `projectctl tunnel routes` — Show enriched tunnel-agent routes for active tunnels"
+    requirement: "tunnel: `projectctl tunnel routes` — Show enriched tunnel-agent routes for active tunnels"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 3055d55978300508cabd80fc9d8b7aab8455775e6f53c9161fe3d2f05ca25267
+    status: active
+  - id: PCT-41
+    type: tooling
+    title: "tunnel: `projectctl tunnel domains` — Show available tunnel domains derived from tunnel settings"
+    requirement: "tunnel: `projectctl tunnel domains` — Show available tunnel domains derived from tunnel settings"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c2b6b37f4657d36b3600f265f8ee5b189b6a834f6d1c394c57ea0cc3dad6b277
+    status: active
+  - id: PCT-42
+    type: tooling
+    title: "tunnel: `projectctl tunnel set-domain <domain>` — Set tunnel_domain and clear subdomains"
+    requirement: "tunnel: `projectctl tunnel set-domain <domain>` — Set tunnel_domain and clear subdomains"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 5c1f410d90f78b5c4c8b9257d6935a81ca7577b2fdc8adae45032506e91a1cc4
+    status: active
+  - id: PCT-43
+    type: tooling
+    title: "tunnel: `projectctl tunnel set prod <hostname>` — [DEPRECATED] Use \"tunnel assignment set prod --token-id <id> --hostname <hostname>\". Updates compatibility tunnel_hostname (prod) during rollout only."
+    requirement: "tunnel: `projectctl tunnel set prod <hostname>` — [DEPRECATED] Use \"tunnel assignment set prod --token-id <id> --hostname <hostname>\". Updates compatibility tunnel_hostname (prod) during rollout only."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 0fdc48eceef5c75303eee683d4207bf70eff4d5e12af5bd7dd5bffc921238805
+    status: active
+  - id: PCT-44
+    type: tooling
+    title: "tunnel: `projectctl tunnel set dev <hostname>` — [DEPRECATED] Use \"tunnel assignment set dev --token-id <id> --hostname <hostname>\". Updates compatibility test_tunnel_hostname (dev) during rollout only."
+    requirement: "tunnel: `projectctl tunnel set dev <hostname>` — [DEPRECATED] Use \"tunnel assignment set dev --token-id <id> --hostname <hostname>\". Updates compatibility test_tunnel_hostname (dev) during rollout only."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: ad57096baaa247dc90b71d70751dcbf665bbdf4654754543fb914411c8bf07d7
+    status: active
+  - id: PCT-45
+    type: tooling
+    title: "tunnel: `projectctl tunnel clear prod|dev|all` — Clear tunnel hostname(s) with confirmation or --yes"
+    requirement: "tunnel: `projectctl tunnel clear prod|dev|all` — Clear tunnel hostname(s) with confirmation or --yes"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: ac6d04ffbdd485e241f4f76df1ed6d504e5dc8e071c85ed2633fcb00816ab47e
+    status: active
+  - id: PCT-46
+    type: tooling
+    title: "commands: `projectctl commands list` — List all quick commands for this project"
+    requirement: "commands: `projectctl commands list` — List all quick commands for this project"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 92d6abea3f867e6c9d2061dfd3e446076c1f69e96221068af105f9ec9af4d831
+    status: active
+  - id: PCT-47
+    type: tooling
+    title: "commands: `projectctl commands add --name <name> --cmd <command>` — Create a new quick command"
+    requirement: "commands: `projectctl commands add --name <name> --cmd <command>` — Create a new quick command"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 9c4745731a4813bc6ef9b3a8a9b314ffca1d7a3196ed0836067eccd7e3f0946b
+    status: active
+  - id: PCT-48
+    type: tooling
+    title: "commands: `projectctl commands update <id>` — Update a command (partial fields)"
+    requirement: "commands: `projectctl commands update <id>` — Update a command (partial fields)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 723539b214a3f60a9801c1ab460e95436c0a11c8500d3668cdcae8f8632a661d
+    status: active
+  - id: PCT-49
+    type: tooling
+    title: "commands: `projectctl commands delete <id>` — Delete a command (requires --yes)"
+    requirement: "commands: `projectctl commands delete <id>` — Delete a command (requires --yes)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 38a80c967cbf4e55ecb37a4e2474a6db236d12410f34181035c91843de9ec42a
+    status: active
+  - id: PCT-50
+    type: tooling
+    title: "commands: `projectctl commands run <id-or-name>` — Print exact command to run (exec in-shell limitation documented)"
+    requirement: "commands: `projectctl commands run <id-or-name>` — Print exact command to run (exec in-shell limitation documented)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c449352cc5e5136ad545da707ef9dc3c80b78997dee287981b2a9d63c97e6d82
+    status: active
+  - id: PCT-51
+    type: tooling
+    title: "tasks: `projectctl tasks list` — List all tasks for this project"
+    requirement: "tasks: `projectctl tasks list` — List all tasks for this project"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 08e91c30b16bd9c75d75c0901128922b0407425fc7ffcf235a734b4b455b6bfa
+    status: active
+  - id: PCT-52
+    type: tooling
+    title: "tasks: `projectctl tasks show <file>` — Show task details"
+    requirement: "tasks: `projectctl tasks show <file>` — Show task details"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 72be762eb19fd46815303a6c416e6264359bf2be143c76115b11c4d6c6b00893
+    status: active
+  - id: PCT-53
+    type: tooling
+    title: "tasks: `projectctl tasks create --title <title>` — Create a new task"
+    requirement: "tasks: `projectctl tasks create --title <title>` — Create a new task"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: d0ba173971125994f380d5527050801592e9d00e340c59fb4586abb1daff948e
+    status: active
+  - id: PCT-54
+    type: tooling
+    title: "tasks: `projectctl tasks update <file>` — Update task frontmatter fields"
+    requirement: "tasks: `projectctl tasks update <file>` — Update task frontmatter fields"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 4c5261d7b2024bfcb25ae8a44c4a096c90646a64a17a2437543f9679cd511a57
+    status: active
+  - id: PCT-55
+    type: tooling
+    title: "tasks: `projectctl tasks delete <file>` — Delete a task (requires --yes)"
+    requirement: "tasks: `projectctl tasks delete <file>` — Delete a task (requires --yes)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c01c61c199d13066e40b65aad5743f9aa760252b560ab5997f5ff064fe31aa08
+    status: active
+  - id: PCT-56
+    type: tooling
+    title: "schedule: `projectctl schedule list` — List all scheduled tasks with next run and status"
+    requirement: "schedule: `projectctl schedule list` — List all scheduled tasks with next run and status"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 0ce5e10173c873c22e9270f4e8fbbbeeadd42c16879a7c711908e2b8579b22be
+    status: active
+  - id: PCT-57
+    type: tooling
+    title: "schedule: `projectctl schedule add --branch <branch> --daily <HH:mm> --prompt <text>` — Create daily scheduled task"
+    requirement: "schedule: `projectctl schedule add --branch <branch> --daily <HH:mm> --prompt <text>` — Create daily scheduled task"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8ecbc6b5e5fa310fbbb1f8201f978507364cf4ad39cc9eb18f6528b12363dc6e
+    status: active
+  - id: PCT-58
+    type: tooling
+    title: "schedule: `projectctl schedule add --branch <branch> --once <YYYY-MM-DDTHH:mm> --prompt <text>` — Create one-time scheduled task"
+    requirement: "schedule: `projectctl schedule add --branch <branch> --once <YYYY-MM-DDTHH:mm> --prompt <text>` — Create one-time scheduled task"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 28161a0a098be3b1e82d209e286d63a3e5564abceb423424a27b1c025b4fbc96
+    status: active
+  - id: PCT-59
+    type: tooling
+    title: "schedule: `projectctl schedule update <id>` — Update a scheduled task fields"
+    requirement: "schedule: `projectctl schedule update <id>` — Update a scheduled task fields"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: f0d2a3b59798fdad7d32724407531a78fbcbf729c9239cf181fa02aebab4bf53
+    status: active
+  - id: PCT-60
+    type: tooling
+    title: "schedule: `projectctl schedule enable <id>` — Enable a scheduled task"
+    requirement: "schedule: `projectctl schedule enable <id>` — Enable a scheduled task"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: eebc45ab33ad36439a0fee80096b7846344d5949347434d7430881c0f407d20e
+    status: active
+  - id: PCT-61
+    type: tooling
+    title: "schedule: `projectctl schedule disable <id>` — Disable a scheduled task"
+    requirement: "schedule: `projectctl schedule disable <id>` — Disable a scheduled task"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 3b8bc8d61e9ec83adf0800fb3d417ec136f246273deaf691db74e6604730aaf5
+    status: active
+  - id: PCT-62
+    type: tooling
+    title: "schedule: `projectctl schedule delete <id>` — Delete a scheduled task (requires --yes)"
+    requirement: "schedule: `projectctl schedule delete <id>` — Delete a scheduled task (requires --yes)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: adb56178ff7b6d80ad7488653e4833406ddac565a092f8589cf0117602656734
+    status: active
+  - id: PCT-63
+    type: tooling
+    title: "docs: `projectctl docs status` — Show docs/app-map status and criterion totals"
+    requirement: "docs: `projectctl docs status` — Show docs/app-map status and criterion totals"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 2e47110ac9dbcd1ff03193af58530657b1651a8b0fd614e57bc5e8efede11d50
+    status: active
+  - id: PCT-64
+    type: tooling
+    title: "docs: `projectctl docs list` — List docs/app-map entries"
+    requirement: "docs: `projectctl docs list` — List docs/app-map entries"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8362dcf78fe385b204de3736554a336575d32d2fa44304b37e02a2f3680fbe02
+    status: active
+  - id: PCT-65
+    type: tooling
+    title: "docs: `projectctl docs show <id-or-path>` — Show doc content (if API provides sufficient data)"
+    requirement: "docs: `projectctl docs show <id-or-path>` — Show doc content (if API provides sufficient data)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: dfa305788023cd271991acbd11ff43c6a4cf9dfcba485602f3689272ddb735e2
+    status: active
+  - id: PCT-66
+    type: tooling
+    title: "storage: `projectctl storage status` — Show storage/cached bytes usage"
+    requirement: "storage: `projectctl storage status` — Show storage/cached bytes usage"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 481fcb8b617367e359bdef8324e00954fe4614392318e3341f2c3769c84dfd43
+    status: active
+  - id: PCT-67
+    type: tooling
+    title: "storage: `projectctl storage clean` — Clean cache (requires --yes for safety)"
+    requirement: "storage: `projectctl storage clean` — Clean cache (requires --yes for safety)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: fe42f6ab2cc4dcd4486eb9c1d7a9a2cd2a8023cacdbdce23f49e0ba94abd0e16
+    status: active
+  - id: PCT-68
+    type: tooling
+    title: "releases: `projectctl releases list` — List all releases for this project (newest first)"
+    requirement: "releases: `projectctl releases list` — List all releases for this project (newest first)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8a697c72efe2ab256555fc17e5076b7aca00fd8f571d6797ad24912c0981402b
+    status: active
+  - id: PCT-69
+    type: tooling
+    title: "releases: `projectctl releases show <id>` — Show full details of a release"
+    requirement: "releases: `projectctl releases show <id>` — Show full details of a release"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 0ab31aa52ef6bf7b39b6cce9e97902e4d1af28f8fa1973eb96ae0d45ef76a63e
+    status: active
+  - id: PCT-70
+    type: tooling
+    title: "releases: `projectctl releases diff <from-id> <to-id>` — Compare operative metadata between two releases"
+    requirement: "releases: `projectctl releases diff <from-id> <to-id>` — Compare operative metadata between two releases"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: b21edfd1ba9ba31cba4ac13eddeb18bda0f37100ef7e8229c53f613edda9730c
+    status: active
+  - id: PCT-71
+    type: tooling
+    title: "releases: `projectctl rollback prod <id>` — Rollback prod to a specific release (requires --yes)"
+    requirement: "releases: `projectctl rollback prod <id>` — Rollback prod to a specific release (requires --yes)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 7273dcdb284c1e96eae1dea9e735c705b8074c7667e61e45909ecb7a84304899
+    status: active
+  - id: PCT-72
+    type: tooling
+    title: "activity: `projectctl activity list` — List audit events (--type, --env, --actor, --since, --limit, --offset)"
+    requirement: "activity: `projectctl activity list` — List audit events (--type, --env, --actor, --since, --limit, --offset)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 4f0aab789ec576d0b0ec3a98a1a6b5bfbe7e12c14133f0e8f4e68a3325b8644a
+    status: active
+  - id: PCT-73
+    type: tooling
+    title: "activity: `projectctl activity show <id>` — Show a single audit event by ID"
+    requirement: "activity: `projectctl activity show <id>` — Show a single audit event by ID"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 3ff6cc34633fa48cb1069ffc48d78e3ba7f5cbc9478867c7128a52410daaad9d
+    status: active
+  - id: PCT-74
+    type: tooling
+    title: "navigation: `projectctl open <target>` — Open URL or print target URL (dev, prod, dashboard; add --print for scripting)"
+    requirement: "navigation: `projectctl open <target>` — Open URL or print target URL (dev, prod, dashboard; add --print for scripting)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: bdc89a13393bf37be1a7696c9062612ca50610def0a4195ba2fc79a04a0fc110
+    status: active
+  - id: PCT-75
+    type: tooling
+    title: "test: `projectctl test run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]` — Run the unified test runner against a view or feature (Bun unit + Playwright PW-AUTO)"
+    requirement: "test: `projectctl test run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]` — Run the unified test runner against a view or feature (Bun unit + Playwright PW-AUTO)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: d41335232471dd044ac497a11f0a7c5b7ab4a37dcb59d83ccfad8ad9a51db65d
+    status: active
+  - id: PCT-76
+    type: tooling
+    title: "test: `projectctl test list-runs [--limit=<n>]` — List recent test runs from .runtime/test-results/<projectId>/"
+    requirement: "test: `projectctl test list-runs [--limit=<n>]` — List recent test runs from .runtime/test-results/<projectId>/"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 61d1cdc66db6fdde79aefd974a36e2b68da1ba552a03abca33ea30e733c8816c
+    status: active
+  - id: PCT-77
+    type: tooling
+    title: "test: `projectctl test results <run-id>` — Show full summary.json for a given run id"
+    requirement: "test: `projectctl test results <run-id>` — Show full summary.json for a given run id"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c14801167e2a7c6087210663735969cdf5440384ba1d7d126f485fddb52db76d
+    status: active
+  - id: PCT-78
+    type: tooling
+    title: "test: `projectctl test schedule-add --target=<view>[:<feature>] --frequency=<daily|once> [--time HH:mm] [--date YYYY-MM-DD]` — Schedule a recurring or one-time test run via project_scheduled_tasks (mode=test)"
+    requirement: "test: `projectctl test schedule-add --target=<view>[:<feature>] --frequency=<daily|once> [--time HH:mm] [--date YYYY-MM-DD]` — Schedule a recurring or one-time test run via project_scheduled_tasks (mode=test)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: e97e219a2d38c8519c43488ce430aa9e1aadf7e8d3804ffd54418417ef23e73b
+    status: active
+  - id: PCT-79
+    type: visual
+    title: "Tab `cli` (default) existe como segmented control interno y queda activa por query param `?tab=cli` o sin query param"
+    requirement: "Tab `cli` (default) existe como segmented control interno y queda activa por query param `?tab=cli` o sin query param"
+    owner: "docs/app-map/views/projectctl/features/cli.md"
+    source:
+      - "docs/app-map/views/projectctl/features/cli.md"
+    revision: a3794a5a9720cba20345611b72e63303463021849a16fa137410c543dbcdc109
+    status: active
+  - id: PCT-80
+    type: tooling
+    title: "El panel CLI reusa 1:1 `frontend/src/views/projectctl/data/projectctl-commands.ts` como única fuente de metadata; cero duplicación"
+    requirement: "El panel CLI reusa 1:1 `frontend/src/views/projectctl/data/projectctl-commands.ts` como única fuente de metadata; cero duplicación"
+    owner: "docs/app-map/views/projectctl/features/cli.md"
+    source:
+      - "docs/app-map/views/projectctl/features/cli.md"
+    revision: 8b4ba41737c52595e6ec5258fb5d185714e62c70b5c1b1ee7be159d995ebd497
+    status: active
+  - id: PCT-81
+    type: visual
+    title: "Cada familia MUST exponer `<span data-testid=\"projectctl-cli-family-summary-{family}\">{N} comandos</span>` con conteos pinneados al registry backend"
+    requirement: "Cada familia MUST exponer `<span data-testid=\"projectctl-cli-family-summary-{family}\">{N} comandos</span>` con conteos pinneados al registry backend"
+    owner: "docs/app-map/views/projectctl/features/cli.md"
+    source:
+      - "docs/app-map/views/projectctl/features/cli.md"
+    revision: b24d54a9c00beb8210ed3caf5cba7818b32b1d357b4ffcaf82c97e1d86187005
+    status: active
+  - id: PCT-82
+    type: visual
+    title: "Cambio de tab desde CLI preserva query string + scroll position; URL es compartible"
+    requirement: "Cambio de tab desde CLI preserva query string + scroll position; URL es compartible"
+    owner: "docs/app-map/views/projectctl/features/cli.md"
+    source:
+      - "docs/app-map/views/projectctl/features/cli.md"
+    revision: e54f2f748dc5b529313e97f07b7b30207197fb256eb389a410dc293fd7e53782
+    status: active
+  - id: PCT-83
+    type: visual
+    title: "Tab `doc` existe y lista las reglas documentales que un proyecto debe cumplir para que su `docs/app-map/` se renderice read-only desde la tab Doc del workspace"
+    requirement: "Tab `doc` existe y lista las reglas documentales que un proyecto debe cumplir para que su `docs/app-map/` se renderice read-only desde la tab Doc del workspace"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: 439e26827dbba5135b86058c11e06e9d47b1f1ff9014394c2d84ffda9a87426a
+    status: active
+  - id: PCT-84
+    type: visual
+    title: "El panel Doc lista las 5 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid) en formato checklist navigable"
+    requirement: "El panel Doc lista las 5 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid) en formato checklist navigable"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: da7634016b41a5c0865800a6b062c8c46134373736be4d91629ddf5117fbaa90
+    status: active
+  - id: PCT-85
+    type: tooling
+    title: "El panel Doc explica el contrato `criteria[]` inline (frontmatter YAML con IDs prefijados por bundle y métodos/cobertura permitidos)"
+    requirement: "El panel Doc explica el contrato `criteria[]` inline (frontmatter YAML con IDs prefijados por bundle y métodos/cobertura permitidos)"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: 8f11d0705040691fa28c2900cd6f2ec4e564697ba57e6d0c6f4458b4d66d8694
+    status: active
+  - id: PCT-86
+    type: tooling
+    title: "El panel Doc referencia como única SoT `docs/app-map/` + `navigation.yaml` + `${bundle}.md` + `${bundle}.mmd`"
+    requirement: "El panel Doc referencia como única SoT `docs/app-map/` + `navigation.yaml` + `${bundle}.md` + `${bundle}.mmd`"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: 9e78d7744692f2f92d4ff1a954a850eaffa06fd0c96acad1a835cf17a38dfa47
+    status: active
+  - id: PCT-87
+    type: tooling
+    title: "El panel Doc referencia `.agents/skills/projectctl-requirements/references/standard.md` como policy integrada sobre cuándo y cómo actualizar bundles"
+    requirement: "El panel Doc referencia `.agents/skills/projectctl-requirements/references/standard.md` como policy integrada sobre cuándo y cómo actualizar bundles"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: 5fdd58b4e951a92b38c6b446ba41494f438fb7cdaa834ab4c39d14cb9e972283
+    status: active
+  - id: PCT-88
+    type: tooling
+    title: "El panel Doc lista los IDs reservados por bundle/prefix (PCT/PRJ/TST/ AC/DSH/TNL/LGN/MDL) y referencia los AC cross-cutting vigentes"
+    requirement: "El panel Doc lista los IDs reservados por bundle/prefix (PCT/PRJ/TST/ AC/DSH/TNL/LGN/MDL) y referencia los AC cross-cutting vigentes"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: 23c2bfe2cf1c724313a8382be4125cc7d2e5abe4ca8b7d91ba487e7de95ffc84
+    status: active
+  - id: PCT-89
+    type: visual
+    title: "Tab `test` existe y lista las reglas del sistema de testing del repo aplicables a cualquier proyecto gestionado"
+    requirement: "Tab `test` existe y lista las reglas del sistema de testing del repo aplicables a cualquier proyecto gestionado"
+    owner: "docs/app-map/views/projectctl/features/test.md"
+    source:
+      - "docs/app-map/views/projectctl/features/test.md"
+    revision: 674bf76d0842fd505696a01d11fd250b09b9a002991b6b4a64f79523df0f3995
+    status: active
+  - id: PCT-90
+    type: tooling
+    title: "El panel Test explica el contrato AC mandatorio (`// @ac <ID>` en las primeras 10 líneas de `**/*.test.ts` y `test.info().annotations.push` en Playwright) y el rechazo de `results.json` sin AC mapeado (TST-10 / AC-007)"
+    requirement: "El panel Test explica el contrato AC mandatorio (`// @ac <ID>` en las primeras 10 líneas de `**/*.test.ts` y `test.info().annotations.push` en Playwright) y el rechazo de `results.json` sin AC mapeado (TST-10 / AC-007)"
+    owner: "docs/app-map/views/projectctl/features/test.md"
+    source:
+      - "docs/app-map/views/projectctl/features/test.md"
+    revision: 414908dd763434eda36c5e77c3e113d365acd6844e0dd27e950f892e823eb0e7
+    status: active
+  - id: PCT-91
+    type: tooling
+    title: "El panel Test explica el runner unificado (`bun run scripts/test-runner.ts run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]`) y el mapping 1:1 con la familia `projectctl test *` (PCT-75..PCT-78)"
+    requirement: "El panel Test explica el runner unificado (`bun run scripts/test-runner.ts run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]`) y el mapping 1:1 con la familia `projectctl test *` (PCT-75..PCT-78)"
+    owner: "docs/app-map/views/projectctl/features/test.md"
+    source:
+      - "docs/app-map/views/projectctl/features/test.md"
+    revision: 0f992a0a262f3307964209ef363f9c7553cc8a310705f19a46c2039581311030
+    status: active
+  - id: PCT-92
+    type: contract
+    title: "El panel Test explica la persistencia `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/` `{junit.xml,results.json,summary.json}` (TST-08) y el write-back atómico a `criteria[].coverage[Unit|PW-AUTO]` via `patchBundleCoverage` (TST-04, TST-11)"
+    requirement: "El panel Test explica la persistencia `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/` `{junit.xml,results.json,summary.json}` (TST-08) y el write-back atómico a `criteria[].coverage[Unit|PW-AUTO]` via `patchBundleCoverage` (TST-04, TST-11)"
+    owner: "docs/app-map/views/projectctl/features/test.md"
+    source:
+      - "docs/app-map/views/projectctl/features/test.md"
+    revision: fff46739e9f1501cdfd3220a441b905a036e5e42b59794c82f411d762311c97e
+    status: active
+  - id: PCT-93
+    type: tooling
+    title: "El panel Test explica el gate `bun run test:check` (TST-13: falla si `functional: implemented` sin `Unit + PW-AUTO = covered`) y el layout canónico `frontend/__tests__/<view>/<feature>.test.ts` + `tests/e2e/<view>/<feature>.spec.ts` (TST-36)"
+    requirement: "El panel Test explica el gate `bun run test:check` (TST-13: falla si `functional: implemented` sin `Unit + PW-AUTO = covered`) y el layout canónico `frontend/__tests__/<view>/<feature>.test.ts` + `tests/e2e/<view>/<feature>.spec.ts` (TST-36)"
+    owner: "docs/app-map/views/projectctl/features/test.md"
+    source:
+      - "docs/app-map/views/projectctl/features/test.md"
+    revision: 17d867114acbfde6431822ed8c5f3400f2538423dfa04b012c5733a08ed6c3e9
+    status: active
+  - id: PCT-94
+    type: tooling
+    title: "El panel Test referencia `playwright/TEST_PLAN.md` como mapping persistente archivo↔criterio y `.agents/skills/projectctl-requirements/references/standard.md` como policy integrada para decidir alcance (Unit | PW-CLI | PW-AUTO | Manual)"
+    requirement: "El panel Test referencia `playwright/TEST_PLAN.md` como mapping persistente archivo↔criterio y `.agents/skills/projectctl-requirements/references/standard.md` como policy integrada para decidir alcance (Unit | PW-CLI | PW-AUTO | Manual)"
+    owner: "docs/app-map/views/projectctl/features/test.md"
+    source:
+      - "docs/app-map/views/projectctl/features/test.md"
+    revision: bb711c380399f4c21d24868162e915104d5c1f13a37c87d666b61a04e520120f
+    status: active
+  - id: PCT-95
+    type: visual
+    title: "Tab `entorno` existe y lista las reglas para que un proyecto gestionado arranque, sea publicable y se conecte al tunnel compartido"
+    requirement: "Tab `entorno` existe y lista las reglas para que un proyecto gestionado arranque, sea publicable y se conecte al tunnel compartido"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: a648ae81a60b5681b0d1b0bcd90f318ffe8a2df3ff5385cb5299fd91b372dc5e
+    status: active
+  - id: PCT-96
+    type: tooling
+    title: "El panel Entorno explica el layout canónico de overlays: `compose.yml` para `prod` (target Docker `prod`, frontend con `target: prod`), `compose.dev.yml` para `dev` (target Docker `dev`, HMR + `bun --watch`); un solo repositorio, dos modos de ejecución; servicio `tunnel` solo bajo profile explícito"
+    requirement: "El panel Entorno explica el layout canónico de overlays: `compose.yml` para `prod` (target Docker `prod`, frontend con `target: prod`), `compose.dev.yml` para `dev` (target Docker `dev`, HMR + `bun --watch`); un solo repositorio, dos modos de ejecución; servicio `tunnel` solo bajo profile explícito"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 6c3bf2d84e80404c6d40200a3f3bfbf4b510d88886cbc35b2e8402c67b7fa802
+    status: active
+  - id: PCT-97
+    type: tooling
+    title: "El panel Entorno explica los puertos canónicos (`FRONTEND_PORT` host → `4321` contenedor y `API_PORT` en prod; `FRONTEND_DEV_PORT` host → `4321` contenedor y `API_DEV_PORT` en dev) y la obligatoriedad de las claves explícitas en `.env` y `.env.dev`"
+    requirement: "El panel Entorno explica los puertos canónicos (`FRONTEND_PORT` host → `4321` contenedor y `API_PORT` en prod; `FRONTEND_DEV_PORT` host → `4321` contenedor y `API_DEV_PORT` en dev) y la obligatoriedad de las claves explícitas en `.env` y `.env.dev`"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 0fd9ad9dd1fda0cf68a1a799624363f5c2c1ad378661b1fcf8006fccb546269d
+    status: active
+  - id: PCT-98
+    type: operational
+    title: "El panel Entorno explica el contrato edge `shared-edge-network` external + alias exacto por entorno (`<app>-origin` en prod, `test-<app>-origin` en dev), el guardrail `TUNNEL_NOT_PUBLISHABLE` y la regla \"alias edge first, `container-host-gateway:<PORT>` solo legacy/compat\""
+    requirement: "El panel Entorno explica el contrato edge `shared-edge-network` external + alias exacto por entorno (`<app>-origin` en prod, `test-<app>-origin` en dev), el guardrail `TUNNEL_NOT_PUBLISHABLE` y la regla \"alias edge first, `container-host-gateway:<PORT>` solo legacy/compat\""
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 48296477a5b88e90ea03beae3b9343e01c5fc5ef1580ff3bbcd8c28995338fcd
+    status: active
+  - id: PCT-99
+    type: contract
+    title: "El panel Entorno explica que el sandbox NO expone Docker CLI ni socket; el control de runtime se hace exclusivamente vía `projectctl env *` (PCT-30..PCT-37), `projectctl tunnel *` (PCT-38..PCT-45) y `projectctl start|stop|restart|rebuild|promote|deploy|doctor`"
+    requirement: "El panel Entorno explica que el sandbox NO expone Docker CLI ni socket; el control de runtime se hace exclusivamente vía `projectctl env *` (PCT-30..PCT-37), `projectctl tunnel *` (PCT-38..PCT-45) y `projectctl start|stop|restart|rebuild|promote|deploy|doctor`"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 8751727ffe9aec37c42b85de5b510b847d6445d2537c55ea485da6c72fa82351
+    status: active
+  - id: PCT-100
+    type: tooling
+    title: "El panel Entorno referencia `.agents/skills/projectctl-requirements/ references/standard.md` como policy integrada de runtime cross-service y frontera de cambio/migración de compose/env para publicabilidad"
+    requirement: "El panel Entorno referencia `.agents/skills/projectctl-requirements/ references/standard.md` como policy integrada de runtime cross-service y frontera de cambio/migración de compose/env para publicabilidad"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 6a389083449961f28d5ad340da5d1727888a6d36b0c6fd2d651215d50ed1f2b6
+    status: active
+  - id: PCT-101
+    type: visual
+    title: "Segmented control interno expone las tabs canónicas en orden fijo"
+    requirement: "Segmented control interno expone las tabs canónicas en orden fijo"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: a98ee67cebe80f2f2f4996f1866872c9faefa6e1e92a4954503224080cc7dde3
+    status: active
+  - id: PCT-102
+    type: visual
+    title: "Cada tab expone su panel y aside de fuentes con data-testid canónico"
+    requirement: "Cada tab expone su panel y aside de fuentes con data-testid canónico"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 6f057ceea7bc43ab94e01ab24289c810529cb6f0d159c3844709e765489d4bf0
+    status: active
+  - id: PCT-103
+    type: tooling
+    title: "El bundle raíz index.md preserva PCT-01..78 + tabla de mapeo a bundles por tab"
+    requirement: "El bundle raíz index.md preserva PCT-01..78 + tabla de mapeo a bundles por tab"
+    owner: ".agents/skills/projectctl-requirements/references/sources.md"
+    source:
+      - ".agents/skills/projectctl-requirements/references/sources.md"
+    revision: a2cf029e5e3ed59373d4ef4604733e1c9b4e445b2d8670df193e40fb6dc4b357
+    status: active
+  - id: PCT-104
+    type: visual
+    title: "Tab inicial, deep links y data-testid mantienen el contrato cross-tab"
+    requirement: "Tab inicial, deep links y data-testid mantienen el contrato cross-tab"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: a41b03c977f67c54831c1bae9961983fed8deae6a56f6373c0bde5e67a331a63
+    status: active
+  - id: PCT-105
+    type: tooling
+    title: "Paquete copiable sin modificaciones + Maintenance contract + prerequisitos de instalación explícitos"
+    requirement: "Paquete copiable sin modificaciones + Maintenance contract + prerequisitos de instalación explícitos"
+    owner: ".agents/skills/projectctl-requirements/references/sources.md"
+    source:
+      - ".agents/skills/projectctl-requirements/references/sources.md"
+    revision: 9f397a53ee8fa8ee674e192f7271728315405cc57bd523153c3b61d84bf3b188
+    status: active
+  - id: PCT-106
+    type: tooling
+    title: "Tab `tareas` declara los tres inputs obligatorios del bootstrap declarados por el binding; ausencia de cualquiera deriva al usuario al formulario de la tarea sin iniciar Fase 1"
+    requirement: "Tab `tareas` declara los tres inputs obligatorios del bootstrap declarados por el binding; ausencia de cualquiera deriva al usuario al formulario de la tarea sin iniciar Fase 1"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 0b1e7764d34b839af5df0b2ec89c035343413b42f88aa46a06ec68da0a69f9bb
+    status: active
+  - id: PCT-107
+    type: tooling
+    title: "La task canónica usa el patrón de identidad y archivo del binding; la rama se declara, no se crea, y se materializa solo en el control declarado por el binding"
+    requirement: "La task canónica usa el patrón de identidad y archivo del binding; la rama se declara, no se crea, y se materializa solo en el control declarado por el binding"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: c0958d6702359e09ba6c5e2648d87be66d6b4973abdf71ca34e234ecd25e56ae
+    status: active
+  - id: PCT-108
+    type: tooling
+    title: "Persistencia declarada por el binding: índice compacto de coordinación, artefactos de fase escritos por su lane owner, sin mirrors configurados"
+    requirement: "Persistencia declarada por el binding: índice compacto de coordinación, artefactos de fase escritos por su lane owner, sin mirrors configurados"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 2731988319b1cc056044661a28163f07ede90a87270c81008d6eaeebb61c8f1a
+    status: active
+  - id: PCT-109
+    type: tooling
+    title: "El flujo expone las fases, estados y controles declarados por el binding; ningún identificador sustituido ni alias operativo es válido"
+    requirement: "El flujo expone las fases, estados y controles declarados por el binding; ningún identificador sustituido ni alias operativo es válido"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: d52426d9c52745e9add34e4b29a47781282e3ed7344b5b3de4de390e7a8d30c3
+    status: active
+  - id: PCT-110
+    type: tooling
+    title: "Fase 1 publica objetivo, entrada, agentes permitidos, gate de salida y error loop del binding; no crea branch antes de aprobar"
+    requirement: "Fase 1 publica objetivo, entrada, agentes permitidos, gate de salida y error loop del binding; no crea branch antes de aprobar"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 0da985f1a8dac0fef9ca2d2cabcfcf77733d0fd4850e7b3c1821e03cc9d91953
+    status: active
+  - id: PCT-111
+    type: tooling
+    title: "Fase 2 entra solo tras aprobar propuesta y crear branch; permite exactamente las lanes declaradas por el binding y no sale sin code review verde + aceptación funcional explícita"
+    requirement: "Fase 2 entra solo tras aprobar propuesta y crear branch; permite exactamente las lanes declaradas por el binding y no sale sin code review verde + aceptación funcional explícita"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 7f974d71c0670f826c357b98bafa524f634947066ed85c9b4f44466da8a0748c
+    status: active
+  - id: PCT-112
+    type: tooling
+    title: "Fase 3 permite exactamente las lanes declaradas por el binding; cada AC con estado declarado por el binding requiere el coverage mínimo exigido"
+    requirement: "Fase 3 permite exactamente las lanes declaradas por el binding; cada AC con estado declarado por el binding requiere el coverage mínimo exigido"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: bb333bf4c922735c0bf4364fe821c533d0ec6475d44862c7a3bf2e811fc312a1
+    status: active
+  - id: PCT-113
+    type: tooling
+    title: "Fase 4 es siempre requerida; owner único declarado por el binding; habilita commit final, push y PR contra la rama declarada"
+    requirement: "Fase 4 es siempre requerida; owner único declarado por el binding; habilita commit final, push y PR contra la rama declarada"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 8420808c3dfdaf4543e4e229032c2f116e5ec688f926a39406a59a5fda28c4a3
+    status: active
+  - id: PCT-114
+    type: visual
+    title: "`/projectctl?tab=tareas` es informativa/no mutable; la tab `/project/[id]` conserva CRUD/ejecución; el contrato agente completo vive en el binding declarado"
+    requirement: "`/projectctl?tab=tareas` es informativa/no mutable; la tab `/project/[id]` conserva CRUD/ejecución; el contrato agente completo vive en el binding declarado"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 4dcdab71862f130a8e429424b55abd796b9e50995c4d016563063550aa27ea67
+    status: active
+  - id: PCT-115
+    type: tooling
+    title: "El estado declarado por el binding para `p1_awaiting_acceptance` permanece bloqueado hasta que el coordinador registre la aprobación explícita con los campos exigidos por el gate"
+    requirement: "El estado declarado por el binding para `p1_awaiting_acceptance` permanece bloqueado hasta que el coordinador registre la aprobación explícita con los campos exigidos por el gate"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 908b69597c068747aab4d1c0b677194d76484fd81479c89ddf172eacbb2a0930
+    status: active
+  - id: PCT-116
+    type: tooling
+    title: "Fase 2 llega al estado declarado por el binding para aceptación funcional únicamente con code review verde; Fase 3 permanece bloqueada hasta que el coordinador registre la aceptación funcional explícita"
+    requirement: "Fase 2 llega al estado declarado por el binding para aceptación funcional únicamente con code review verde; Fase 3 permanece bloqueada hasta que el coordinador registre la aceptación funcional explícita"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 77a35c95193fa2768139c618188cd94e0cede73c657981579e61c62d472874ad
+    status: active
+  - id: PCT-117
+    type: tooling
+    title: "La branch se crea únicamente en la acción de control declarada por el binding; todos los cambios ocurren en ella"
+    requirement: "La branch se crea únicamente en la acción de control declarada por el binding; todos los cambios ocurren en ella"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 6849449cc697d1af595356330cda29de603f697bc060551109fd9c1e9d9f951a
+    status: active
+  - id: PCT-118
+    type: tooling
+    title: "Las fuentes normativas activas no incluyen identificadores sustituidos ni nombres de lanes retiradas como fallback o historia"
+    requirement: "Las fuentes normativas activas no incluyen identificadores sustituidos ni nombres de lanes retiradas como fallback o historia"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: f83d5f8b8ef167e69ef5d00319e108249152f63d9d65884d84add94d8b29c84b
+    status: active
+  - id: PCT-119
+    type: tooling
+    title: "APP-MAP añade `PCT-106..PCT-121` trazados 1:1 a `AC-001..AC-016` sin sobrescribir `PCT-001..PCT-105` ni los criterios `PRJ/AC` del workspace; el mapping AC↔PCT es trazable"
+    requirement: "APP-MAP añade `PCT-106..PCT-121` trazados 1:1 a `AC-001..AC-016` sin sobrescribir `PCT-001..PCT-105` ni los criterios `PRJ/AC` del workspace; el mapping AC↔PCT es trazable"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 0000cd09ed47778e5f703eee7c6ba997f2f9422e1e38c3a80baba6470d195837
+    status: active
+  - id: PCT-120
+    type: tooling
+    title: "Cada fase declara sus states, gate y error loop a través del binding y devuelve `criteria_covered` no vacío"
+    requirement: "Cada fase declara sus states, gate y error loop a través del binding y devuelve `criteria_covered` no vacío"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 3e23e446b0e8356ec72204065312185cfcf7c1a0ec979be7add6dcafdaee260f
+    status: active
+  - id: PCT-121
+    type: tooling
+    title: "El taskReadme activo prevalece; taskReadmes históricos y memorias stale no reservan IDs ni restauran decisiones"
+    requirement: "El taskReadme activo prevalece; taskReadmes históricos y memorias stale no reservan IDs ni restauran decisiones"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: cbf625fd326c4504ed0c8a9e02ccf3faad8499f19849c23ae5478f091b97076c
+    status: active
+  - id: PCT-122
+    type: tooling
+    title: "`projectctl users list` command is present in the global catalog"
+    requirement: "`projectctl users list` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 4d5ef5f3e9d780848f0160030f78522ec4075ebe530cb2ecf24125f3bc6be7de
+    status: active
+  - id: PCT-123
+    type: tooling
+    title: "`projectctl users add` command is present in the global catalog"
+    requirement: "`projectctl users add` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: db1801b9c4923a10d9ad187a98576bd9baac8ec2ba7c19f9c2fea6ab42d5d9c6
+    status: active
+  - id: PCT-124
+    type: tooling
+    title: "`projectctl users update` command is present in the global catalog"
+    requirement: "`projectctl users update` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 2cc4e6625aef0cd59751e51f0b090eab962d29922582bc6fafc80b61f6ca7dad
+    status: active
+  - id: PCT-125
+    type: tooling
+    title: "`projectctl users delete` command is present in the global catalog"
+    requirement: "`projectctl users delete` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 58b47c8085e414659687b09cc50d54fed794ba1abca0d113d45bf7d5a1c50428
+    status: active
+  - id: PCT-126
+    type: tooling
+    title: "`projectctl tunnel assignment list` command is present in the global catalog"
+    requirement: "`projectctl tunnel assignment list` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 1eb0559ec9610826904bc892f10f189d36a513b2d8d70dff7c7065c6185ecc2f
+    status: active
+  - id: PCT-127
+    type: tooling
+    title: "`projectctl tunnel assignment set` command is present in the global catalog"
+    requirement: "`projectctl tunnel assignment set` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 5ca1ba718b838cc24148f30c44aaf2ee554ee98dd6689258e36589455439697a
+    status: active
+  - id: PCT-128
+    type: tooling
+    title: "`projectctl tunnel assignment clear` command is present in the global catalog"
+    requirement: "`projectctl tunnel assignment clear` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8006d25d5dfaff5d84c5bdaf0c5e25d252add8fc147e721b4c2c34492e9c6bda
+    status: active
+  - id: PCT-129
+    type: tooling
+    title: "`projectctl tunnel assignment reconcile` command is present in the global catalog"
+    requirement: "`projectctl tunnel assignment reconcile` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: a53c812a0318dc9b8f1c76267d5f7f9e34e0568a6f52d580a0a90eb28c5e8d34
+    status: active
+  - id: PCT-130
+    type: tooling
+    title: "`projectctl sdd agent set` command is present in the global catalog"
+    requirement: "`projectctl sdd agent set` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 8eb4527fb967c6e39c2544046be4a4cc167f09b636bf174f5cd160684577afde
+    status: active
+  - id: PCT-131
+    type: tooling
+    title: "`projectctl sdd profile create` command is present in the global catalog"
+    requirement: "`projectctl sdd profile create` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 75210f65b40316e5766f862b66161ee65803b027a4c0adbf759288d2020846fa
+    status: active
+  - id: PCT-132
+    type: tooling
+    title: "`projectctl sdd profile list` command is present in the global catalog"
+    requirement: "`projectctl sdd profile list` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 71c5a341cae714264cc5d735c00a9526377805ae93f65bd99173868bae535f1b
+    status: active
+  - id: PCT-133
+    type: tooling
+    title: "`projectctl sdd profile show` command is present in the global catalog"
+    requirement: "`projectctl sdd profile show` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 35027c95cf06c0a6519e2468b9f1a0d1db875ea7690f16a3c655fece5e5acf64
+    status: active
+  - id: PCT-134
+    type: tooling
+    title: "`projectctl sdd profile edit` command is present in the global catalog"
+    requirement: "`projectctl sdd profile edit` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 2a43368638075a1899c6e87fb29cc6afea6085c29670e6914d5410d7ecda92ea
+    status: active
+  - id: PCT-135
+    type: tooling
+    title: "`projectctl sdd profile apply` command is present in the global catalog"
+    requirement: "`projectctl sdd profile apply` command is present in the global catalog"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 567c6efa1cea0c78fed3c868597c1842c9f41f22d3535b1708995355d226b524
+    status: active
+  - id: PCT-136
+    type: tooling
+    title: "runtime: `projectctl orphans list env [--json] [--quiet]` — List project- scoped orphan containers without mutating Docker"
+    requirement: "runtime: `projectctl orphans list env [--json] [--quiet]` — List project- scoped orphan containers without mutating Docker"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: d133a72da6092c82f7d162cfdc1a7517c33497ca36273f0ff23cee070e00a353
+    status: active
+  - id: PCT-137
+    type: tooling
+    title: "runtime: `projectctl orphans clean env --yes [--json] [--quiet]` — Remove confirmed project-scoped orphan containers"
+    requirement: "runtime: `projectctl orphans clean env --yes [--json] [--quiet]` — Remove confirmed project-scoped orphan containers"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: e5dccfcb486e0063eba5c0fe07e4800981e8c5f610dcabc5955a50433032498c
+    status: active
+  - id: PCT-138
+    type: tooling
+    title: "runtime: `projectctl runtime preflight dev` — Validate managed-dev prerequisites without mutating the runtime"
+    requirement: "runtime: `projectctl runtime preflight dev` — Validate managed-dev prerequisites without mutating the runtime"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 6b794380e9f6500d115120701c3ab4bb715bb821232c52bc8ae9b429ded1d2b4
+    status: active
+  - id: PCT-139
+    type: tooling
+    title: "runtime: `projectctl runtime plan dev` — Show the managed-dev start plan without mutating the runtime"
+    requirement: "runtime: `projectctl runtime plan dev` — Show the managed-dev start plan without mutating the runtime"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 2e3ea45155cf5bf4010211368571f7ea444e710b0695884f29551725e9231c8e
+    status: active
+  - id: PCT-140
+    type: tooling
+    title: "runtime: `projectctl runtime readiness dev` — Check managed-dev post-start readiness without mutating the runtime"
+    requirement: "runtime: `projectctl runtime readiness dev` — Check managed-dev post-start readiness without mutating the runtime"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 6c3c9cb4850b32b178967ad527427ae334e3fdab3dbb36fe278c704074bdeaa5
+    status: active
+  - id: PCT-141
+    type: tooling
+    title: "`projectctl docs lint` — Validates the strict `docs/app-map` contract for a managed project (indentation 2/4/6 and `criteria[]` shape) through its authenticated/API-backed path, including the existing read-path semantics. It remains distinct from `projectctl local docs lint`, which checks only files in the current checkout and does not claim managed-project parity."
+    requirement: "`projectctl docs lint` — Validates the strict `docs/app-map` contract for a managed project (indentation 2/4/6 and `criteria[]` shape) through its authenticated/API-backed path, including the existing read-path semantics. It remains distinct from `projectctl local docs lint`, which checks only files in the current checkout and does not claim managed-project parity."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: d58056778cab4e57588c5e0a8fef978398572fe70471199ca89bda721b9741ec
+    status: active
+  - id: PCT-142
+    type: tooling
+    title: "`projectctl docs format [--check]` — Remains the managed/API-backed command for normalizing a project's `docs/app-map`; without `--check` it may write and with `--check` it reports without writing. It is not accepted by the local-static allowlist: `projectctl local docs format`, with or without `--check`, is rejected before API fallback and local mode never formats."
+    requirement: "`projectctl docs format [--check]` — Remains the managed/API-backed command for normalizing a project's `docs/app-map`; without `--check` it may write and with `--check` it reports without writing. It is not accepted by the local-static allowlist: `projectctl local docs format`, with or without `--check`, is rejected before API fallback and local mode never formats."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 4f40d7fe49fe4cdabb3594dcfc86137cd1bbff0203d631db9238085cb4297493
+    status: active
+  - id: PCT-143
+    type: tooling
+    title: "`/projectctl` catalog distinguishes local-static capabilities from managed/API-backed commands with stable classification, mode, scope, readOnly and limitations metadata; the UI shows the class and remains informational without an execute action"
+    requirement: "`/projectctl` catalog distinguishes local-static capabilities from managed/API-backed commands with stable classification, mode, scope, readOnly and limitations metadata; the UI shows the class and remains informational without an execute action"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: cc4ae9f82cf888b3c97f36cc16c766d66ab85358dde2d84008785f25f657f715
+    status: active
+  - id: PCT-144
+    type: tooling
+    title: "Local usage is explicitly discoverable as `projectctl local <capability>`; only the literal `local` selector selects local mode before `checkProjectId()`, and missing credentials never infer local mode"
+    requirement: "Local usage is explicitly discoverable as `projectctl local <capability>`; only the literal `local` selector selects local mode before `checkProjectId()`, and missing credentials never infer local mode"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 6f2904e096a364d590bbb84576813bc7a5c5a703e6702d24474d174e22ba500f
+    status: active
+  - id: PCT-145
+    type: tooling
+    title: "`projectctl local doctor`, `projectctl local env validate` and `projectctl local docs lint` are filesystem-only, bounded to the checkout root and descendants, with no API/network/subprocess access and no symlink escape outside the root"
+    requirement: "`projectctl local doctor`, `projectctl local env validate` and `projectctl local docs lint` are filesystem-only, bounded to the checkout root and descendants, with no API/network/subprocess access and no symlink escape outside the root"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: b8245ebce1eecb4e9f26b5555b26f204736689797e105ed48ac5e88bdaff392a
+    status: active
+  - id: PCT-146
+    type: tooling
+    title: "Every local human and JSON result identifies `mode: local`, `classification: local-static`, `scope: filesystem`, `readOnly: true` and `remoteState: not_checked`, and states that managed runtime, ownership, Supabase, tunnels, Docker, tasks, releases and other remote state were not checked"
+    requirement: "Every local human and JSON result identifies `mode: local`, `classification: local-static`, `scope: filesystem`, `readOnly: true` and `remoteState: not_checked`, and states that managed runtime, ownership, Supabase, tunnels, Docker, tasks, releases and other remote state were not checked"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 948e0c1316da06702563be9dd586cc7cb1735c910ff8ab6ddec78fbd683803f0
+    status: active
+  - id: PCT-147
+    type: tooling
+    title: "Local mode rejects `status`, `docs format`, env writes, `run`, runtime, tunnel, tasks, storage, release and user mutations, unknown capabilities and unsupported flags before API fallback, without mutation or API contact, using the stable rejection code"
+    requirement: "Local mode rejects `status`, `docs format`, env writes, `run`, runtime, tunnel, tasks, storage, release and user mutations, unknown capabilities and unsupported flags before API fallback, without mutation or API contact, using the stable rejection code"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 5e589841429ce3d8fb7397e89046f6198090691687b5d66f3bf00fa6f9c1723f
+    status: active
+  - id: PCT-148
+    type: tooling
+    title: "Without the explicit `local` selector, managed `status`, `doctor`, `env validate`, `docs lint` and `docs format` retain their current dispatch, ownership, project resolution, remote output and `apiRequest()` authentication guard, including fail-closed behavior"
+    requirement: "Without the explicit `local` selector, managed `status`, `doctor`, `env validate`, `docs lint` and `docs format` retain their current dispatch, ownership, project resolution, remote output and `apiRequest()` authentication guard, including fail-closed behavior"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c87825fc81df4fe6ffa4cdee7d4b8d6410a049657b205a9548554dc6903c40b8
+    status: active
+  - id: PCT-149
+    type: tooling
+    title: "Regla spawn: `spawn(cmd, args, {shell:false})`, NUNCA `exec()` ni `shell:true`"
+    requirement: "Regla spawn: `spawn(cmd, args, {shell:false})`, NUNCA `exec()` ni `shell:true`"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 15696f2e6caa2dc8d461824adf5a84498305eb434b512e8cb0cd8b76b8637268
+    status: active
+  - id: PCT-150
+    type: contract
+    title: "`/activity` expone trail de auditoría (PCT-72/73) con consumidor declarado"
+    requirement: "`/activity` expone trail de auditoría (PCT-72/73) con consumidor declarado"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 205e81adbb5ce12bc4e0a3bc1f6b7cbcfcbbea78f27ed0d7b5d4f0be8850c7b8
+    status: active
+  - id: PCT-151
+    type: contract
+    title: "Familia `/internal/*` token-gated fail-closed; legacy test-runs preservado"
+    requirement: "Familia `/internal/*` token-gated fail-closed; legacy test-runs preservado"
+    owner: "docs/app-map/views/projectctl/features/cli.md"
+    source:
+      - "docs/app-map/views/projectctl/features/cli.md"
+    revision: 721e159b921ad2baa8d41315dc59e8f8c6d71ee96b854efd23f7b716a773a8c3
+    status: active
+  - id: PCT-152
+    type: tooling
+    title: "Wrapper `projectctl-root`: bridge autenticado sin credencial por uso (lane `/internal`)"
+    requirement: "Wrapper `projectctl-root`: bridge autenticado sin credencial por uso (lane `/internal`)"
+    owner: "docs/app-map/views/projectctl/features/cli.md"
+    source:
+      - "docs/app-map/views/projectctl/features/cli.md"
+    revision: e084f75b886d4c9f69c4d691bded1634544a31ae61fdb81842ebae6f9db79c0e
+    status: active
+  - id: PCT-153
+    type: contract
+    title: "Webhook central valida JWT (`DEPLOY_JWT_SECRET`) + allowlist de IPs (`WEBHOOK_ALLOWED_IPS`)"
+    requirement: "Webhook central valida JWT (`DEPLOY_JWT_SECRET`) + allowlist de IPs (`WEBHOOK_ALLOWED_IPS`)"
+    owner: "docs/app-map/views/projectctl/features/entorno.md"
+    source:
+      - "docs/app-map/views/projectctl/features/entorno.md"
+    revision: 828c1da48b791661a8b0f24420b791a1376b512b9c974a07fa32fdb5290a6030
+    status: active
+  - id: PCT-154
+    type: tooling
+    title: "Contrato bidireccional código⇒criterio con procedimiento de auditoría en close"
+    requirement: "Contrato bidireccional código⇒criterio con procedimiento de auditoría en close"
+    owner: "docs/app-map/views/projectctl/features/doc.md"
+    source:
+      - "docs/app-map/views/projectctl/features/doc.md"
+    revision: fb5e26a72f1ed5c44b64c18c9a4ceca66b355bd0e9abd722b76753ce689778e2
+    status: active
+  - id: PCT-155
+    type: tooling
+    title: "La proposal declara el delta de criterios con IDs"
+    requirement: "La proposal declara el delta de criterios con IDs"
+    owner: "docs/app-map/views/projectctl/features/tareas.md"
+    source:
+      - "docs/app-map/views/projectctl/features/tareas.md"
+    revision: 7d6cea1ceba426d74e47e8e1a9700a14ab336c7f1d5fceea7fb3f295f97c72fa
+    status: active
+  - id: PCT-156
+    type: tooling
+    title: "tasks: `projectctl tasks approve <file> --kind proposal|severe|pre-merge --actor <actor> --decision <text> --recorded-at <utc> --revision <rev> --criteria <ids> [--summary <text> --risks <a|b> --evidence <refs> --severity-class <class>]` — Record a revision-bound proposal, severe or pre-merge approval on a task"
+    requirement: "tasks: `projectctl tasks approve <file> --kind proposal|severe|pre-merge --actor <actor> --decision <text> --recorded-at <utc> --revision <rev> --criteria <ids> [--summary <text> --risks <a|b> --evidence <refs> --severity-class <class>]` — Record a revision-bound proposal, severe or pre-merge approval on a task"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: b7f30008ef8bf1c4255e3c68d890a5d07cbab76fd5e34551197c1a88407f1a39
+    status: active
+  - id: PCT-157
+    type: tooling
+    title: "tasks: `projectctl tasks-status get <task_id>` — Show the public.tasks tracking mirror row for a task id"
+    requirement: "tasks: `projectctl tasks-status get <task_id>` — Show the public.tasks tracking mirror row for a task id"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 7714089def89d92cba5cdbf98500a5bae985d7709c9da9def8a8cfeb3c620a6c
+    status: active
+  - id: PCT-158
+    type: tooling
+    title: "tasks: `projectctl tasks-status set <task_id> [--phase <phase>] [--state <state>] [--status <status>] [--branch <branch>]` — Update the public.tasks tracking mirror row (not taskReadme files)"
+    requirement: "tasks: `projectctl tasks-status set <task_id> [--phase <phase>] [--state <state>] [--status <status>] [--branch <branch>]` — Update the public.tasks tracking mirror row (not taskReadme files)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 2febfd8def0087a92e516935197102bcf8988a3b598a5ccdad07ae9feb0a518c
+    status: active
+  - id: PCT-159
+    type: tooling
+    title: "tasks: `projectctl tasks-status list` — List public.tasks tracking mirror rows for this project"
+    requirement: "tasks: `projectctl tasks-status list` — List public.tasks tracking mirror rows for this project"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 6f428737ebb3cddb37c20f9cc3a4feca3b72455814be5a69e17773be6c95b8e2
+    status: active
+  - id: PCT-160
+    type: tooling
+    title: "tasks: `projectctl tasks-status purge <task_id>` — Delete the public.tasks tracking mirror row for a task id"
+    requirement: "tasks: `projectctl tasks-status purge <task_id>` — Delete the public.tasks tracking mirror row for a task id"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 67482e9e05ae72d5c4ec235b3cc880f0dd9a854b58b6065540d57544046cfb75
+    status: active
+  - id: PCT-161
+    type: tooling
+    title: "tasks: `projectctl purge preview --active-task-id <id>` — Preview owner-scoped non-v10 task purge without mutation"
+    requirement: "tasks: `projectctl purge preview --active-task-id <id>` — Preview owner-scoped non-v10 task purge without mutation"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: f04f4a43259c6bfd53b278922551b210f44209a84ee5485d532e816449448520
+    status: historical
+  - id: PCT-162
+    type: tooling
+    title: "tasks: `projectctl purge execute --active-task-id <id> --preview-checksum <hex>` — Execute a preview-bound owner-scoped purge after severe approval (requires --yes)"
+    requirement: "tasks: `projectctl purge execute --active-task-id <id> --preview-checksum <hex>` — Execute a preview-bound owner-scoped purge after severe approval (requires --yes)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 34a6801ece03338e84f028a9aa1d854c69be638f2e461705f96e2302ef16c2cf
+    status: historical
+  - id: PCT-163
+    type: tooling
+    title: "tasks: `projectctl purge rollback --active-task-id <id> --preview-checksum <hex>` — Roll back a preview-bound purge from journal/snapshot (requires --yes)"
+    requirement: "tasks: `projectctl purge rollback --active-task-id <id> --preview-checksum <hex>` — Roll back a preview-bound purge from journal/snapshot (requires --yes)"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 17c93fdb956692e53c0f320c08a15ec7326700dada004e1c71489ef9b35f60d7
+    status: historical
+  - id: PCT-164
+    type: tooling
+    title: "docs: `projectctl docs generate` — Stage deterministic Projectctl documentation projections from the sandbox registry. App Map/read-model publish is owned by the generated-docs unit."
+    requirement: "docs: `projectctl docs generate` — Stage deterministic Projectctl documentation projections from the sandbox registry. App Map/read-model publish is owned by the generated-docs unit."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: fa637745c643e83eee535abdb355df45805894b86a43b8734b6d9e270253d78c
+    status: active
+  - id: PCT-165
+    type: tooling
+    title: "docs: `projectctl docs check` — Regenerate documentation projections in staging and fail closed on byte/schema/reference/tab/criteria/navigation drift without writing outputs"
+    requirement: "docs: `projectctl docs check` — Regenerate documentation projections in staging and fail closed on byte/schema/reference/tab/criteria/navigation drift without writing outputs"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 0b61b9e08dd3ca402985ff243da85e3f6baa1a121c13cfb58f12676589ffd251
+    status: active
+candidates:
+  - id: PCT-CAND-20260908-PCTMAP-A01
+    title: "seis tabs exactas y nueva tab Agentes generada"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-005
+  - id: PCT-CAND-20260908-PCTMAP-R01
+    title: "contrato activo de tabs/deep links retirados, sin alias"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-005
+  - id: PCT-CAND-20260908-PCTMAP-M01
+    title: "navegación Projectctl pasa a bloque generado con orden cerrado"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-005
+  - id: PCT-CAND-20260908-PCTMAP-A02
+    title: "capabilities core, web-browser, managed-docker y estado disabled"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-004
+  - id: PCT-CAND-20260908-PCTMAP-R02
+    title: "catálogos CLI manuales y claims de conteo activos ajenos al registry"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-007
+  - id: PCT-CAND-20260908-PCTMAP-M02
+    title: "catálogo CLI se deriva exclusivamente del registry sandbox"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-007
+  - id: PCT-CAND-20260908-PCTMAP-A03
+    title: "MAP de módulos y resolución selectiva por lane ID lógico"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-002
+  - id: PCT-CAND-20260908-PCTMAP-R03
+    title: "referencias operativas v9/V1/cuatro fases y paths físicos retirados"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-003
+  - id: PCT-CAND-20260908-PCTMAP-M03
+    title: "workflow portable mueve binding y módulos sin alterar autoridad externa"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-001
+  - id: PCT-CAND-20260908-PCTMAP-A04
+    title: "manifest YAML normativo de criterios y ledger separado de coverage"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-008
+  - id: PCT-CAND-20260908-PCTMAP-R04
+    title: "claims históricos de coverage tratados como evidencia vigente"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-008
+  - id: PCT-CAND-20260908-PCTMAP-M04
+    title: "matriz de coverage cerrada, audit trail Manual/PW-CLI y override humano"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-008
+  - id: PCT-CAND-20260908-PCTMAP-A05
+    title: "generación/check integral de App Map, bundles y navigation"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-009
+  - id: PCT-CAND-20260908-PCTMAP-R05
+    title: "edición manual activa de projections Projectctl"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-009
+  - id: PCT-CAND-20260908-PCTMAP-M05
+    title: "skill normativa y App Map completamente generado/committeado"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-009
+  - id: PCT-CAND-20260908-PCTMAP-A06
+    title: "contrato completo de creación de task y UI de estado a dos niveles"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-006
+  - id: PCT-CAND-20260908-PCTMAP-R06
+    title: "creación parcial de tasks y snapshots UI que redeclaran machine values"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-006
+  - id: PCT-CAND-20260908-PCTMAP-M06
+    title: "task flow de cinco fases con approvals proposal/severo/pre-merge"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-006
+  - id: PCT-CAND-20260908-PCTMAP-A07
+    title: "purga no-v10 Projectctl auditable, reversible y sin reescritura Git"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-013
+  - id: PCT-CAND-20260908-PCTMAP-R07
+    title: "tasks no-v10 activas en filesystem o public.tasks"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-013
+  - id: PCT-CAND-20260908-PCTMAP-M07
+    title: "operación destructiva exige dry-run, binding de revisión, confirmación severa y rollback"
+    status: task-scoped
+    mapping: unassigned
+    related_ac: AC-013

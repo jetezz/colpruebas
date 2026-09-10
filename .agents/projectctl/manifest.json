@@ -1,0 +1,74 @@
+{
+  "schema": "projectctl-manifest/v1",
+  "capabilities": {
+    "core": {
+      "id": "core",
+      "required": true,
+      "status": "disabled",
+      "requirements": [
+        "locator",
+        "binding-v2",
+        "artifact-store",
+        "resolver",
+        "docs",
+        "test"
+      ],
+      "validation": {
+        "checks": [
+          "locator:.agents/sdd-workflow.json",
+          "binding-v2:.agents/skills/projectctl-requirements/references/tasks/binding.md",
+          "artifact-store:.agents/skills/projectctl-requirements/references/tasks/binding.md",
+          "resolver:.agents/skills/projectctl-requirements/modules/sd-protocol/skill-resolver.md",
+          "docs:scripts/docs-lint.ts",
+          "test:scripts/test-runner.ts",
+          "resolver-script:scripts/projectctl-module-resolver.ts"
+        ],
+        "reason": "blocked: missing scripts/docs-lint.ts and scripts/projectctl-module-resolver.ts; non-portable root app scripts were not copied. locator, binding V2, artifact-store and in-package skill-resolver.md are present. test-runner.ts exists as destination-owned. next unit: destination-owned portable docs generate/check plus resolver script, or an EX follow-up that does not copy root app code."
+      },
+      "source_revision": "a6e240930e3cd43158887d05a97bb2644fe35c6db9ebc532bf8289610c2524b8"
+    },
+    "web-browser": {
+      "id": "web-browser",
+      "required": false,
+      "status": "enabled",
+      "requirements": [
+        "frontend",
+        "playwright"
+      ],
+      "validation": {
+        "checks": [
+          "frontend:frontend",
+          "playwright:playwright"
+        ]
+      },
+      "source_revision": "1fb191c4accd4c12f7fc4775df53eb4b8e5afc72dacd66550fe707eb4fbd2e60"
+    },
+    "managed-docker": {
+      "id": "managed-docker",
+      "required": false,
+      "status": "disabled",
+      "requirements": [
+        "compose.yml",
+        "compose.dev.yml",
+        "prod-env-contract",
+        "dev-env-contract"
+      ],
+      "validation": {
+        "checks": [
+          "compose.yml:compose.yml",
+          "compose.dev.yml:compose.dev.yml",
+          "prod-env-contract:.env.example",
+          "dev-env-contract:.env.dev.example",
+          "prod-host-keys:FRONTEND_PORT,API_PORT",
+          "dev-host-keys:FRONTEND_DEV_PORT,API_DEV_PORT",
+          "container_port",
+          "sandbox-no-docker-socket",
+          "portable-tunnel-excluded"
+        ],
+        "reason": "disabled: compose.yml has no services and does not interpolate FRONTEND_PORT or API_PORT; compose.dev.yml and .env.dev.example use FRONTEND_PORT/API_PORT instead of FRONTEND_DEV_PORT/API_DEV_PORT; missing FRONTEND_DEV_PORT,API_DEV_PORT. EX1 does not mutate destination compose/env."
+      },
+      "source_revision": "ca2c409f9f001eec15a428a0c27b51819179bf5138d9cc924b5ffb821d25d0f0"
+    }
+  },
+  "source_revision": "5df5877f771a039445fb73c996dbf113dac33eddf4ec39ba689f29bdfeb6f59d"
+}

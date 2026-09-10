@@ -13,6 +13,7 @@ summary: >-
 source_of_truth: app-map
 criteria:
   - id: PCT-79
+    type: ui
     title: >-
       La UI interna de /projectctl de la plataforma (no este repo consumidor)
       renderiza la tab cli con el catálogo de comandos agrupado por familia.
@@ -28,6 +29,7 @@ criteria:
       (frontend/src/views/projectctl/ui/), gobernada por
       frontend-policy/fsd-architecture; este repo solo consume el estándar.
   - id: PCT-80
+    type: ui
     title: La tab cli expone filtro por `name` y copia al portapapeles por comando.
     functional: not-applicable
     coverage:
@@ -37,6 +39,7 @@ criteria:
       Manual: not-applicable
     notes: Superficie UI de la plataforma; no aplicable a este repo consumidor.
   - id: PCT-81
+    type: tooling
     title: >-
       El catálogo de comandos del CLI (71 visibles) vive en la SoT
       frontend/src/views/projectctl/data/projectctl-commands.ts (plataforma).
@@ -50,6 +53,7 @@ criteria:
       SoT del catálogo en la plataforma; este repo referencia el estándar sin
       duplicar el catálogo.
   - id: PCT-82
+    type: ui
     title: >-
       La tab cli de /projectctl se integra a las tabs de compatibilidad de
       manera navegable y consistente.
@@ -61,6 +65,7 @@ criteria:
       Manual: not-applicable
     notes: Superficie UI de la plataforma; no aplicable a este repo consumidor.
   - id: PCT-83
+    type: tooling
     title: >-
       /projectctl?tab=doc renderiza el panel Doc listando las 5 secciones MUST +
       contrato criteria[] inline + prefix discipline + SoT única + eliminación
@@ -77,6 +82,7 @@ criteria:
       superficie legacy quality-*.md se elimina (REQ-DOC-004). Validado por
       projectctl-bundle.test.ts (fase 3).
   - id: PCT-84
+    type: tooling
     title: >-
       Cada bundle de docs/app-map declara las 5 secciones canónicas MUST: URL,
       Tab, Objetivo, Criterios de calidad y Diagrama Mermaid, con sibling
@@ -91,6 +97,7 @@ criteria:
       Este index.md declara las 5 secciones MUST y su sibling index.mmd
       (Mermaid). Validado por projectctl-bundle.test.ts.
   - id: PCT-85
+    type: tooling
     title: >-
       El frontmatter criteria[] usa la estructura {id, title, functional,
       coverage} con IDs prefijados por bundle (PCT-* para views/projectctl/) y
@@ -107,6 +114,7 @@ criteria:
       patchBundleCoverage (backend/src/coverage-writer.ts). Validado por
       projectctl-bundle.test.ts.
   - id: PCT-86
+    type: tooling
     title: >-
       Única SoT de documentación funcional = docs/app-map/ + navigation.yaml +
       ${bundle}.md + ${bundle}.mmd; la superficie docs/01-product/quality/**
@@ -121,6 +129,7 @@ criteria:
       navigation.yaml registra la vista; quality-*.md eliminadas (REQ-DOC-004).
       Validado por projectctl-bundle.test.ts (ausencia de quality-*.md).
   - id: PCT-87
+    type: tooling
     title: >-
       El estándar projectctl-requirements (references/standard.md) es la policy
       integrada sobre cuándo y cómo actualizar bundles de docs/app-map/.
@@ -135,6 +144,7 @@ criteria:
       .agents/skills/projectctl-requirements/references/standard.md como policy
       de origen.
   - id: PCT-88
+    type: tooling
     title: >-
       Prefix discipline: IDs reservados
       PCT-*|PRJ-*|TST-*|AC-*|DSH-*|TNL-*|LGN-*|MDL-*; no se inventa prefijo
@@ -149,6 +159,7 @@ criteria:
       Todos los criterios de este bundle usan prefijo PCT-*; no hay prefijo
       inventado. Regla pineseada en estas notas (REQ-DOC-005).
   - id: PCT-89
+    type: tooling
     title: >-
       Existe script de tests unificado invocable vía Bun
       (scripts/test-runner.ts) con contrato 1:1 con projectctl test *.
@@ -165,6 +176,7 @@ criteria:
       implementar ese panel. El test-tab propio del repo se cubre en
       project-workspace (PWT-*) y el runner/gate en PCT-91/92/93/94.
   - id: PCT-90
+    type: tooling
     title: >-
       Contrato AC mandatorio: // @ac <ID> en primeras 10 líneas de
       .test.ts/.spec.ts + annotations Playwright; rechazo de cobertura sin AC
@@ -179,6 +191,7 @@ criteria:
       Entregado por AC-003. El runner assertAcHeader/assertAcHeaderSpec rechaza
       archivos sin header (exit 2).
   - id: PCT-91
+    type: tooling
     title: 'projectctl test * mapea 1:1 al runner unificado scripts/test-runner.ts.'
     functional: implemented
     coverage:
@@ -188,6 +201,7 @@ criteria:
       Manual: covered
     notes: Entregado por AC-003. Manual vía CLI projectctl test (coordinator-owned).
   - id: PCT-92
+    type: integration
     title: >-
       Persistencia canónica de corridas en
       .runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/{junit.xml,results.json,summary.json}
@@ -202,6 +216,7 @@ criteria:
       Persistencia completada por AC-003 sobre layout existente (46 runs legacy
       preservados). Write-back sobre este bundle en fase 3.
   - id: PCT-93
+    type: tooling
     title: >-
       Layout canónico de tests/specs + gate de cobertura bun run test:check
       (subcomando check del runner, convención 2 segmentos view/feature).
@@ -215,6 +230,7 @@ criteria:
       Entregado por AC-003/AC-005 (frontend/playwright.config.ts + test:check).
       El gate evalua cobertura de criterios functional: implemented en fase 3.
   - id: PCT-94
+    type: tooling
     title: >-
       playwright/TEST_PLAN.md mapea archivo↔criterio con tiers PW-AUTO/PW-CLI y
       solo cambia cuando nace/cambia cobertura Playwright persistente.
@@ -226,6 +242,7 @@ criteria:
       Manual: not-applicable
     notes: Entregado por AC-003 (WU-TST-1).
   - id: PCT-95
+    type: integration
     title: >-
       El proyecto gestionado cumple las reglas de publicabilidad de
       references/entorno.md; FRONTEND_PORT obligatorio y mapeo
@@ -240,6 +257,7 @@ criteria:
       Entregado por AC-001 (env FRONTEND_PORT=4321 + compose canónicos). Manual
       vía projectctl env validate (coordinator-owned).
   - id: PCT-96
+    type: integration
     title: >-
       Overlays canónicos compose.yml (prod) / compose.dev.yml (dev) con servicio
       frontend target prod/dev; docker-compose*.yml fuera del uso canónico.
@@ -253,6 +271,7 @@ criteria:
       Entregado por AC-001 (AD-01). Manual vía projectctl status
       (coordinator-owned).
   - id: PCT-97
+    type: integration
     title: >-
       projectctl env validate reporta ok y detecta missing/invalid FRONTEND_PORT
       (regresión no permitida).
@@ -266,6 +285,7 @@ criteria:
       Entregado por AC-001; validado en fase 3 vía projectctl env validate
       (coordinator-owned).
   - id: PCT-98
+    type: integration
     title: >-
       Contrato edge mis-proyectos-edge external: true con aliases por entorno
       (<app>-origin prod / test-<app>-origin dev) preservados.
@@ -279,6 +299,7 @@ criteria:
       Entregado por AC-001 (AD-01, red/alias preservados de legacy sin cambio de
       valor). Validado en projectctl status.
   - id: PCT-99
+    type: security
     title: >-
       Sandbox NO expone docker CLI/socket; el control de runtime es exclusivo
       vía projectctl (env *, tunnel *,
@@ -293,6 +314,7 @@ criteria:
       Entregado por AC-001/REQ-ENT-006 (skill sandbox-runtime-policy instalada).
       Validado por suite y projectctl doctor.
   - id: PCT-100
+    type: integration
     title: >-
       El proyecto gestionado arranca, es publicable y conecta al tunnel
       compartido con el contrato de entorno del estándar.
@@ -306,6 +328,7 @@ criteria:
       Entregado por AC-001 (docs entornos/architecture/tunnel); validado por
       projectctl doctor sin drifts críticos (fase 3).
   - id: PCT-106
+    type: tooling
     title: >-
       El flujo operativo de tareas es única SoT normativa del binding
       task-flow-binding v9.0.0 en references/tareas.md.
@@ -319,6 +342,7 @@ criteria:
       Entregado por AC-005/AC-004. Validado por
       projectctl-requirements.sot-coherence.test.ts (gate R-007) en fase 3.
   - id: PCT-107
+    type: tooling
     title: >-
       Los estados/task states usados pertenecen al status.writable del binding
       v9; sin aliases retirados (branching, pushing, ready_for_branch,
@@ -333,6 +357,7 @@ criteria:
       Entregado por AC-004 (locator v9 + retiro de estados de fixtures).
       Validado por sot-coherence gate R-007 (escaneo taskReadme).
   - id: PCT-109
+    type: tooling
     title: >-
       La ejecución SDD se enruta solo a lanes del binding
       (sdd-spec/design/tasks/ apply-*/verify-*); sin aliases retirados como
@@ -345,6 +370,7 @@ criteria:
       Manual: not-applicable
     notes: Validado por sot-coherence gate R-007 en fase 3.
   - id: PCT-110
+    type: tooling
     title: >-
       Los gates del flujo (acceptance, app_map_close, cobertura, etc.) se
       evalúan contra el binding v9 con evidencia registrada.
@@ -358,6 +384,7 @@ criteria:
       Gate AC-009.app_map_close en cierre evalúa este bundle
       (criteria[].coverage sincronizado). Validado en fase 3/cierre.
   - id: PCT-112
+    type: tooling
     title: >-
       La persistencia SDD usa taskReadme como índice + phase artifacts; cfg de
       mirrors/write_order conforme al binding (este overlay: mirrors: []).
@@ -369,6 +396,7 @@ criteria:
       Manual: not-applicable
     notes: Entregado por AC-004/AC-005; validado por sot-coherence gate R-007.
   - id: PCT-121
+    type: tooling
     title: >-
       El cierre y archive de una tarea registra lineage y evidencia conforme al
       binding task-flow-binding v9.0.0.

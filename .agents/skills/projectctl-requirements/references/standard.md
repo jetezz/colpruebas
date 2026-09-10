@@ -1,8 +1,8 @@
 # Integrated Standard — Docs, Testing, Runtime and Projectctl Operation
 
-Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-governance`, `testing-policy`, `ops-runtime-policy` y `projectctl-operator`. Desde `projectctl-requirements` v10, esta skill también publica el binding operativo único de tareas en `references/tareas.md`; esta skill es el estándar integrado para que un proyecto sea compatible con `/projectctl`.
+Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-governance`, `testing-policy`, `ops-runtime-policy` y `projectctl-operator`. `projectctl-requirements` package v11 publica el binding operativo único en `references/tareas.md`; esta skill es el estándar integrado para compatibilidad `/projectctl`.
 
-> **Rol de este archivo**: integrado de reglas operativas. Los valores del workflow viven únicamente en el bloque `task-flow-binding` v9.0.0.
+> **Rol de este archivo**: integrado de reglas operativas. Los valores del workflow viven únicamente en el bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2).
 
 ## 1. Documentación y app-map
 
@@ -35,9 +35,50 @@ Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-g
 - Cada bundle declara 5 secciones: URL, Tab, Objetivo, Criterios de calidad, Diagrama Mermaid.
 - Cada bundle incluye frontmatter `criteria[]` con IDs inline para trazabilidad doc <-> tests <-> producto.
 - El ID del criterio es vinculante; no debe existir criterio en código o tests que no esté documentado en `docs/app-map/**`.
+- Todo criterio declarado en `docs/app-map/**` debe tener evidencia en código o tests, **o** una justificación explícita (not-applicable / Manual / documental).
 - Estados funcionales permitidos: `implemented | partial | missing | not-applicable`.
 - Estados de cobertura permitidos: `covered | partial | missing | not-applicable`.
 - Métodos permitidos: `Unit | PW-CLI | PW-AUTO | Manual`.
+- Tipo de criterio obligatorio (campo `type`, item-level): `ui | functionality | a11y | backend | data | integration | security | performance | tooling` — enum cerrado de 9 (T-1).
+
+### Clasificación del criterio — enum cerrado `type` (T-1)
+
+Cada criterio `criteria[]` declara `type` (obligatorio, item-level, indent 4, lowercase). Valores canónicos y su **verificación por defecto** (guía documental, NUNCA una restricción de lint — T-7):
+
+| Value | Definición (una línea) | Verificación por defecto |
+|---|---|---|
+| `ui` | Cómo se ve/interactúa/percibe la vista renderizada (layout, estilos, affordances, contenido presentado) | PW-CLI / PW-AUTO |
+| `functionality` | Comportamiento e2e visible cuyo resultado correcto cruza el stack | PW-AUTO |
+| `a11y` | Criterio WCAG citable o comportamiento teclado/screen-reader/contraste | PW + auditoría manual |
+| `backend` | Lógica de servidor/API sin UI necesaria (reglas, validaciones, autorización) | Unit / API |
+| `data` | Estado/estructura de DB: schema, migraciones, RLS/grants, seed | Unit / SQL |
+| `integration` | Contrato entre sistemas: APIs externas, webhooks, eventos, auth providers | Contract / API |
+| `security` | Control contra amenaza (authn/authz, cifrado, sesiones), nivel ASVS | Unit/API + revisión |
+| `performance` | Atributo con umbral numérico bajo condiciones | Suite perf / Manual |
+| `tooling` | CLIs, scripts, infra/ops internos sin UI de usuario final | Unit + corrida manual |
+
+### Auditoría de criterios
+
+La dirección doc→código es normativa (no un hard gate de lint). En el cierre de un cambio, verificar por bundle que cada criterio declarado tenga al menos una referencia en código o tests, o una nota de excepción (not-applicable / Manual / documental). Es un procedimiento normativo en close; NO es un hard gate de lint.
+
+La mitad mecánica del contrato vive en los checks de `scripts/docs-lint.ts`: `checkProductCode`, `checkUnitTests` y `checkPlaywrightSpecs` (código⇒criterio, dirección inversa a la auditoría doc⇒código). Esta sección solo declara la dirección doc⇒código como procedimiento de auditoría; no introduce un lint inverso.
+
+### Árbol de clasificación del criterio (T-5 — normativo)
+
+Asignar el tipo de un criterio por la primera regla que coincida, en orden:
+
+1. Impone un **umbral numérico** de tiempo/capacidad/recursos → `performance`. (Si además expresa una amenaza, la regla 2 gana.)
+2. Expresa protección contra una **amenaza** / control de seguridad → `security`.
+3. Es un **criterio de éxito WCAG** o comportamiento teclado/screen-reader/contraste → `a11y`.
+4. Requiere una **vista renderizada en browser** para verificar → si la preocupación es *cómo se ve/interactúa* → `ui`; si es *corrección del resultado del flujo* → `functionality`.
+5. La evidencia es un **contrato entre sistemas** (API externa/webhook/evento/provider) → `integration`.
+6. La evidencia es **estado/schema/RLS de DB** sin API → `data`.
+7. La evidencia es una **respuesta de API/servicio** o efecto de servidor, sin UI → `backend`.
+8. El sujeto es una **herramienta interna / CLI / script / infra / env** sin UI de usuario final → `tooling`.
+
+Desempates: **un criterio = una preocupación** (preocupaciones mixtas MUST dividirse en dos criterios tipados, nunca multi-tipo); UI+backend mismo comportamiento → tipar por donde vive la evidencia directa más barata (regla de la pirámide; preocupación enforced en servidor → `backend` aunque tenga UI); a11y vs ui → el SC WCAG citado gana; tooling con UI de admin → mirar el consumidor del criterio (usuario final vs operador).
+
+> **last-verified**: 2026-09-07 — regenerar ante cualquier cambio en `shared/contracts/app-map.ts` (`APP_MAP_CRITERION_TYPES`), en `docs/app-map/views/project-workspace/features/doc-tab.md` (piloto T-6), en la taxonomía del spec (T-1/T-5) o en el contrato bidireccional doc⇒código (R-B; mitad mecánica en `scripts/docs-lint.ts` `checkProductCode`/`checkUnitTests`/`checkPlaywrightSpecs`).
 
 ### Diagramas
 
@@ -94,11 +135,11 @@ Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-g
 
 - Los proyectos gestionados deben cumplir `references/entorno.md`.
 - Frontend debe exponer `4321` dentro del contenedor.
-- `FRONTEND_PORT` es obligatorio en `.env` y `.env.dev`.
+- `.env` debe declarar `FRONTEND_PORT` y `.env.dev` debe declarar `FRONTEND_DEV_PORT`; ambos archivos son configuración local explícita y no aceptan aliases entre overlays.
 - El frontend debe unirse a `mis-proyectos-edge` con alias esperado por entorno.
 - Prod usa alias `<app>-origin`; dev usa `test-<app>-origin`.
 - No usar `host.docker.internal:<FRONTEND_PORT>` como camino estándar cuando existe alias edge gestionado; queda como compat/legacy.
-- `projectctl env validate` debe detectar `FRONTEND_PORT` faltante o inválido.
+- `projectctl env validate` debe detectar las claves de puerto faltantes o inválidas según el overlay: `FRONTEND_PORT`/`API_PORT` en `.env` y `FRONTEND_DEV_PORT`/`API_DEV_PORT` en `.env.dev`.
 - `projectctl tunnel status` debe exponer `TUNNEL_NOT_PUBLISHABLE` con acciones cuando falte red/alias/hostname.
 
 ### Cambios operativos
@@ -147,7 +188,7 @@ terminal -> projectctl -> API -> webhook-listener -> Docker host
 
 ## 5. Flujo operativo de tareas
 
-El contrato ejecutable completo vive únicamente en el bloque delimitado `task-flow-binding` (`TaskFlowBindingV1`, v9.0.0) dentro de `.agents/skills/projectctl-requirements/references/tareas.md`.
+El contrato ejecutable completo vive únicamente en el bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0) dentro de `.agents/skills/projectctl-requirements/references/tareas.md`.
 
 Este archivo respeta el contrato integral del bloque sin replicar valores:
 
@@ -159,6 +200,10 @@ Este archivo respeta el contrato integral del bloque sin replicar valores:
 - La fase documental tiene un único owner por binding (`sdd-apply-doc`); los demás lanes deben consumir el bloque por contexto, no duplicar su rol.
 - Los criterios nuevos se trazan como `PCT-106..PCT-121` en `.agents/skills/projectctl-requirements/references/sources.md`; este `standard.md` solo los cita cuando corresponde al flujo integrado.
 - La persistencia SDD (primary index, phase artifacts, mirrors y write order) es parte del bloque. Este overlay configura cero mirrors; índice y phase artifacts son suficientes para recovery y cierre.
+- RDD, su modo opt-in, fase, lanes, guards, gates y entrega condicional se consumen desde el bloque. Este archivo no reproduce sus catálogos. Tareas V1/v8 se leen solo como RDD disabled; valores desconocidos o instalaciones V1/V2 y v8/v9 mezcladas bloquean sin fallback.
+- El paquete se instala por reemplazo completo `copy-tree-no-mods`; una instalación híbrida debe fail closed antes de routing o delivery.
+ - Toda proposal MUST declarar el delta de criterios (añadir/eliminar/modificar con IDs) antes de Fase 2.
+ - El binding único también define `environment_verification_deferred` y `pending_environment_close_block`; esta referencia los consume sin duplicar sus machine values.
 
 ## 6. Resultado esperado de un agente que usa este estándar
 
