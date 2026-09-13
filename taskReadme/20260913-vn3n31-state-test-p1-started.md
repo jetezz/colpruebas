@@ -1,7 +1,7 @@
 ---
-title: "AC summary test 1788778545518"
-task_id: "20260907-ufen1h"
-task_slug: "ac-summary-test-1788778545518"
+title: "State test: p1_started"
+task_id: "20260913-vn3n31"
+task_slug: "state-test-p1-started"
 sdd_change_id: ""
 binding_id: "projectctl-requirements.task-flow"
 binding_version: "10.0.0"
@@ -11,24 +11,24 @@ phase: "fase_1_propuesta"
 state: "p1_started"
 source_branch: "develop"
 target_branch: "develop"
-branch_name: "feature/20260907-ufen1h-ac-summary-test-1788778545518"
+branch_name: "feature/20260913-vn3n31-state-test-p1-started"
 app_map: "home-status-summary"
-task_type: "Mejora UX/UI"
+task_type: "Documentación"
 pw_enabled: false
 browser_validation: "optional"
 pr_url: ""
-created_at: "2026-09-07T10:55:47.740Z"
-updated_at: "2026-09-07T10:55:47.740Z"
+created_at: "2026-09-13T11:21:33.790Z"
+updated_at: "2026-09-13T11:21:33.790Z"
 ---
-# AC summary test 1788778545518
+# State test: p1_started
 
 ## 1. Objetivo
 
-Resultado esperado de prueba.
+State test: p1_started
 
 ## 2. Contexto operativo
 
-Problema de prueba para resumen AC.
+State test: p1_started
 
 ## 3. Criterios de aceptación
 
