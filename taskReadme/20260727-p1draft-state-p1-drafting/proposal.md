@@ -1,3 +1,8 @@
+---
+task_id: "20260727-p1draft"
+task_slug: "state-p1-drafting"
+phase: "fase_1_propuesta"
+---
 # Proposal: State test `p1_drafting`
 
 > Faithful transposition: the proposal body below is copied from the inline proposal evidence in `taskReadme/20260727-p1draft-state-p1-drafting.md`. The source index remains unchanged. Statements about inline persistence and command scope describe the original proposal-authoring context; they do not negate this canonical phase artifact or the outer apply iteration's user-required production rebuild.

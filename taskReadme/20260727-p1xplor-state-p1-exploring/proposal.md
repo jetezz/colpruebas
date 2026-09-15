@@ -1,3 +1,8 @@
+---
+task_id: "20260727-p1xplor"
+task_slug: "state-p1-exploring"
+phase: "fase_1_propuesta"
+---
 # Proposal: Fixture state-test `p1_exploring`
 
 ## Fixture intent

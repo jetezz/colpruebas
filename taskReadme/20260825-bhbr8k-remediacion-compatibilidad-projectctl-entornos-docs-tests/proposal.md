@@ -1,3 +1,8 @@
+---
+task_id: "20260825-bhbr8k"
+task_slug: "remediacion-compatibilidad-projectctl-entornos-docs-tests"
+phase: null
+---
 # PROPOSE-1 — Propuesta SDD — Remediación compatibilidad /projectctl (entornos, docs, tests)
 
 > Lane: `sdd-propose` (fase 1, planning). Basada en la exploración reconciliada

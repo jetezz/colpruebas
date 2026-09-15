@@ -1,3 +1,8 @@
+---
+task_id: "20260727-prpdemo"
+task_slug: "validacion-artefacto-propuesta-canonico"
+phase: "fase_1_propuesta"
+---
 # Proposal: Validación de visibilidad del artifact `proposal.md`
 
 ## Intent
