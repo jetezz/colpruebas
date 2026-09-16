@@ -82,6 +82,9 @@ criteria:
       en tests/front/tests/index.spec.ts con `@ac home-05`.
 ---
 
+## 1. URL
+/
+
 # Inicio
 
 ## Qué cubre

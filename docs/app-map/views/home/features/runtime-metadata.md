@@ -39,6 +39,8 @@ criteria:
       Footer.astro consume `new Date().toISOString()` en el servidor. Garantia
       de formato enforced por serializacion automatica de Date.
 ---
+## 1. URL
+/
 
 # Metadatos de ejecución
 

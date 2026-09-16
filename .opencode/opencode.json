@@ -15,7 +15,7 @@
     "sdd-verify-code": {},
     "sdd-explore-code": {},
     "sdd-orchestrator": {
-      "model": "opencode-go/deepseek-v4-flash"
+      "model": "minimax/MiniMax-M3"
     },
     "sdd-verify-pwcli": {},
     "sdd-verify-units": {},

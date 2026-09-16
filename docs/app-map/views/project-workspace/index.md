@@ -9,6 +9,8 @@ summary: >-
   views/project-workspace/features/test-tab.md.
 source_of_truth: app-map
 ---
+## 1. URL
+/project/[id]
 
 # Project Workspace
 

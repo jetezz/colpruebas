@@ -68,6 +68,8 @@ criteria:
       Git:`. El dato dinamico proviene de runtime-metadata; esta feature expone
       solo el rendering.
 ---
+## 1. URL
+/
 
 # Resumen de estado
 
