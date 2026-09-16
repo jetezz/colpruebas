@@ -15,18 +15,3 @@ navigation:
         kind: feature
         bundle: views/home/features/runtime-metadata
         children: []
-  - id: project-workspace
-    title: Project Workspace
-    kind: view
-    bundle: views/project-workspace/index
-    children:
-      - id: project-workspace-test-tab
-        title: Tab Test
-        kind: feature
-        bundle: views/project-workspace/features/test-tab
-        children: []
-  - id: projectctl
-    title: Projectctl
-    kind: view
-    bundle: views/projectctl/index
-    children: []

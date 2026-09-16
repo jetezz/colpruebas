@@ -1,5 +1,5 @@
 // Canonical Playwright config (target of the root symlink `playwright.config.ts`).
-// Derived from `playwright.config.cjs` (source of truth) + design §5.6 `PWAUTO_VIEWS`.
+// The repository's only test discovery root is the canonical `tests/e2e` tree.
 // `outputDir='playwright/test-results'` makes the runner's
 // readOrder[i]=<REPO_ROOT>/playwright/test-results/.last-run.junit.xml
 // hit and parse the JUnit XML.
@@ -8,20 +8,14 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const configDir = dirname(fileURLToPath(import.meta.url));
-const baseURL = process.env.BASE_URL || 'http://localhost:4321';
+const baseURL = process.env.BASE_URL?.trim();
 
 export const PWAUTO_VIEWS = {
-  'projectctl': { project: 'pwauto-projectctl', bundle_path: 'views/projectctl/index', grep: /@projectctl\b/ },
   'home': { project: 'pwauto-home', bundle_path: 'views/home/index', grep: /@home\b/ },
-  'project-workspace:test-tab': {
-    project: 'pwauto-test-tab',
-    bundle_path: 'views/project-workspace/features/test-tab',
-    grep: /@(project-workspace-test-tab|test-tab)\b/,
-  },
 } as const;
 
 export default defineConfig({
-  testDir: resolve(configDir, '../tests/front/tests'),
+  testDir: resolve(configDir, '../tests/e2e'),
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: 0,
@@ -32,7 +26,7 @@ export default defineConfig({
     ['junit', { outputFile: resolve(configDir, 'playwright/test-results', '.last-run.junit.xml') }],
   ],
   use: {
-    baseURL,
+    ...(baseURL ? { baseURL } : {}),
     trace: 'off',
   },
   projects: [
@@ -45,30 +39,6 @@ export default defineConfig({
         view_id: 'home',
         feature_id: null,
         bundle_path: PWAUTO_VIEWS['home'].bundle_path,
-        base_url: baseURL,
-      },
-    },
-    {
-      name: PWAUTO_VIEWS['project-workspace:test-tab'].project,
-      testIgnore: /auth\.setup\.ts/,
-      grep: PWAUTO_VIEWS['project-workspace:test-tab'].grep,
-      workers: 1,
-      metadata: {
-        view_id: 'project-workspace',
-        feature_id: 'project-workspace-test-tab',
-        bundle_path: PWAUTO_VIEWS['project-workspace:test-tab'].bundle_path,
-        base_url: baseURL,
-      },
-    },
-    {
-      name: PWAUTO_VIEWS['projectctl'].project,
-      testIgnore: /auth\.setup\.ts/,
-      grep: PWAUTO_VIEWS['projectctl'].grep,
-      workers: 1,
-      metadata: {
-        view_id: 'projectctl',
-        feature_id: null,
-        bundle_path: PWAUTO_VIEWS['projectctl'].bundle_path,
         base_url: baseURL,
       },
     },

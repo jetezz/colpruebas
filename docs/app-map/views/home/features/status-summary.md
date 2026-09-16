@@ -4,7 +4,7 @@ title: Resumen de estado
 kind: feature
 summary: >-
   Tarjeta principal que comunica nombre de la aplicacion y estado visible de
-  frontend, API y rama.
+  frontend, API y referencia de rama.
 source_of_truth: app-map
 criteria:
   - id: HSS-01
@@ -14,30 +14,25 @@ criteria:
       `Resumen de estado` con la etiqueta `Aplicacion:`.
     functional: implemented
     coverage:
-      Unit: covered
+      Unit: missing
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
-    notes: >-
-      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
-      Aplicacion:` + `info-card contiene colpruebas`. Anota `@ac HSS-01` en el
-      primer test del archivo.
+    notes: Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-01`.
   - id: HSS-02
     type: ui
     title: >-
       El estado del frontend se muestra dentro de la misma tarjeta, alineado a
-      la derecha del label `Frontend:`, diferenciado por entorno (production
-      verde / test amarillo).
+      la derecha del label `Frontend:` y diferenciado por entorno.
     functional: implemented
     coverage:
-      Unit: covered
+      Unit: missing
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
-      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
-      Frontend:`. Estilo de color vive en InfoCard.astro `.value.production` /
-      `.value.test`.
+      Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-02`; el estilo de
+      color por entorno vive en InfoCard.astro.
   - id: HSS-03
     type: ui
     title: >-
@@ -45,61 +40,49 @@ criteria:
       y replica el patron de color por entorno.
     functional: implemented
     coverage:
-      Unit: covered
+      Unit: missing
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
-    notes: >-
-      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene
-      API:`.
+    notes: Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-03`.
   - id: HSS-04
     type: ui
     title: >-
-      La rama git operativa se renderiza con la etiqueta `Rama Git:` en la misma
-      tarjeta y respeta el color del entorno actual.
+      Una referencia de rama git se renderiza con la etiqueta `Rama Git:` en la
+      misma tarjeta.
     functional: implemented
     coverage:
-      Unit: covered
+      Unit: missing
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
-      Cubierto por tests/front/tests/index.spec.ts caso `info-card contiene Rama
-      Git:`. El dato dinamico proviene de runtime-metadata; esta feature expone
-      solo el rendering.
+      Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-04`. Este bundle es
+      autoridad para el rendering de la fila; el valor se documenta en
+      home-runtime-metadata.
 ---
+
 ## 1. URL
+
 /
 
-# Resumen de estado
+## 2. Tab
 
-## Qué cubre
+Landing principal (`/`).
 
-- Nombre visible de la aplicacion en la tarjeta principal.
-- Estado actual del frontend segun el entorno activo.
-- Estado actual de la API dentro del mismo bloque.
-- Referencia visible de rama para validar rapidamente el despliegue.
-
-## Valor para el usuario
+## 3. Objetivo
 
 Reduce la incertidumbre inicial y ayuda a validar si esta viendo el entorno correcto antes de seguir con una prueba o una revision manual.
 
-## Trazabilidad
+## 4. Criterios de calidad
 
 | ID | Nivel | Cubre |
 |---|---|---|
 | HSS-01 | obligatorio | Aplicacion visible con label `Aplicacion:` y valor correcto |
 | HSS-02 | obligatorio | Frontend visible con label `Frontend:` y color por entorno |
 | HSS-03 | obligatorio | API visible con label `API:` y color por entorno |
-| HSS-04 | esperado | Rama git visible con label `Rama Git:` y color por entorno |
+| HSS-04 | esperado | Referencia de rama git visible con label `Rama Git:` |
 
-## Estados principales
+## 5. Diagrama Mermaid
 
-- tarjeta visible al cargar la landing
-- estados de frontend y API diferenciados por entorno
-- rama visible para inspeccion manual
-
-## Notas del diagrama
-
-- El resumen se presenta como una tarjeta unica con filas de informacion.
-- Los textos exactos pueden variar segun el entorno, pero la documentacion usa labels estables y orientados al usuario.
+El sibling `status-summary.mmd` representa la tarjeta y sus filas de información.

@@ -163,12 +163,12 @@ function walk(dir: string, cb: (file: string) => void, depth = 0): void {
 
 function discoverUnitFiles(): string[] {
   // Mirrors buildInventory's unit roots (backend/src/test-inventory.ts):
-  // `tests/back`, `backend/src` and `frontend/__tests__` (design §8 — AD-06, same
-  // discovery as the gate/backend so no test is silently unreachable).
+  // the canonical `tests/unit` tree is authoritative (HOME-3 / TST-36 — the
+  // same discovery as the gate/backend so no test is silently unreachable).
+  // Legacy roots (`tests/back`, `backend/src`, `frontend/__tests__`) are NOT
+  // scanned.
   const roots = [
-    join(repoRoot, 'tests', 'back'),
-    join(repoRoot, 'backend', 'src'),
-    join(repoRoot, 'frontend', '__tests__'),
+    join(repoRoot, 'tests', 'unit'),
   ];
   const files: string[] = [];
   const seen = new Set<string>();
@@ -184,7 +184,9 @@ function discoverUnitFiles(): string[] {
 }
 
 function discoverPwautoSpecs(): string[] {
-  const root = join(repoRoot, 'tests', 'front', 'tests');
+  // Canonical PW-AUTO discovery root (HOME-3 / TST-36): `tests/e2e` is the
+  // only spec tree. The legacy `tests/front/tests` root is NOT scanned.
+  const root = join(repoRoot, 'tests', 'e2e');
   const files: string[] = [];
   const seen = new Set<string>();
   walk(root, (p) => {
@@ -366,9 +368,14 @@ function runPwautoExecution(view: string, feature: string | null): ExecOutcome {
       perCriterion: new Map(),
     };
   }
+  // Single canonical config (HOME-3 / TST-36): `frontend/playwright.config.ts`
+  // with `testDir` = `tests/e2e` (the root `playwright.config.ts` is only a
+  // symlink to it). The explicit `--config` keeps discovery deterministic no
+  // matter how the symlink resolves.
   const args = [
     'playwright',
     'test',
+    '--config=frontend/playwright.config.ts',
     `--project=${project}`,
   ];
   const res = spawnSync('bunx', args, { cwd: repoRoot, encoding: 'utf8' });
@@ -495,7 +502,8 @@ async function writeRunArtifacts(opts: {
 
 async function runCommand(args: string[]): Promise<number> {
   let method: 'unit' | 'pwauto' | 'all' = 'unit';
-  let targetSpec = 'projectctl';
+  // Home-only repo (HOME-3): the default target is `home`, not `projectctl`.
+  let targetSpec = 'home';
   let persist = false;
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
@@ -766,6 +774,9 @@ function walkNavBundles(
   while ((m = bundleRelRe.exec(navRaw))) {
     const rel = (m[1] ?? '').trim();
     if (!rel) continue;
+    // Home-only gate (HOME-3 / TST-13): only bundles under `views/home/` are
+    // evaluated. No global coverage/test-system logic lives here.
+    if (rel !== 'views/home/index' && !rel.startsWith('views/home/')) continue;
     const abs = join(repoRoot, 'docs', 'app-map', `${rel}.md`);
     if (seen.has(abs)) continue;
     seen.add(abs);

@@ -58,7 +58,7 @@ function sha256(buf: string): string {
 }
 
 export function defaultBundlePath(): string {
-  return 'docs/app-map/views/project-workspace/features/test-tab.md';
+  return 'docs/app-map/views/home/index.md';
 }
 
 export function defaultProjectsRoot(): string {

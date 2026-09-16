@@ -14,58 +14,14 @@ criteria:
       nombre en el titulo del documento y en la tarjeta principal.
     functional: implemented
     coverage:
-      Unit: covered
+      Unit: missing
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Implementado en frontend/src/pages/index.astro (titulo + Header +
-      InfoCard). data-testid del nombre: .info-card .label=Aplicacion. Test
-      PW-AUTO del titulo + tarjeta en tests/front/tests/index.spec.ts con `@ac
-      home-01`.
-  - id: HOME-02
-    type: functionality
-    title: >-
-      El estado visible del frontend y de la API se muestra simultaneamente y se
-      diferencia por entorno (production = verde, test = amarillo).
-    functional: implemented
-    coverage:
-      Unit: covered
-      PW-CLI: missing
-      PW-AUTO: covered
-      Manual: missing
-    notes: >-
-      Implementado en InfoCard.astro via `.value.production` / `.value.test`
-      (colores verde `#28a745` y amarillo `#ffc107`). Cobertura delegada al
-      feature home-status-summary.
-  - id: HOME-03
-    type: ui
-    title: >-
-      La rama git activa es visible en la tarjeta principal para contextualizar
-      el despliegue observado.
-    functional: implemented
-    coverage:
-      Unit: covered
-      PW-CLI: missing
-      PW-AUTO: covered
-      Manual: missing
-    notes: >-
-      `Rama Git:` label en InfoCard.astro. Cobertura delegada a
-      home-runtime-metadata para el dato dinamico.
-  - id: HOME-04
-    type: ui
-    title: >-
-      La marca temporal (timestamp ISO 8601) es visible en el pie de la landing
-      para dar contexto del momento de carga.
-    functional: implemented
-    coverage:
-      Unit: covered
-      PW-CLI: missing
-      PW-AUTO: covered
-      Manual: missing
-    notes: >-
-      Implementado via Footer.astro que renderiza `new Date().toISOString()`.
-      Cobertura delegada al feature home-runtime-metadata.
+      InfoCard). Test PW-AUTO del titulo + tarjeta en
+      tests/e2e/home/index.spec.ts con `@ac HOME-01`.
   - id: HOME-05
     type: functionality
     title: >-
@@ -73,48 +29,36 @@ criteria:
       console clean).
     functional: implemented
     coverage:
-      Unit: covered
+      Unit: missing
       PW-CLI: missing
-      PW-AUTO: covered
+      PW-AUTO: missing
       Manual: missing
     notes: >-
       Test PW-AUTO cubre `console.error` debe ser 0 al cargar / via networkidle
-      en tests/front/tests/index.spec.ts con `@ac home-05`.
+      en tests/e2e/home/index.spec.ts con `@ac HOME-05`.
 ---
 
 ## 1. URL
+
 /
 
-# Inicio
+## 2. Tab
 
-## Qué cubre
+Landing principal (`/`).
 
-- Landing real accesible desde la raiz `/`.
-- Identidad visible de colpruebas apenas carga la pagina.
-- Tarjeta central con aplicacion, frontend, API y rama visibles.
-- Footer con timestamp visible para dar contexto temporal.
-
-## Valor para el usuario
+## 3. Objetivo
 
 Permite verificar en segundos que colpruebas esta arriba, que el entorno visible es el esperado y que la lectura tiene contexto operativo minimo.
 
-## Trazabilidad
+## 4. Criterios de calidad
+
+Este bundle conserva solo los criterios propios de la landing. `home-status-summary` es la autoridad única para `HSS-01..HSS-04`, y `home-runtime-metadata` para `HRM-01..HRM-02`; esos comportamientos no se duplican aquí.
 
 | ID | Nivel | Cubre |
 |---|---|---|
-| home-01 | obligatorio | Identidad visible de la aplicacion en la portada |
-| home-02 | obligatorio | Estado visible del frontend y de la API |
-| home-03 | esperado | Referencia operativa de rama o version visible |
-| home-04 | deseado | Marca temporal visible para dar contexto |
-| home-05 | obligatorio | Carga principal sin errores visibles |
+| HOME-01 | obligatorio | Identidad visible de la aplicacion en la portada |
+| HOME-05 | obligatorio | Carga principal sin errores visibles |
 
-## Estados principales
+## 5. Diagrama Mermaid
 
-- landing renderizada
-- tarjeta de estado visible
-- metadatos operativos visibles
-
-## Notas del diagrama
-
-- La vista real corresponde a la raiz `/` del frontend.
-- El diagrama separa tarjeta de estado y metadatos de ejecucion aunque ambos conviven en la misma pantalla.
+El sibling `index.mmd` separa visualmente la identidad, el resumen de estado y los metadatos que conviven en la misma pantalla.

@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "bun run test:back && bun run test:front",
-    "test:back": "cd back && bun test",
-    "test:front": "cd front && bun install && bunx playwright test"
+    "test": "cd .. && bun run test:all",
+    "test:unit": "cd .. && bun run test:unit",
+    "test:unit:home": "cd .. && bun run test:unit:home",
+    "test:pwauto": "cd .. && bun run test:pwauto",
+    "test:pwauto:home": "cd .. && bun run test:pwauto:home",
+    "test:all": "cd .. && bun run test:all",
+    "test:all:home": "cd .. && bun run test:all:home"
   }
 }

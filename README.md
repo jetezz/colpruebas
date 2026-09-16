@@ -6,9 +6,8 @@ consumida por UI, sistema de testing canónico y flujo de tareas binding v9.0.0.
 
 ## Descripción
 
-`colpruebas` es un proyecto que ejecuta la **stack de compatibilidad `/projectctl`**: una
-landing (`/`), un workspace de proyecto gestionado y la vista `/projectctl` que expone las
-cinco tabs (`cli | doc | test | entorno | tareas`), respaldada por una API Express + Bun y un
+`colpruebas` es un proyecto home-only: una
+landing (`/`) respaldada por una API Express + Bun y un
 entorno de sandbox gestionado. La operación del repo sigue el estándar canónico
 `projectctl-requirements`.
 
@@ -17,8 +16,7 @@ entorno de sandbox gestionado. La operación del repo sigue el estándar canóni
 | Recurso | Ruta / comando | Qué es |
 | --- | --- | --- |
 | Runtime gestionado | `projectctl` (`status`, `start`, `stop`, `restart`, `rebuild`, `env validate`, `doctor`, `logs`, `tunnel *`, `test *`) | Control de entornos prod/dev (sandbox no expone docker). |
-| UI `/projectctl` | `docs/app-map/views/projectctl/index.md` | Documentación funcional de la vista (5 secciones MUST). |
-| Docs funcionales | `docs/app-map/**` + `docs/app-map/navigation.yaml` | Única SoT documental consumida por UI. |
+| Docs funcionales | `docs/app-map/**` + `docs/app-map/navigation.yaml` | Única SoT documental consumida por UI (vista `home`). |
 | Registro de skills | `.atl/skill-registry.md` + `docs/00-context/agents_skills.md` | Skills instaladas en el repo. |
 | Guía del flujo de tareas | `docs/04-process/task.md` | Cómo operar tareas (cita el binding v9.0.0). |
 | Coordinación de tarea | `taskReadme/<task_id>-<task_slug>.md` | Índice de coordinación de cada tarea. |
