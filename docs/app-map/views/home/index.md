@@ -14,9 +14,9 @@ criteria:
       nombre en el titulo del documento y en la tarjeta principal.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Implementado en frontend/src/pages/index.astro (titulo + Header +
@@ -29,9 +29,9 @@ criteria:
       console clean).
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Test PW-AUTO cubre `console.error` debe ser 0 al cargar / via networkidle

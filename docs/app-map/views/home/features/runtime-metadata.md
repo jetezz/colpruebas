@@ -14,9 +14,9 @@ criteria:
       contextualizar la ejecucion observada.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Renderizado por InfoCard.astro (`Rama Git:` + `gitBranch`). En este
@@ -30,9 +30,9 @@ criteria:
       refleja el momento del render SSR, no del cliente.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Footer.astro consume `new Date().toISOString()` en el servidor. El spec

@@ -9,7 +9,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Frontend Pages — @home', () => {
-  test('index page loads correctly', async ({ page }, testInfo) => {
+  test('HOME-01 HSS-01 HSS-02 HSS-03 HSS-04 HRM-01 home identity and status summary render correctly', async ({ page }, testInfo) => {
     testInfo.annotations.push(
       { type: 'ac', description: 'HOME-01' },
       { type: 'ac', description: 'HSS-01' },
@@ -23,20 +23,19 @@ test.describe('Frontend Pages — @home', () => {
 
     await expect(page).toHaveTitle(/colpruebas/);
 
-    const heading = page.locator('h1');
-    await expect(heading).toContainText('colpruebas');
+    await expect(page.getByRole('heading', { name: 'colpruebas' })).toBeVisible();
 
-    await expect(page.locator('.info-card')).toBeVisible();
-
-    await expect(page.locator('.info-card')).toContainText('Aplicación:');
-    await expect(page.locator('.info-card')).toContainText('colpruebas');
-
-    await expect(page.locator('.info-card')).toContainText('Frontend:');
-    await expect(page.locator('.info-card')).toContainText('API:');
-    await expect(page.locator('.info-card')).toContainText('Rama Git:');
+    const statusSummary = page.locator('.info-card');
+    await expect(statusSummary).toBeVisible();
+    await expect(statusSummary).toContainText('Aplicación:');
+    await expect(statusSummary).toContainText('colpruebas');
+    await expect(statusSummary).toContainText('Frontend:');
+    await expect(statusSummary).toContainText('API:');
+    await expect(statusSummary).toContainText('Rama Git:');
+    await expect(statusSummary).toContainText('MAIN');
   });
 
-  test('page has no console errors', async ({ page }, testInfo) => {
+  test('HOME-05 page has no console errors', async ({ page }, testInfo) => {
     testInfo.annotations.push({ type: 'ac', description: 'HOME-05' });
 
     const errors: string[] = [];

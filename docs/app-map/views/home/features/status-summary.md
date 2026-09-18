@@ -14,9 +14,9 @@ criteria:
       `Resumen de estado` con la etiqueta `Aplicacion:`.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-01`.
   - id: HSS-02
@@ -26,9 +26,9 @@ criteria:
       la derecha del label `Frontend:` y diferenciado por entorno.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-02`; el estilo de
@@ -40,9 +40,9 @@ criteria:
       y replica el patron de color por entorno.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-03`.
   - id: HSS-04
@@ -52,9 +52,9 @@ criteria:
       misma tarjeta.
     functional: implemented
     coverage:
-      Unit: missing
+      Unit: covered
       PW-CLI: missing
-      PW-AUTO: missing
+      PW-AUTO: covered
       Manual: missing
     notes: >-
       Cubierto por tests/e2e/home/index.spec.ts con `@ac HSS-04`. Este bundle es
