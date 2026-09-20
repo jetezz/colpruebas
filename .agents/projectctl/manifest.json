@@ -48,15 +48,15 @@
       "required": false,
       "status": "disabled",
       "requirements": [
-        "compose.yml",
-        "compose.dev.yml",
+        "compose/compose.yml",
+        "compose/compose.dev.yml",
         "prod-env-contract",
         "dev-env-contract"
       ],
       "validation": {
         "checks": [
-          "compose.yml:compose.yml",
-          "compose.dev.yml:compose.dev.yml",
+          "compose.yml:compose/compose.yml",
+          "compose.dev.yml:compose/compose.dev.yml",
           "prod-env-contract:.env.example",
           "dev-env-contract:.env.dev.example",
           "prod-host-keys:FRONTEND_PORT,API_PORT",

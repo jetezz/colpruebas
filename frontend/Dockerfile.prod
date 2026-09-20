@@ -1,13 +1,14 @@
 FROM oven/bun:1-alpine AS prod
 
-WORKDIR /app
+WORKDIR /app/frontend
 
-COPY package.json ./
-COPY astro.config.mjs ./
-COPY tsconfig.json ./
+COPY frontend/package.json ./
+COPY frontend/astro.config.mjs ./
+COPY frontend/tsconfig.json ./
 RUN bun add astro @astrojs/node
 
-COPY src ./src
+COPY frontend/src ./src
+COPY shared /app/shared
 
 ARG PUBLIC_ENVIRONMENT=production
 ARG PUBLIC_API_URL=http://localhost:3005
