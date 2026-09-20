@@ -39,7 +39,8 @@ bun test <path/to/test>     # tests puntuales
 
 ## Entornos
 
-- Overlays canónicos: `compose.yml` (prod) y `compose.dev.yml` (dev), con el servicio `frontend`
+- Overlays canónicos: `compose/compose.yml` (base), `compose/compose.prod.yml` (prod) y
+  `compose/compose.dev.yml` (dev), con el servicio `frontend`
   en `build.target: prod|dev` y puerto mapeado `"${FRONTEND_PORT}:4321"`.
 - `.env` / `.env.dev` son locales (excluidos del commit); la referencia commitada es
   `.env.example`.

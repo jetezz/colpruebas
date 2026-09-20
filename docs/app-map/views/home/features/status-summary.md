@@ -13,6 +13,9 @@ criteria:
       El nombre de la aplicacion es visible dentro de la tarjeta central
       `Resumen de estado` con la etiqueta `Aplicacion:`.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/InfoCard.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
@@ -25,6 +28,9 @@ criteria:
       El estado del frontend se muestra dentro de la misma tarjeta, alineado a
       la derecha del label `Frontend:` y diferenciado por entorno.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/InfoCard.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
@@ -39,6 +45,9 @@ criteria:
       El estado de la API se muestra dentro de la tarjeta con la etiqueta `API:`
       y replica el patron de color por entorno.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/InfoCard.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
@@ -51,6 +60,9 @@ criteria:
       Una referencia de rama git se renderiza con la etiqueta `Rama Git:` en la
       misma tarjeta.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/InfoCard.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing

@@ -2,9 +2,10 @@
 import Header from '../components/Header.astro';
 import InfoCard from '../components/InfoCard.astro';
 import Footer from '../components/Footer.astro';
+import type { RuntimeEnvironment } from '../../../shared/contracts/runtime';
 
 const appName = 'colpruebas';
-const environment = import.meta.env.PUBLIC_ENVIRONMENT || 'test';
+const environment = (import.meta.env.PUBLIC_ENVIRONMENT || 'test') as RuntimeEnvironment;
 const timestamp = new Date().toISOString();
 
 const frontendStatus = environment === 'production' 

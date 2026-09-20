@@ -1,12 +1,14 @@
 services:
   frontend-prod:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
+      context: ..
+      dockerfile: frontend/Dockerfile.prod
       target: prod
       args:
         - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
         - PUBLIC_API_URL=${PUBLIC_API_URL}
+    env_file:
+      - ../.env
     ports:
       - "${FRONTEND_PORT}:4321"
     environment:
@@ -25,8 +27,10 @@ services:
 
   api-prod:
     build:
-      context: .
-      dockerfile: ./backend/Dockerfile.prod
+      context: ..
+      dockerfile: backend/Dockerfile.prod
+    env_file:
+      - ../.env
     ports:
       - "${API_PORT}:3000"
     environment:

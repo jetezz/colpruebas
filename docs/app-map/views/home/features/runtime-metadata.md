@@ -13,6 +13,9 @@ criteria:
       La tarjeta muestra una referencia visible de la rama git para
       contextualizar la ejecucion observada.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/Footer.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
@@ -29,6 +32,9 @@ criteria:
       El timestamp visible en el pie de la landing esta en formato ISO 8601 y
       refleja el momento del render SSR, no del cliente.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/Footer.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing

@@ -57,7 +57,8 @@ estándar `projectctl-requirements` (binding `task-flow-binding` v9.0.0).
 
 ## 6. Runtime / entornos
 
-- Overlays canónicos `compose.yml` (prod) y `compose.dev.yml` (dev) con servicio `frontend` en
+- Overlays canónicos `compose/compose.yml` (base), `compose/compose.prod.yml` (prod) y
+  `compose/compose.dev.yml` (dev) con servicio `frontend` en
   `build.target: prod|dev` y `"${FRONTEND_PORT}:4321"`.
 - Contrato edge `mis-proyectos-edge` con alias por entorno; runtime exclusivo vía `projectctl`.
 - Detalle: `docs/00-context/entornos.md` y `docs/02-features/tunnel.md`.

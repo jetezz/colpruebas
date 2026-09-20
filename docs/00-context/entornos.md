@@ -10,19 +10,19 @@
 
 ## 1. Overlays canónicos (compose de plataforma)
 
-Un proyecto gestionado por la plataforma usa **tres archivos Compose canónicos** en la raíz,
+Un proyecto gestionado por la plataforma usa **tres archivos Compose canónicos** en `compose/`,
 tal y como los valida el `webhook-listener` de la plataforma (ground truth del contrato):
 
 | Archivo | Rol | Contenido |
 | --- | --- | --- |
-| `compose.yml` | **BASE** | Solo las redes compartidas: `internal` (bridge) + `edge` (`name: mis-proyectos-edge`, `external: true`). No declara servicios. |
-| `compose.prod.yml` | **PROD overlay** | Servicios `frontend-prod` (target `prod`) + `api-prod`. |
-| `compose.dev.yml` | **DEV overlay** | Servicios `frontend-dev` (target `dev`, HMR/watch) + `api-dev`. |
+| `compose/compose.yml` | **BASE** | Solo las redes compartidas: `internal` (bridge) + `edge` (`name: mis-proyectos-edge`, `external: true`). No declara servicios. |
+| `compose/compose.prod.yml` | **PROD overlay** | Servicios `frontend-prod` (target `prod`) + `api-prod`. |
+| `compose/compose.dev.yml` | **DEV overlay** | Servicios `frontend-dev` (target `dev`, HMR/watch) + `api-dev`. |
 
 La plataforma ejecuta el rango de overlays como
 
 ```
-docker compose -f compose.yml -f compose.<mode>.yml
+docker compose -f compose/compose.yml -f compose/compose.<mode>.yml
 ```
 
 (+ un overlay runtime escrito por la plataforma que añade `container_name`, `API_URL` y los

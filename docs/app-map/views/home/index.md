@@ -13,6 +13,9 @@ criteria:
       La aplicacion se identifica visiblemente apenas carga la landing con su
       nombre en el titulo del documento y en la tarjeta principal.
     functional: implemented
+    evidence_paths:
+      - frontend/src/pages/index.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
@@ -28,6 +31,9 @@ criteria:
       La carga inicial de la landing no produce errores de consola (browser
       console clean).
     functional: implemented
+    evidence_paths:
+      - frontend/src/pages/index.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
