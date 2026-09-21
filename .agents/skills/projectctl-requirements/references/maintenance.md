@@ -4,13 +4,15 @@ parent_skill: projectctl-requirements
 owner: WU-04 (apply-code-high)
 purpose: anti-drift contract + cross-repo semver + SoT coherence + task-flow binding safeguards
 sot_policy: canonical-standard
-version: 12.0.0
-last_full_regen: 2026-09-07
+version: 13.1.0
+last_full_regen: 2026-09-19
 generated_by: merge resolution after develop integration
 binding_role: traces_task_flow_binding_block_only
 ---
 
 # `.agents/skills/projectctl-requirements/references/maintenance.md` — Contrato anti-drift + versionado cross-repo
+
+> **last-verified: 2026-09-20.** El contrato activo es package v13.1.0/binding v10.0.0; las notas de bumps anteriores son lineage histórico, no autoridad operativa.
 
 > **Archivo referente**: contrato operativo que rige la regeneración, verificación de coherencia y versionado cross-repo de la skill `projectctl-requirements`. Este archivo es la **forma detallada** del bloque `Maintenance contract` declarado en `.agents/skills/projectctl-requirements/SKILL.md`. Cualquier agente, humano o script que toque la skill debe leer este archivo antes de tomar decisiones de cambio.
 >
@@ -20,7 +22,7 @@ binding_role: traces_task_flow_binding_block_only
 
 > **SoT original**: `.agents/skills/skill-creator/SKILL.md` (regla principal: "una skill debe poder explicarse en una oración").
 
-La skill `projectctl-requirements` es el **estándar canónico de compatibilidad `/projectctl`** del repo. Absorbe las reglas integradas y mantiene el **binding integral** (bloque `task-flow-binding`, `TaskFlowBindingV2`) en `references/tareas.md` para que viajen juntos. Toda entry cita rutas de trazabilidad y se limita a:
+La skill `projectctl-requirements` es el **estándar canónico de compatibilidad `/projectctl`** del repo. Absorbe las reglas integradas y mantiene el **binding integral** (bloque `task-flow-binding`, `TaskFlowBindingV2`) en `.agents/skills/projectctl-requirements/references/tasks/binding.md`. Toda entry cita rutas de trazabilidad y se limita a:
 
 - Listar el path original (`<skill-path>` o `<bundle-path>` o `<CLI/API/runtime>` o `<test-path>`).
 - Resumir el requisito en 1-2 frases.
@@ -37,7 +39,7 @@ Consecuencias operativas:
 
 ## 2. Cambio upstream invalida entries
 
-> **SoT original**: `.agents/skills/sd-protocol/persistence-contract.md` + `.agents/skills/skill-creator/SKILL.md`.
+> **SoT original**: `.agents/skills/projectctl-requirements/modules/sd-protocol/persistence-contract.md` + `.agents/skills/skill-creator/SKILL.md`.
 
 Cualquier cambio en una **fuente citada** (skill path / bundle path / CLI / API / test path) **invalida** automáticamente las entries de la skill que la referencian. Ejemplos de cambios upstream que invalidan entries:
 
@@ -56,7 +58,7 @@ Detección:
 
 ## 3. Bump de `last-verified` por entry ante cambio upstream
 
-> **SoT original**: `.agents/skills/skill-creator/SKILL.md` + `.agents/skills/sd-protocol/persistence-contract.md`.
+> **SoT original**: `.agents/skills/skill-creator/SKILL.md` + `.agents/skills/projectctl-requirements/modules/sd-protocol/persistence-contract.md`.
 
 ### Regla
 
@@ -125,7 +127,7 @@ Las citas con URLs, paths absolutos, placeholders o globs no están sujetas a un
 
 ### `metadata.version` semver interno
 
-La skill declara `metadata.version` semver en `.agents/skills/projectctl-requirements/SKILL.md` (package actual: `12.0.0`; binding machine: `9.0.0`).
+La skill declara `metadata.version` semver en `.agents/skills/projectctl-requirements/SKILL.md` (package actual: `13.1.0`; binding machine: `10.0.0`, `TaskFlowBindingV2`, model `2`).
 
 ### Reglas de bump
 
@@ -154,6 +156,8 @@ La skill declara `metadata.version` semver en `.agents/skills/projectctl-require
 > **Bump vigente package v10.0.0 → v11.0.0 / binding v9.0.0 → v10.0.0 (MAJOR)**: publica `TaskFlowBindingV2`, model 2, modo RDD default disabled, fase/lanes/guards/gates RDD, `rdd-report` y delivery condicional, conservando `task_skill_selection`. V1 queda solo como lectura legacy disabled-only. El árbol se reemplaza completo con `copy-tree-no-mods`; cualquier instalación híbrida falla cerrada.
 
 > **Bump vigente package v11.0.0 → v12.0.0 (MAJOR; binding permanece v10.0.0)**: `criteria[].type` pasa a ser obligatorio y se incorporan las reglas bidireccionales código⇒criterio y delta de criterios en proposals, junto con PCT-149..PCT-155, TST-38 y AC-329. El binding `TaskFlowBindingV2` no cambia.
+
+> **Bump vigente package v12.1.0 → v13.0.0 (MAJOR; binding permanece v10.0.0)**: el contrato público incorpora la octava tab `criterios`, fija el orden `cli → tareas → agentes → doc → criterios → test → entorno → estructura` y reconcilia el contrato de bundles a seis secciones incluyendo `Sources`. La referencia `references/criterios.md` es derivada y cita-no-copia; el árbol debe reemplazarse completo con `copy-tree-no-mods`.
 
 ### Audit trail cross-repo
 
@@ -187,7 +191,7 @@ El agente que carga `projectctl-requirements` en repo destino debe:
 
 ## 6. Reglas operativas finales
 
-> **SoT original**: este archivo + `.agents/skills/skill-creator/SKILL.md` + `.agents/skills/coordinador/SKILL.md`.
+> **SoT original**: este archivo + `.agents/skills/skill-creator/SKILL.md` + `.agents/skills/projectctl-requirements/modules/coordinator/module.md`.
 
 | # | Regla | Quién la aplica |
 | --- | --- | --- |
@@ -231,7 +235,7 @@ Per cambio upstream detectado:
 
 - Un reset, eliminación o renombrado de un taskReadme o phase artifact requiere confirmación del coordinador y preservación de la evidencia de estado.
 - Nunca se restaura un taskReadme ausente desde una memoria stale ni se usa una memoria anterior para reservar IDs, reemplazar decisiones o reconstruir una fuente normativa.
-- Cualquier cambio en el bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0) delimitado en `.agents/skills/projectctl-requirements/references/tareas.md` obliga a:
+- Cualquier cambio en el bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0) delimitado en `.agents/skills/projectctl-requirements/references/tasks/binding.md` obliga a:
   1. Regenerar `.agents/skills/projectctl-requirements/generated/phase-state-schema.json` mediante `taskflow:generate` (owned by `sdd-apply-code-high-WU-11`).
   2. Revisar `.agents/skills/projectctl-requirements/references/sources.md` para asegurar que la tabla `PCT-106..PCT-121` sigue trazando el bloque (solo identificadores) sin reproducir machine values.
   3. Revisar `.agents/skills/projectctl-requirements/references/decisions.md` para mantener las decisiones D-N y D'-N alineadas con la nueva forma del binding.
@@ -241,9 +245,9 @@ Per cambio upstream detectado:
 
 ## 9. Criterios cubiertos por este archivo
 
-`PCT-105` (cross-repo + anti-drift + installability), `PCT-106..PCT-121` (binding de tareas) y elementos contractuales de `PCT-83..PCT-100` referenciados desde este archivo.
+`PCT-105` (cross-repo + anti-drift + installability), `PCT-106..PCT-121` (binding de tareas), `PCT-175` (check semántico de criterios) y elementos contractuales de `PCT-83..PCT-100` referenciados desde este archivo.
 
-(Véase `.agents/skills/projectctl-requirements/references/sources.md` para la tabla SoT machine-grepeable completa, `references/{test,entorno}.md` para los contratos operativos de cada tab y `.agents/skills/projectctl-requirements/references/tareas.md` v10.0.0 §`task-flow-binding` para el bloque integral `TaskFlowBindingV2`.)
+(Véase `.agents/skills/projectctl-requirements/references/sources.md` para la tabla SoT machine-grepeable, `references/{test,entorno}.md` para los contratos operativos de cada tab y `.agents/skills/projectctl-requirements/references/tasks/binding.md` v10.0.0 §`task-flow-binding` para el bloque integral `TaskFlowBindingV2`.)
 
 ---
 
@@ -251,7 +255,7 @@ Per cambio upstream detectado:
 
 > **SoT original**: generador canónico `gentle-ai skill-registry refresh --force` (output: `.atl/skill-registry.md`) + `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` (checks A/B de WU-CODE-5, task `20260804-drift-cleanup-projectctl`).
 > **Cumple**: AC-007b (spec `20260804-drift-cleanup-projectctl`, REQ-SPEC-DRIFT-2-B).
-> **last-verified**: 2026-08-04 (regenerar ante cualquier cambio en el generador o en su output).
+> **last-verified**: 2026-09-10 (regenerar ante cualquier cambio en el generador o en su output).
 
 ### Decisión: el generador es la SoT del formato
 

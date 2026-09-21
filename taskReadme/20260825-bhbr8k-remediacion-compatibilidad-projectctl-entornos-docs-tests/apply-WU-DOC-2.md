@@ -289,3 +289,52 @@ que se conserva tal cual y queda señalado como riesgo de wording residual (ver 
 **artifact_ref**: `taskReadme/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests/apply-WU-DOC-2.md`
 **next_recommended**: verify-units re-run (docs no impactan gate unit, confirmar) + commit/PR del coordinador
 **skill_resolution**: `injected-paths`
+
+---
+
+# REV 4 — WU-DOC-02: validación home-only y limpieza de referencias imposibles
+
+> Scope: documentación del checkout destino únicamente. No se modificaron scripts, manifest,
+> tests, Compose, env ni el árbol `.agents/skills/` canónico.
+
+## Summary
+
+- Los tres bundles registrados por `navigation.yaml` (`home`, `home-status-summary` y
+  `home-runtime-metadata`) conservan identidad/frontmatter, criterios inline tipables,
+  cobertura y siblings Mermaid; ahora declaran las 6 secciones MUST, incluida `Sources`.
+- Se verificaron los 16 `evidence_paths` declarados contra archivos existentes y los tres
+  nodos de navegación contra sus bundles y companions Mermaid.
+- Se eliminaron referencias imposibles del contexto local: `architecture.md` ya no afirma la
+  existencia de la UI `/projectctl` ni de `project/[id].astro`; `tunnel.md` ya no enlaza un
+  bundle local `projectctl` inexistente. Las referencias dentro del árbol de la skill canónica
+  no se tocaron.
+
+## Validation
+
+| Command | Result |
+| --- | --- |
+| `bun run docs:lint` | PASS — 3 home bundles, 0 diagnostics |
+| `bun run docs:status` | PASS — 3 home bundles, 0 diagnostics |
+| `bun run docs:check` | PASS — 3 home bundles, 0 diagnostics |
+| `bun run docs:generate` | PASS — home-only mode; no bundle rewrite; 0 diagnostics |
+
+## Files changed
+
+- `docs/app-map/views/home/index.md`
+- `docs/app-map/views/home/features/status-summary.md`
+- `docs/app-map/views/home/features/runtime-metadata.md`
+- `docs/00-context/architecture.md`
+- `docs/02-features/tunnel.md`
+- `taskReadme/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests/apply-WU-DOC-2.md`
+
+## Criteria coverage
+
+- `20/20` equivalent home-only documentation checks: 3/3 navigation bundles, 3/3 six-section
+  bundles, 8/8 criteria entries typed/covered, 16/16 evidence paths existing, and 3/3 Mermaid
+  siblings resolvable.
+- `blocked: none`.
+
+**rev**: 4
+**unit**: `WU-DOC-02`
+**unit_status**: `done`
+**artifact_ref**: `taskReadme/20260825-bhbr8k-remediacion-compatibilidad-projectctl-entornos-docs-tests/apply-WU-DOC-2.md`

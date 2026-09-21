@@ -67,3 +67,9 @@ Ayuda a distinguir rapidamente el contexto operativo sin tener que inspeccionar 
 ## 5. Diagrama Mermaid
 
 El sibling `runtime-metadata.mmd` representa la referencia de rama y el timestamp visibles.
+
+## 6. Sources
+
+- Implementación: `frontend/src/pages/index.astro` y `frontend/src/components/Footer.astro`
+- Cobertura: `tests/e2e/home/index.spec.ts`
+- Navegación: `docs/app-map/navigation.yaml`

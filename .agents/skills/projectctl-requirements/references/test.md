@@ -31,11 +31,11 @@ Para cada requisito:
 
 ### Requisito
 
-`/projectctl?tab=test` MUST renderizar el panel Test listando las reglas del sistema de testing aplicables a cualquier proyecto del repo: contrato AC mandatorio, runner unificado, persistencia atómica + write-back a `criteria[].coverage`, gate `test:check` y layout canónico.
+`/projectctl?tab=test` MUST renderizar el panel Test listando las reglas del sistema de testing aplicables a cualquier proyecto del repo: contrato AC mandatorio, runner unificado, runs persistidos con coverage `pending`/no aceptada y auto-writeback diferido, gate `test:check` y layout canónico.
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §2 + `playwright/TEST_PLAN.md` + `docs/app-map/views/project-workspace/features/test-tab.md` + `scripts/test-runner.ts`.
 > **Cumple**: PCT-89.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §2, `playwright/TEST_PLAN.md`, `docs/app-map/views/project-workspace/features/test-tab.md` o `scripts/test-runner.ts`.
+> **last-verified**: 2026-09-10 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §2, `playwright/TEST_PLAN.md`, `docs/app-map/views/project-workspace/features/test-tab.md` o `scripts/test-runner.ts`.
 
 ---
 
@@ -66,7 +66,7 @@ test('panel Test carga', async ({}, testInfo) => {
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §2 + `scripts/test-runner.ts` + `docs/app-map/views/project-workspace/features/test-tab.md` + `frontend/__tests__/projectctl-commands-mapping.test.ts`.
 > **Cumple**: PCT-90.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en el contrato AC (helpers `assertAcHeader` / `assertAcHeaderSpec`), TST-10/AC-007, o el formato de anotación en Playwright.
+> **last-verified**: 2026-09-10 — regenerar ante cualquier cambio en el contrato AC (helpers `assertAcHeader` / `assertAcHeaderSpec`), TST-10/AC-007, o el formato de anotación en Playwright.
 
 ---
 
@@ -87,22 +87,22 @@ El panel Test MUST explicar el **runner unificado** y el mapping 1:1 entre los c
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §4 + `scripts/test-runner.ts` + `docs/app-map/views/projectctl/index.md` + `docs/app-map/views/project-workspace/features/test-tab.md`.
 > **Cumple**: PCT-91.
-> **last-verified**: 2026-09-06 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §4 familia `projectctl test *`, en `scripts/test-runner.ts`, o en los entry points del mapping CLI ↔ runner.
+> **last-verified**: 2026-09-10 — regenerar ante cualquier cambio en `.agents/skills/projectctl-requirements/references/standard.md` §4 familia `projectctl test *`, en `scripts/test-runner.ts`, o en los entry points del mapping CLI ↔ runner.
 
 ---
 
-## PCT-92 — Persistencia `.runtime/test-results/...` + write-back atómico a `criteria[].coverage`
+## PCT-92 — Persistencia `.runtime/test-results/...` + coverage pendiente en v1
 
 ### Requisito
 
 El panel Test MUST explicar:
 
 1. **Estructura de persistencia** (TST-08): cada ejecución de `--persist` escribe en `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/` los archivos `junit.xml`, `results.json`, `summary.json`. El archivo `summary.json` contiene el `criteria[]` con status por criterio (`covered` | `partial` | `missing` | `not-applicable`).
-2. **Write-back atómico** (TST-04, TST-11): tras la corrida, `patchBundleCoverage` (en `sandbox/src/services/test-results-writer.ts`) actualiza `criteria[].coverage[Unit | PW-AUTO]` del bundle documental impactado (sea el bundle features por tab del view o el `index.md` raíz del view; los nombres concretos de view/feature siguen las convenciones del workspace).
+2. En v1, los runs se conservan y la cobertura queda `pending`/no aceptada; el auto-writeback de `criteria[].coverage` queda diferido con razón `AUTO_WRITEBACK_DEFERRED_V1`. La implementación futura deberá definir el writer antes de activar cualquier mutación del bundle.
 
 > **SoT original**: `sandbox/src/services/test-results-writer.ts` + `sandbox/src/services/test-results-writer.test.ts` + `.agents/skills/projectctl-requirements/references/standard.md` §2 + `docs/app-map/views/project-workspace/features/test-tab.md` + `playwright/TEST_PLAN.md`.
 > **Cumple**: PCT-92.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `sandbox/src/services/test-results-writer.ts` (especialmente `patchBundleCoverage`), TST-04/TST-08/TST-11, o el formato del archivo `summary.json` (que reside bajo la ruta runtime documentada en `.runtime/test-results/`).
+> **last-verified**: 2026-09-10 — regenerar ante cualquier cambio en `sandbox/src/services/test-results-writer.ts`, TST-04/TST-08/TST-11, o el formato del archivo `summary.json` (que reside bajo la ruta runtime documentada en `.runtime/test-results/`).
 
 ---
 
@@ -117,11 +117,11 @@ El panel Test MUST explicar:
    - Unit tests: 1 archivo por criterio, ubicado bajo el path frontend-side o sandbox-side, siguiendo la convención de 2 segmentos view/feature que el workspace aplica (los placeholders `<view>` y `<feature>` se sustituyen por el view real y el feature real al materializar el archivo). Ejemplo real: `frontend/__tests__/projectctl-tabs.test.ts`.
    - Specs PW-AUTO: 1 spec por criterio, ubicado bajo el path en el workspace Playwright (en repo raíz), misma convención view/feature con placeholders sustituidos.
    - Cada archivo MUST llevar el header `// @ac <ID>` en las primeras 10 líneas (TST-03).
-   - Coverage matrix: `criteria[].coverage` en cada bundle (frontmatter), sincronizada via `patchBundleCoverage`.
+    - Coverage matrix: `criteria[].coverage` en cada bundle (frontmatter); en v1 queda pendiente/no aceptada y no se sincroniza automáticamente.
 
 > **SoT original**: `.agents/skills/projectctl-requirements/references/standard.md` §2 + `playwright/TEST_PLAN.md` + `playwright.config.ts` + `docs/app-map/views/project-workspace/features/test-tab.md` + `scripts/test-runner.ts`.
 > **Cumple**: PCT-93.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en TST-13, TST-36, `playwright.config.ts` `PWAUTO_VIEWS`, o el contrato del gate `test:check`.
+> **last-verified**: 2026-09-10 — regenerar ante cualquier cambio en TST-13, TST-36, `playwright.config.ts` `PWAUTO_VIEWS`, o el contrato del gate `test:check`.
 
 ---
 
@@ -136,7 +136,7 @@ El panel Test MUST declarar sus dos references obligatorias:
 
 > **SoT original**: `playwright/TEST_PLAN.md` + `.agents/skills/projectctl-requirements/references/standard.md`.
 > **Cumple**: PCT-94.
-> **last-verified**: 2026-07-24 — regenerar ante cualquier cambio en `playwright/TEST_PLAN.md` (especialmente tiers y mapping) o en `.agents/skills/projectctl-requirements/references/standard.md` §2 (especialmente el contrato de decisión de alcance).
+> **last-verified**: 2026-09-10 — regenerar ante cualquier cambio en `playwright/TEST_PLAN.md` (especialmente tiers y mapping) o en `.agents/skills/projectctl-requirements/references/standard.md` §2 (especialmente el contrato de decisión de alcance).
 
 ---
 
@@ -147,7 +147,7 @@ El panel Test MUST declarar sus dos references obligatorias:
 | PCT-89 | Panel Test existe y lista las reglas del sistema de testing del repo |
 | PCT-90 | Contrato AC mandatorio: `// @ac <ID>` header + `test.info().annotations.push` + rechazo sin mapeo |
 | PCT-91 | Runner unificado + mapping 1:1 con `projectctl test *` (PCT-75..78) |
-| PCT-92 | Persistencia `.runtime/test-results/<projectId>/<run-id>/` + write-back atómico a `criteria[].coverage` |
+| PCT-92 | Persistencia `.runtime/test-results/<projectId>/<run-id>/` + coverage `pending`/no aceptada en v1; auto-writeback diferido |
 | PCT-93 | Gate `bun run test:check` (TST-13) + layout/discovery canónicos (TST-36) |
 | PCT-94 | References testing: `playwright/TEST_PLAN.md` mapping + estándar integrado en `.agents/skills/projectctl-requirements/references/standard.md` |
 

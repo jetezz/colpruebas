@@ -1,5 +1,5 @@
 schema: projectctl-criteria/v1
-source_revision: 1974658b7792de4de6a2af0664af64650642b69bf5f2c944a7e7205cbbee6c69
+source_revision: 428464a7860d678c362bef25e0907693d828fe57ff5f877c197fefbbce869ef9
 criteria:
   - id: PCT-01
     type: contract
@@ -750,8 +750,8 @@ criteria:
     status: active
   - id: PCT-84
     type: visual
-    title: "El panel Doc lista las 5 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid) en formato checklist navigable"
-    requirement: "El panel Doc lista las 5 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid) en formato checklist navigable"
+    title: "El panel Doc lista las 6 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources) en formato checklist navigable"
+    requirement: "El panel Doc lista las 6 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources) en formato checklist navigable"
     owner: "docs/app-map/views/projectctl/features/doc.md"
     source:
       - "docs/app-map/views/projectctl/features/doc.md"
@@ -822,12 +822,12 @@ criteria:
     status: active
   - id: PCT-92
     type: contract
-    title: "El panel Test explica la persistencia `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/` `{junit.xml,results.json,summary.json}` (TST-08) y el write-back atómico a `criteria[].coverage[Unit|PW-AUTO]` via `patchBundleCoverage` (TST-04, TST-11)"
-    requirement: "El panel Test explica la persistencia `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/` `{junit.xml,results.json,summary.json}` (TST-08) y el write-back atómico a `criteria[].coverage[Unit|PW-AUTO]` via `patchBundleCoverage` (TST-04, TST-11)"
+    title: "El panel Test explica que los artefactos persistentes de cada run se conservan bajo `.runtime/test-results/<projectId>/<run-id>/`; el auto-writeback de coverage queda diferido en v1, por lo que la cobertura permanece pendiente/no aceptada y no muta automáticamente criterios ni ledger"
+    requirement: "El panel Test explica que los artefactos persistentes de cada run se conservan bajo `.runtime/test-results/<projectId>/<run-id>/`; el auto-writeback de coverage queda diferido en v1, por lo que la cobertura permanece pendiente/no aceptada y no muta automáticamente criterios ni ledger"
     owner: "docs/app-map/views/projectctl/features/test.md"
     source:
       - "docs/app-map/views/projectctl/features/test.md"
-    revision: fff46739e9f1501cdfd3220a441b905a036e5e42b59794c82f411d762311c97e
+    revision: c2e61df7b61417610e297334480bd1079a4bf4ef03834d14d2592102b131787c
     status: active
   - id: PCT-93
     type: tooling
@@ -876,12 +876,12 @@ criteria:
     status: active
   - id: PCT-98
     type: operational
-    title: "El panel Entorno explica el contrato edge `shared-edge-network` external + alias exacto por entorno (`<app>-origin` en prod, `test-<app>-origin` en dev), el guardrail `TUNNEL_NOT_PUBLISHABLE` y la regla \"alias edge first, `container-host-gateway:<PORT>` solo legacy/compat\""
-    requirement: "El panel Entorno explica el contrato edge `shared-edge-network` external + alias exacto por entorno (`<app>-origin` en prod, `test-<app>-origin` en dev), el guardrail `TUNNEL_NOT_PUBLISHABLE` y la regla \"alias edge first, `container-host-gateway:<PORT>` solo legacy/compat\""
+    title: "El panel Entorno explica que la publicación gestionada usa una red edge externa proporcionada por el operador y aliases por entorno; la validación falla cerrada si faltan prerrequisitos de publicación, y los fallbacks o nombres legacy quedan en la documentación local del repositorio"
+    requirement: "El panel Entorno explica que la publicación gestionada usa una red edge externa proporcionada por el operador y aliases por entorno; la validación falla cerrada si faltan prerrequisitos de publicación, y los fallbacks o nombres legacy quedan en la documentación local del repositorio"
     owner: "docs/app-map/views/projectctl/features/entorno.md"
     source:
       - "docs/app-map/views/projectctl/features/entorno.md"
-    revision: 48296477a5b88e90ea03beae3b9343e01c5fc5ef1580ff3bbcd8c28995338fcd
+    revision: cd691e0fa83898a5ba2bb29f4c883dcfb649c08a8854f9cadc5e22398a4c2881
     status: active
   - id: PCT-99
     type: contract
@@ -903,8 +903,8 @@ criteria:
     status: active
   - id: PCT-101
     type: visual
-    title: "Segmented control interno expone las tabs canónicas en orden fijo"
-    requirement: "Segmented control interno expone las tabs canónicas en orden fijo"
+    title: "Segmented control interno expone las 8 tabs canónicas en orden fijo: cli, tareas, agentes, doc, criterios, test, entorno, estructura"
+    requirement: "Segmented control interno expone las 8 tabs canónicas en orden fijo: cli, tareas, agentes, doc, criterios, test, entorno, estructura"
     owner: "docs/app-map/views/projectctl/index.md"
     source:
       - "docs/app-map/views/projectctl/index.md"
@@ -912,8 +912,8 @@ criteria:
     status: active
   - id: PCT-102
     type: visual
-    title: "Cada tab expone su panel y aside de fuentes con data-testid canónico"
-    requirement: "Cada tab expone su panel y aside de fuentes con data-testid canónico"
+    title: "Cada una de las 8 tabs expone su panel y aside de fuentes con data-testid canónico, incluyendo agentes y criterios"
+    requirement: "Cada una de las 8 tabs expone su panel y aside de fuentes con data-testid canónico, incluyendo agentes y criterios"
     owner: "docs/app-map/views/projectctl/index.md"
     source:
       - "docs/app-map/views/projectctl/index.md"
@@ -921,8 +921,8 @@ criteria:
     status: active
   - id: PCT-103
     type: tooling
-    title: "El bundle raíz index.md preserva PCT-01..78 + tabla de mapeo a bundles por tab"
-    requirement: "El bundle raíz index.md preserva PCT-01..78 + tabla de mapeo a bundles por tab"
+    title: "El bundle raíz index.md preserva PCT-01..78 y mapea cada tab a su bundle, incluyendo features/criterios.md y PCT-169..PCT-174"
+    requirement: "El bundle raíz index.md preserva PCT-01..78 y mapea cada tab a su bundle, incluyendo features/criterios.md y PCT-169..PCT-174"
     owner: ".agents/skills/projectctl-requirements/references/sources.md"
     source:
       - ".agents/skills/projectctl-requirements/references/sources.md"
@@ -1371,8 +1371,8 @@ criteria:
     status: active
   - id: PCT-153
     type: contract
-    title: "Webhook central valida JWT (`DEPLOY_JWT_SECRET`) + allowlist de IPs (`WEBHOOK_ALLOWED_IPS`)"
-    requirement: "Webhook central valida JWT (`DEPLOY_JWT_SECRET`) + allowlist de IPs (`WEBHOOK_ALLOWED_IPS`)"
+    title: "Frontera de webhook autenticada y allowlist de red/origen configuradas por el operador"
+    requirement: "Frontera de webhook autenticada y allowlist de red/origen configuradas por el operador"
     owner: "docs/app-map/views/projectctl/features/entorno.md"
     source:
       - "docs/app-map/views/projectctl/features/entorno.md"
@@ -1450,6 +1450,15 @@ criteria:
       - "docs/app-map/views/projectctl/index.md"
     revision: f04f4a43259c6bfd53b278922551b210f44209a84ee5485d532e816449448520
     status: historical
+  - id: PCT-166
+    type: tooling
+    title: "tasks: `projectctl tasks-status create <task_id> --title <text> [--body <text>] [--branch <branch>]` — Idempotently create or update a tracking row (JWT terminal session; not taskReadme files)"
+    requirement: "tasks: `projectctl tasks-status create <task_id> --title <text> [--body <text>] [--branch <branch>]` — Idempotently create or update a tracking row (JWT terminal session; not taskReadme files)"
+    owner: "docs/app-map/views/tasks/index.md"
+    source:
+      - "docs/app-map/views/tasks/index.md"
+    revision: 791a1d6c1bf4f1745ec726054788e0b1a16a0132392e891e506d13ac621c4c86
+    status: active
   - id: PCT-162
     type: tooling
     title: "tasks: `projectctl purge execute --active-task-id <id> --preview-checksum <hex>` — Execute a preview-bound owner-scoped purge after severe approval (requires --yes)"
@@ -1485,6 +1494,87 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 0b61b9e08dd3ca402985ff243da85e3f6baa1a121c13cfb58f12676589ffd251
+    status: active
+  - id: PCT-167
+    type: tooling
+    title: "structure: `projectctl structure check [projectId]` — Check managed project structure when a contractual remote capability is available"
+    requirement: "structure: `projectctl structure check [projectId]` — Check managed project structure when a contractual remote capability is available"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: c8bc85d91b7e79ef066e4137c2545caf72ea2889b0c580ca44e41c319df2c264
+    status: active
+  - id: PCT-168
+    type: tooling
+    title: "structure: `projectctl local structure check [path]` — Check the real local checkout structure without mutating it"
+    requirement: "structure: `projectctl local structure check [path]` — Check the real local checkout structure without mutating it"
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: 1c0df8bc4d2a4191d97dac96f938fad8f81f20df39c4f8f0282bc60e5834c21f
+    status: active
+  - id: PCT-169
+    type: visual
+    title: "La tab `criterios` existe en `/projectctl?tab=criterios` como octava tab, ocupa la quinta posición y conserva routing fail-closed"
+    requirement: "La tab `criterios` existe en `/projectctl?tab=criterios` como octava tab, ocupa la quinta posición y conserva routing fail-closed"
+    owner: "docs/app-map/views/projectctl/features/criterios.md"
+    source:
+      - "docs/app-map/views/projectctl/features/criterios.md"
+    revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
+    status: active
+  - id: PCT-170
+    type: docs
+    title: "Los criterios de la tab `criterios` son inline en su bundle App Map y `references/criterios.md` permanece como índice derivado cita-no-copia"
+    requirement: "Los criterios de la tab `criterios` son inline en su bundle App Map y `references/criterios.md` permanece como índice derivado cita-no-copia"
+    owner: "docs/app-map/views/projectctl/features/criterios.md"
+    source:
+      - "docs/app-map/views/projectctl/features/criterios.md"
+    revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
+    status: active
+  - id: PCT-171
+    type: docs
+    title: "La documentación distingue el enum PCT de 7 valores del enum App Map de 9 y preserva exactamente el mapping 7→9"
+    requirement: "La documentación distingue el enum PCT de 7 valores del enum App Map de 9 y preserva exactamente el mapping 7→9"
+    owner: "docs/app-map/views/projectctl/features/criterios.md"
+    source:
+      - "docs/app-map/views/projectctl/features/criterios.md"
+    revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
+    status: active
+  - id: PCT-172
+    type: docs
+    title: "El coverage ledger permanece separado de `criteria[]`, conserva su schema y acepta `entries: []`"
+    requirement: "El coverage ledger permanece separado de `criteria[]`, conserva su schema y acepta `entries: []`"
+    owner: "docs/app-map/views/projectctl/features/criterios.md"
+    source:
+      - "docs/app-map/views/projectctl/features/criterios.md"
+    revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
+    status: active
+  - id: PCT-173
+    type: visual
+    title: "La tab `criterios` renderiza `projectctl-tab-sources-criterios` con citas navegables y sin republicar tablas ni catálogos"
+    requirement: "La tab `criterios` renderiza `projectctl-tab-sources-criterios` con citas navegables y sin republicar tablas ni catálogos"
+    owner: "docs/app-map/views/projectctl/features/criterios.md"
+    source:
+      - "docs/app-map/views/projectctl/features/criterios.md"
+    revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
+    status: active
+  - id: PCT-174
+    type: tooling
+    title: "El generador publica el par `features/criterios.{md,mmd}`, sus 6 secciones, proyecciones coherentes, 24 outputs y `source_revision` regenerado"
+    requirement: "El generador publica el par `features/criterios.{md,mmd}`, sus 6 secciones, proyecciones coherentes, 24 outputs y `source_revision` regenerado"
+    owner: "docs/app-map/views/projectctl/features/criterios.md"
+    source:
+      - "docs/app-map/views/projectctl/features/criterios.md"
+    revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
+    status: active
+  - id: PCT-175
+    type: tooling
+    title: "`projectctl criteria check` — Validate acceptance-criteria semantic quality across canonical sources (Q1/Q2/Q5/Q7)"
+    requirement: "El comando `projectctl criteria check` SHALL validar Q1, Q2, Q5 y Q7 contra `criteria.yaml`, registry/tests, `docs/app-map/**`, referencias de la skill y reservas de `taskReadme/**`; SHALL emitir diagnósticos estables y SHALL fallar cerrado ante errores de severidad `error`."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: e67fdfe25b43c685e454c8e2a99fd5a63bde0169727439e8d332065239ac9440
     status: active
 candidates:
   - id: PCT-CAND-20260908-PCTMAP-A01

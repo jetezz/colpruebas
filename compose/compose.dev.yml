@@ -5,9 +5,10 @@ services:
       dockerfile: frontend/Dockerfile.dev
       target: dev
     env_file:
-      - ../.env.dev
+      - path: ../.env.dev
+        required: false
     ports:
-      - "${FRONTEND_PORT}:4321"
+      - "${FRONTEND_DEV_PORT}:4321"
     environment:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}
@@ -27,7 +28,10 @@ services:
       context: ..
       dockerfile: backend/Dockerfile.dev
     env_file:
-      - ../.env.dev
+      - path: ../.env.dev
+        required: false
+    ports:
+      - "${API_DEV_PORT}:3000"
     environment:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}

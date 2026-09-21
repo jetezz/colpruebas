@@ -66,5 +66,6 @@ Estado clave: **`TUNNEL_NOT_PUBLISHABLE`**.
    `projectctl rebuild dev` (o `prod`) y reintentar `projectctl tunnel status`.
 
 La política normativa y los IDs PCT asociados (PCT-98, PCT-38/PCT-42..PCT-45) viven en
-`.agents/skills/projectctl-requirements/references/entorno.md` y el bundle
-`docs/app-map/views/projectctl/index.md`.
+`.agents/skills/projectctl-requirements/references/entorno.md`. Este checkout es home-only:
+no contiene un bundle local `projectctl`; la aplicación del contrato al runtime se describe en
+`docs/00-context/entornos.md`.

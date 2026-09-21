@@ -4,7 +4,7 @@ description: "Trigger: sdd-apply-doc, doc implementation, documentation apply. I
 license: MIT
 metadata:
   id: sdd-apply-doc
-  version: 2.2.0
+  version: 2.3.0
   contract_ref: WorkflowRuntimeContextV1
 ---
 
@@ -83,6 +83,34 @@ For each assigned work unit:
 - Note issues or deviations.
 
 If the prompt asks you to modify product code, test files, or any artefact outside docs-owned scope, STOP and return `blocked` with the exact mismatch.
+
+### Mandatory App Map Coherence Gate
+
+When an assigned unit changes any file under `docs/app-map/`, the unit MUST treat
+`navigation.yaml` and each affected `${bundle}.md` / `${bundle}.mmd` sibling set as
+one contract. Before reporting the unit as `done`:
+
+1. For every affected navigation node, `id`, `title`, `kind`, and `bundle` MUST
+   match the Markdown frontmatter and resolve to the existing Mermaid companion.
+2. If a bundle frontmatter `id`, `title`, or `kind` changes, the corresponding
+   `navigation.yaml` node MUST be included in `Archivos owned` and updated in the
+   same unit. A documentation-only scope that omits the manifest is incomplete.
+3. The unit MUST route the contract check to `sdd-verify-units` and MUST NOT mark
+   itself `done` until the targeted test below passes and its result is recorded
+   in `apply-<unit_id>` evidence:
+
+   ```text
+   bun test ./src/__tests__/routes/project-docs-app-map-contract.test.ts
+   ```
+
+4. `docs:lint` or a Markdown formatter alone is insufficient evidence for this
+   gate; neither proves navigation/frontmatter identity. If the targeted test is
+   absent or does not cover the changed contract, return `blocked` and route a
+   test work unit to `sdd-apply-unit-tests` before documentation closure.
+
+The doc lane MUST NOT edit test files or execute broad test suites. It records the
+required verification handoff; `sdd-verify-units` owns execution and the final
+test evidence.
 
 ### Step 5: Persist Evidence and Return Unit Status
 

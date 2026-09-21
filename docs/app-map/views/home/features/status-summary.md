@@ -98,3 +98,9 @@ Reduce la incertidumbre inicial y ayuda a validar si esta viendo el entorno corr
 ## 5. Diagrama Mermaid
 
 El sibling `status-summary.mmd` representa la tarjeta y sus filas de información.
+
+## 6. Sources
+
+- Implementación: `frontend/src/components/InfoCard.astro`
+- Cobertura: `tests/e2e/home/index.spec.ts`
+- Navegación: `docs/app-map/navigation.yaml`

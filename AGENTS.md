@@ -6,8 +6,8 @@ agente (humano o IA) que trabaja sobre este repositorio. Es coherente con
 `projectctl-requirements`.
 
 > **SoT normativa del flujo de tareas**: el flujo SDD de este repo NO se define aquí. Vive en el
-> bloque delimitado `task-flow-binding` (`TaskFlowBindingV1`, v9.0.0) dentro de
-> `.agents/skills/projectctl-requirements/references/tareas.md`. Cualquier valor de
+> bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0) dentro de
+> `.agents/skills/projectctl-requirements/references/tasks/binding.md`. Cualquier valor de
 > fase/estado/lane/gate se lee de ese bloque, nunca de este archivo (anti-drift).
 
 ## 1. Propósito del repo
@@ -15,7 +15,7 @@ agente (humano o IA) que trabaja sobre este repositorio. Es coherente con
 `colpruebas` es un proyecto gestionado compatible con `/projectctl`. La operación esperada
 quedó remediada para cumplir el estándar de compatibilidad: entornos prod/dev levantables,
 documentación funcional en `docs/app-map/**`, sistema de testing canónico y flujo de tareas
-binding v9.0.0.
+binding v10.0.0.
 
 ## 2. Convenciones
 
@@ -26,7 +26,7 @@ binding v9.0.0.
 - **Testing**: Bun (`bun test`, `bun run test:check`); un runner unificado y el gate de
   cobertura contractual son los mecanismos estándar. Todo archivo de test declara
   `// @ac <ID>` en las primeras 10 líneas.
-- **Estados de task**: solo los del `status.writable` del binding v9.0.0. No reintroducir
+- **Estados de task**: solo los del `status.writable` del binding v10.0.0. No reintroducir
   aliases retirados (`branching`, `pushing`, `ready_for_branch`, `verified`, etc.).
 
 ## 3. Comandos permitidos
@@ -50,7 +50,7 @@ binding v9.0.0.
 ## 5. Flujo SDD
 
 El flujo completo (fases, estados, lanes, gates, delivery, active sources) se resuelve desde el
-binding `task-flow-binding` v9.0.0. Guía operativa: `docs/04-process/task.md`. Índice de
+binding `task-flow-binding` v10.0.0. Guía operativa: `docs/04-process/task.md`. Índice de
 coordinación de cada tarea: `taskReadme/<task_id>-<task_slug>.md` (detalle full en
 `taskReadme/<task_id>-<task_slug>/<artifact>.md`).
 

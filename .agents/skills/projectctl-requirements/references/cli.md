@@ -18,7 +18,7 @@ Cada requisito vive aquí como checklist canónico de compatibilidad `/projectct
 
 > **SoT original**: `frontend/src/views/projectctl/data/projectctl-commands.ts` (PCT-04) + `frontend/src/views/projectctl/data/grouping.ts::familyOrder()` + `sandbox/src/lib/projectctl-registry.ts` `PROJECTCTL_COMMANDS` + `frontend/__tests__/projectctl-commands-mapping.test.ts` (drift guard 1:1).
 > **Cumple**: PCT-04, PCT-05, PCT-79, PCT-80, PCT-103.
-> **last-verified**: 2026-07-31.
+> **last-verified**: 2026-09-10.
 
 La UI de la tab CLI reusa 1:1 `frontend/src/views/projectctl/data/projectctl-commands.ts` (PCT-04 — `Object.freeze` de 71 entries tipadas con `id`/`family`/`name`/`description`/`usage`/`copyTemplate`) como única fuente de metadata. Cero duplicación: si un agente busca otras definiciones del catálogo en `frontend/src/views/projectctl/`, solo debe existir una (la del módulo). El orden canónico de las 12 familias es `runtime → env → tunnel → commands → tasks → schedule → docs → storage → releases → activity → test → navigation`. La distribución por familia está pinneada: `runtime=22`, `env=8`, `tunnel=8`, `commands=5`, `tasks=5`, `schedule=7`, `docs=3`, `storage=2`, `releases=4`, `activity=2`, `navigation=1`, `test=4` (suma Σ=71).
 
@@ -26,7 +26,7 @@ La UI de la tab CLI reusa 1:1 `frontend/src/views/projectctl/data/projectctl-com
 
 > **SoT original**: `sandbox/src/lib/projectctl-registry.ts` (ProjectctlRegistrySoT) + `frontend/__tests__/projectctl-commands-mapping.test.ts` (PCT-04 drift guard existente, extendido en WU-TEST-1).
 > **Cumple**: PCT-81, PCT-104.
-> **last-verified**: 2026-07-07.
+> **last-verified**: 2026-09-10.
 
 Cada familia MUST exponer `<span data-testid="projectctl-cli-family-summary-<family>">{N} comandos</span>` en el header de cada `FamilySection`, donde `<family>` es el nombre kebab-case de la familia y `{N}` coincide con el conteo de entradas visibles por familia según el fixture inline de `frontend/__tests__/projectctl-commands-mapping.test.ts`. El sumatorio `Σ N = 71` MUST ser invariante a cambios cosméticos. La data-testid discipline sigue el patrón kebab-case `<purpose>-<scope>` transversal a todas las tabs.
 
@@ -34,15 +34,15 @@ Cada familia MUST exponer `<span data-testid="projectctl-cli-family-summary-<fam
 
 > **SoT original**: `frontend/src/views/project/lib/project-tabs.ts:resolveProjectTabDeepLinkResolution` (precedente contract) + `frontend/src/views/models/ui/ModelsView.tsx` (MDL-04 patrón segmented control) + `frontend/src/views/projectctl/stores/tabs.store.ts` (nuevo, scope WU-UI-1) + `frontend/src/views/projectctl/lib/resolve-tab.ts` (nuevo, scope WU-UI-1).
 > **Cumple**: PCT-82, PCT-101, PCT-102.
-> **last-verified**: 2026-07-24.
+> **last-verified**: 2026-09-20.
 
-La ruta `/projectctl?tab=cli` (o `/projectctl` sin query param, ya que `cli` es el default per D-9) MUST renderizar el panel CLI como segmented control interno. El click en cualquier tab del segmented control (cuyo `data-testid` sigue el patrón kebab-case `projectctl-tab-{cli,doc,test,entorno,tareas}`) MUST (a) cambiar la URL a `/projectctl?tab=<tab>` preservando otros query params si los hubiera, y SHOULD (b) preservar `scrollY` del usuario vía `sessionStorage.projectctl.lastScrollY`. La URL resultante MUST ser compartible (cargar la URL fría MUST restaurar el mismo tab activo). El helper `resolveProjectctlTab(pathname, search)` retorna `'cli'` como default y fallback ante query inválido.
+La ruta `/projectctl?tab=cli` (o `/projectctl` sin query param, ya que `cli` es el default per D-9) MUST renderizar el panel CLI como segmented control interno. El click en cualquier tab del segmented control (cuyo `data-testid` sigue el patrón kebab-case `projectctl-tab-{cli,tareas,agentes,doc,criterios,test,entorno,estructura}`) MUST (a) cambiar la URL a `/projectctl?tab=<tab>` preservando otros query params si los hubiera, y SHOULD (b) preservar `scrollY` del usuario vía `sessionStorage.projectctl.lastScrollY`. La URL resultante MUST ser compartible (cargar la URL fría MUST restaurar el mismo tab activo). El helper `resolveProjectctlTab(pathname, search)` retorna `'cli'` cuando falta `tab`; una query explícita desconocida MUST producir el estado visible `unsupported`, sin fallback silencioso.
 
 ## Requisito: Filtro `<input type="search">` case-insensitive substring sobre `name`
 
 > **SoT original**: `frontend/src/views/projectctl/data/projectctl-commands.ts` (PCT-04) + `frontend/__tests__/projectctl-commands.helpers.test.ts` (test vigente de PCT-06).
 > **Cumple**: PCT-06, PCT-ADD-CLI-003 (spec §6.2.1).
-> **last-verified**: 2026-07-24.
+> **last-verified**: 2026-09-10.
 
 El filtro MUST filtrar case-insensitive substring sobre `name` (PCT-06) y SHOULD preservar intactos los resúmenes por familia como números agregados (no se filtran los resúmenes — solo las cards; si una familia queda vacía, su `data-testid` MUST persistir con `0 comandos` y aparecer `EmptyState` global solo si `Σ familias = 0`). Si ninguna card matchea, MUST aparecer `<EmptyState data-testid="projectctl-cli-empty">Sin coincidencias para '<query>'</EmptyState>`.
 
@@ -50,7 +50,7 @@ El filtro MUST filtrar case-insensitive substring sobre `name` (PCT-06) y SHOULD
 
 > **SoT original**: `frontend/src/views/projectctl/ui/CopyButton.tsx` (PCT-07) + `tests/e2e/projectctl.spec.ts` (PW-AUTO vigente cubre PCT-07).
 > **Cumple**: PCT-07.
-> **last-verified**: 2026-07-24.
+> **last-verified**: 2026-09-10.
 
 Cada `CommandCard` MUST mostrar el botón copiar con feedback `✓ Copiado` durante ~1.5s preservando los placeholders del comando copiado. El `copyTemplate === name` está pinneado en `frontend/src/views/projectctl/data/projectctl-commands.ts`; cualquier desviación rompe la spec.
 
@@ -58,7 +58,7 @@ Cada `CommandCard` MUST mostrar el botón copiar con feedback `✓ Copiado` dura
 
 > **SoT original**: `sandbox/src/lib/projectctl-registry.ts` `PROJECTCTL_COMMANDS` (72 entries: 1 hidden = `projectctl --project-id <id>`, 71 visibles) + `frontend/__tests__/projectctl-commands-mapping.test.ts` (drift guard parser tolerante del registry + fixture inline 71 entries).
 > **Cumple**: PCT-04, PCT-79..82.
-> **last-verified**: 2026-07-07.
+> **last-verified**: 2026-09-10.
 
 La UI del frontend NO importa el registry backend (regla FSD-2 + sandbox-frontend boundary); la drift-guard 1:1 vive en `frontend/__tests__/projectctl-commands-mapping.test.ts` que parsea tolerante el registry y compara con la fixture inline. Si el registry agrega/quita comandos visibles, el test falla y obliga a regenerar la UI. Cualquier nuevo comando visible debe (a) tener ID en `PCT-08..PCT-78` contiguos, (b) tener `usage` no vacío, (c) tener `copyTemplate === name`, (d) tener `family` pinneada en `FAMILY_ORDER`.
 
@@ -66,7 +66,7 @@ La UI del frontend NO importa el registry backend (regla FSD-2 + sandbox-fronten
 
 > **SoT original**: `sandbox/src/bin/projectctl.ts` + `sandbox/src/lib/projectctl-registry.ts` (PCT-53/PCT-54) + `frontend/src/views/projectctl/data/projectctl-commands.ts` + `.agents/skills/projectctl-requirements/references/tareas.md` JSON Pointer `/task_skill_selection/cli`.
 > **Cumple**: PCT-53, PCT-54, PCT-103.
-> **last-verified**: 2026-09-06.
+> **last-verified**: 2026-09-10.
 
 `projectctl tasks create` usa exclusivamente el template profesional y exige `--title`, `--problem`, `--expected`, `--app-map`, `--change-type` y `--criteria-json`; `--context` y `--related-task` son opcionales. Create y update aceptan exactamente un modo entre `--skills`, `--no-skills` y `--interactive`. Sin modo, create delega defaults al servidor y update preserva el snapshot. La interacción es opt-in, requiere TTY y es incompatible con `--json`; cancelar no realiza la mutación. Los IDs PCT-53/PCT-54 y el total de comandos permanecen estables.
 

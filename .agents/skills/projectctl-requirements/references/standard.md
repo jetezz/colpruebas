@@ -1,6 +1,8 @@
 # Integrated Standard — Docs, Testing, Runtime and Projectctl Operation
 
-Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-governance`, `testing-policy`, `ops-runtime-policy` y `projectctl-operator`. `projectctl-requirements` package v11 publica el binding operativo único en `references/tareas.md`; esta skill es el estándar integrado para compatibilidad `/projectctl`.
+> **last-verified**: 2026-09-21. El contrato activo es package v13.1.0/binding v10.0.0; cualquier mención a versiones anteriores en el historial de versionado no es normativa.
+
+Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-governance`, `testing-policy`, `ops-runtime-policy` y `projectctl-operator`. `projectctl-requirements` package v13.1.0 publica el binding operativo único en `.agents/skills/projectctl-requirements/references/tasks/binding.md`; esta skill es el estándar integrado para compatibilidad `/projectctl`.
 
 > **Rol de este archivo**: integrado de reglas operativas. Los valores del workflow viven únicamente en el bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2).
 
@@ -32,7 +34,7 @@ Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-g
 - Root fijo: `docs/app-map/`.
 - Manifest obligatorio: `docs/app-map/navigation.yaml`.
 - Bundle exacto por nodo: `${bundle}.md` + `${bundle}.mmd`.
-- Cada bundle declara 5 secciones: URL, Tab, Objetivo, Criterios de calidad, Diagrama Mermaid.
+- Cada bundle declara 6 secciones: URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources.
 - Cada bundle incluye frontmatter `criteria[]` con IDs inline para trazabilidad doc <-> tests <-> producto.
 - El ID del criterio es vinculante; no debe existir criterio en código o tests que no esté documentado en `docs/app-map/**`.
 - Todo criterio declarado en `docs/app-map/**` debe tener evidencia en código o tests, **o** una justificación explícita (not-applicable / Manual / documental).
@@ -113,7 +115,7 @@ Desempates: **un criterio = una preocupación** (preocupaciones mixtas MUST divi
 - El runner unificado es `bun run scripts/test-runner.ts run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]`.
 - `projectctl test *` mapea 1:1 al runner unificado.
 - La persistencia canónica vive en `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/{junit.xml,results.json,summary.json}`.
-- El write-back de coverage se realiza vía `patchBundleCoverage` contra `criteria[].coverage`.
+- En v1 los runs se persisten y la cobertura queda `pending`/no aceptada; el auto-writeback de `criteria[].coverage` está diferido (`AUTO_WRITEBACK_DEFERRED_V1`).
 - `bun run test:check` es el gate de cobertura contractual.
 
 ## 3. Runtime, compose/env y tunnel
@@ -121,24 +123,25 @@ Desempates: **un criterio = una preocupación** (preocupaciones mixtas MUST divi
 ### Reglas duras
 
 - Layout canónico: `compose.yml` para prod y `compose.dev.yml` para dev.
-- Nombres de servicio estables por rol: `frontend`, `api`, `sandbox`, `webhook-listener`, `tunnel`.
+- Los proyectos deben conservar nombres de servicio estables por rol y documentar su mapeo local en los contratos de entorno del repositorio destino.
 - `compose.yml` sirve servidor/prod con `frontend` en `target: prod`.
 - `compose.dev.yml` sirve iteración local/dev con HMR/watch y `frontend` en `target: dev`.
 - `webhook-listener` es el ejecutor operativo; API y sandbox no ejecutan Docker ni `cloudflared` directamente.
-- El tunnel compartido es global y centralizado mediante `CENTRAL_TUNNEL_WEBHOOK_URL` + `DEPLOY_JWT_SECRET`.
+- La publicabilidad gestionada requiere un canal de tunnel central proporcionado por el operador; el paquete portable no fija nombres de endpoints, secretos, red, proveedor ni topología. Consulte `docs/00-context/entornos.md` y `docs/02-features/tunnel.md` del repositorio destino.
 - El estado canónico de configuración `prod/dev` de proyectos gestionados vive cifrado en Supabase; runtime solo consume inyección efímera.
 - `sandbox` y `api` no se exponen libremente al host en producción salvo la excepción explícita vigente del `compose.yml` raíz.
 - `HOST_PROJECT_DIR/workspace/users` debe seguir montado en `/workspace/users` para persistir `HOME` y caches del sandbox.
-- El servicio `tunnel` queda solo como fallback legacy opt-in vía profile explícito.
+- Cualquier servicio de tunnel local queda fuera del camino portable; si el repositorio destino conserva un fallback legacy opt-in, debe documentarlo en sus docs locales.
 
 ### Publicabilidad de proyectos gestionados
 
 - Los proyectos gestionados deben cumplir `references/entorno.md`.
 - Frontend debe exponer `4321` dentro del contenedor.
 - `.env` debe declarar `FRONTEND_PORT` y `.env.dev` debe declarar `FRONTEND_DEV_PORT`; ambos archivos son configuración local explícita y no aceptan aliases entre overlays.
-- El frontend debe unirse a `mis-proyectos-edge` con alias esperado por entorno.
-- Prod usa alias `<app>-origin`; dev usa `test-<app>-origin`.
+- El frontend debe unirse a la red edge gestionada por el operador con el alias esperado por entorno; los nombres concretos se definen en los docs locales del repositorio destino.
+- Prod y dev usan alias edge distintos y explícitos según el contrato local del operador.
 - No usar `host.docker.internal:<FRONTEND_PORT>` como camino estándar cuando existe alias edge gestionado; queda como compat/legacy.
+- El comando local de desarrollo usa el overlay sobre la base: `docker compose --env-file .env.dev -f compose.yml -f compose.dev.yml up -d --build`; `compose.dev.yml` no es un stack independiente.
 - `projectctl env validate` debe detectar las claves de puerto faltantes o inválidas según el overlay: `FRONTEND_PORT`/`API_PORT` en `.env` y `FRONTEND_DEV_PORT`/`API_DEV_PORT` en `.env.dev`.
 - `projectctl tunnel status` debe exponer `TUNNEL_NOT_PUBLISHABLE` con acciones cuando falte red/alias/hostname.
 
@@ -177,6 +180,11 @@ terminal -> projectctl -> API -> webhook-listener -> Docker host
 
 ### Prohibiciones y seguridad
 
+**REQUISITO NO NEGOCIABLE — integración a ramas protegidas (cliente-only):**
+- El agente **NUNCA** ejecuta un merge: **NUNCA merge a `develop`**, **NUNCA merge a `main`** (ni `gh pr merge`, ni `git merge` local hacia las ramas protegidas, ni equivalentes). El merge lo ejecuta únicamente el cliente con su revisión.
+- El alcance de entrega del agente termina en: commit → push → **crear el PR** → reportar la URL del PR → **esperar**. A partir de ahí la tarea queda esperando la decisión humana de integración; ningún criterio de "done" del agente incluye el merge.
+- Si el usuario pide "dejar en done" sin haber hecho merge, el estado `done` del taskReadme refleja implementación + verificación + PR abierto; el merge pendiente se declara explícitamente como acción del cliente.
+
 - No usar Docker raw en sandbox (`docker ps`, `docker compose ...` deben fallar o no existir).
 - No operar otros proyectos desde la PTY actual.
 - No administrar imágenes/redes/volúmenes arbitrarios del host.
@@ -188,12 +196,12 @@ terminal -> projectctl -> API -> webhook-listener -> Docker host
 
 ## 5. Flujo operativo de tareas
 
-El contrato ejecutable completo vive únicamente en el bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0) dentro de `.agents/skills/projectctl-requirements/references/tareas.md`.
+ El contrato ejecutable completo vive únicamente en el bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2) dentro de `.agents/skills/projectctl-requirements/references/tasks/binding.md`.
 
 Este archivo respeta el contrato integral del bloque sin replicar valores:
 
 - **Rol**: solo cita `task-flow-binding` (block id, binding_id, binding_version, path) para que el lector sepa dónde está el binding; nunca publica un catálogo paralelo de estados, lanes o gates.
-- **Runtime projection**: la resolución de lane skill, policies de superficie, paths ordenados, fallo `skill_resolution_missing`, ownership de lanzamiento y snapshot inmutable de modos se rigen por D-20. Los contratos exactos viven en `.agents/skills/sd-protocol/workflow-runtime-context.md` y `.agents/skills/sd-protocol/skill-resolver.md`; no se duplican aquí ni se añaden al binding.
+- **Runtime projection**: la resolución de lane skill, policies de superficie, paths ordenados, fallo `skill_resolution_missing`, ownership de lanzamiento y snapshot inmutable de modos se rigen por D-20. Los contratos exactos viven en los siblings del módulo interno `.agents/skills/projectctl-requirements/modules/sd-protocol/`; no se duplican aquí ni se añaden al binding.
 - **Helpers opcionales**: la política `/task_skill_selection` declara `task-skills/v1`, identidad `metadata.id`, resolución project-installed, relectura por ejecución y orden lane → surfaces → helpers con dedupe exact-path first-wins. Vacío, missing o conflictivo nunca debilita paths obligatorios, modes ni gates.
 - **Tasks CLI profesional**: `/task_skill_selection/cli` es el contrato portable de PCT-53/PCT-54. Create usa el template profesional; `--skills`, `--no-skills` y `--interactive` son mutuamente excluyentes; sin modo, create usa defaults y update preserva.
 - El primary `taskReadme/<task_id>-<task_slug>.md` es un índice de coordinación escrito por el coordinador y el detalle full-artifact vive en `taskReadme/<task_id>-<task_slug>/<artifact>.md` (escrito por la lane owner), según `artifact_store.primary`/`artifact_store.phase_artifacts` del bloque; ninguna referencia introduce una segunda fuente de verdad.
@@ -207,9 +215,9 @@ Este archivo respeta el contrato integral del bloque sin replicar valores:
 
 ## 6. Resultado esperado de un agente que usa este estándar
 
-- Identifica qué área de `/projectctl` toca: `cli | doc | test | entorno | tareas`.
+- Identifica qué área de `/projectctl` toca: `cli | tareas | agentes | doc | criterios | test | entorno | estructura`.
 - Aplica las reglas integradas de este archivo antes de buscar otra skill.
-- Si necesita valores normativos del flujo SDD, extrae el bloque `task-flow-binding` delimitado en `.agents/skills/projectctl-requirements/references/tareas.md` v9.0.0.
+- Si necesita valores normativos del flujo SDD, extrae el bloque `task-flow-binding` delimitado en `.agents/skills/projectctl-requirements/references/tasks/binding.md` v10.0.0.
 - Solo carga skills externas cuando el cambio toca una superficie no absorbida aquí.
 - Reporta criterios afectados (`PCT-*`, `TST-*`, `AC-*`, etc.).
 - Reporta validación ejecutada: `Unit`, `PW-CLI`, `PW-AUTO`, `Manual` o `not_required`.

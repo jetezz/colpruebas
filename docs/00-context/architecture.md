@@ -7,10 +7,9 @@
 
 ## 1. Panorama
 
-`colpruebas` es un **proyecto gestionado compatible con `/projectctl`**: una app servida por
-Astro (modo `server`/SSR), una API Express + Bun, un runtime gestionado vía overlays Compose
-canónicos y un sistema de documentación funcional y de testing canónico. La operación sigue el
-estándar `projectctl-requirements` (binding `task-flow-binding` v9.0.0).
+`colpruebas` es un proyecto gestionado con una landing servida por Astro (modo `server`/SSR),
+una API Express + Bun, un runtime gestionado vía overlays Compose y un sistema de documentación
+funcional y de testing canónico. La operación sigue el estándar `projectctl-requirements`.
 
 ## 2. Frontend (Astro)
 
@@ -18,10 +17,9 @@ estándar `projectctl-requirements` (binding `task-flow-binding` v9.0.0).
 - **Stack**: Astro `^4` + adapter `@astrojs/node` (output `server`, `mode: standalone`).
 - **Servidor**: puerto `4321` (interno), `host: true`, `allowedHosts` para
   `colpruebas.online` / `test.colpruebas.online` / `localhost` / `127.0.0.1`.
-- **Páginas**: `frontend/src/pages/` — landing (`index.astro`), workspace de proyecto
-  (`project/[id].astro`) y la vista `/projectctl`.
-- **Vista `/projectctl`**: `frontend/src/views/projectctl/` (incluye
-  `data/tareas-tab.view-model.ts`, projection generada del binding de tareas).
+- **Páginas**: `frontend/src/pages/index.astro` — landing SSR del proyecto.
+- **Proyección disponible**: `frontend/src/views/projectctl/data/tareas-tab.view-model.ts` es un
+  artefacto de tareas; no implica que este checkout contenga la UI completa `/projectctl`.
 - **Dockerfiles**: `frontend/Dockerfile.prod` (stage `AS prod`) y `frontend/Dockerfile.dev`
   (stage `AS dev`, HMR/watch) — seleccionados por `build.target` de los overlays.
 
@@ -41,14 +39,14 @@ estándar `projectctl-requirements` (binding `task-flow-binding` v9.0.0).
 
 - `docs/app-map/**` + `docs/app-map/navigation.yaml` es la **única superficie funcional**
   consumida por UI (SoT documental).
-- El bundle `/projectctl` vive en `docs/app-map/views/projectctl/` con sus 5 secciones MUST y
-  frontmatter `criteria[]` con IDs `PCT-*`; la cobertura se escribe en `criteria[].coverage`.
+- Los bundles disponibles en este checkout son los de `docs/app-map/views/home/`; cada bundle
+  mantiene sus criterios inline y su cobertura en `criteria[].coverage`.
 - Documentos de contexto/proceso: `docs/00-context/**` (incluidos este archivo,
   `entornos.md`, `agents_skills.md`) y `docs/04-process/task.md`.
 
 ## 5. Sistema de testing (canónico, Bun)
 
-- Runner unificado: `scripts/test-runner.ts` (importa los primitivos de `backend/src`).
+- Runner unificado: `scripts/test-runner.ts` (importa los primitivos existentes de `backend/src`).
 - Gate de cobertura contractual: `bun run test:check`.
 - Persistencia atómica: `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/` con
   `{junit.xml,results.json,summary.json}`.
@@ -58,8 +56,7 @@ estándar `projectctl-requirements` (binding `task-flow-binding` v9.0.0).
 ## 6. Runtime / entornos
 
 - Overlays canónicos `compose/compose.yml` (base), `compose/compose.prod.yml` (prod) y
-  `compose/compose.dev.yml` (dev) con servicio `frontend` en
-  `build.target: prod|dev` y `"${FRONTEND_PORT}:4321"`.
+  `compose/compose.dev.yml` (dev), documentados en `docs/00-context/entornos.md`.
 - Contrato edge `mis-proyectos-edge` con alias por entorno; runtime exclusivo vía `projectctl`.
 - Detalle: `docs/00-context/entornos.md` y `docs/02-features/tunnel.md`.
 

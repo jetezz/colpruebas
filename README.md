@@ -2,7 +2,7 @@
 
 Proyecto gestionado compatible con `/projectctl` (`colpruebas`). Repositorio de prueba/managed
 del estándar de compatibilidad: entornos prod y dev levantables, documentación funcional
-consumida por UI, sistema de testing canónico y flujo de tareas binding v9.0.0.
+consumida por UI, sistema de testing canónico y flujo de tareas binding v10.0.0.
 
 ## Descripción
 
@@ -18,7 +18,7 @@ entorno de sandbox gestionado. La operación del repo sigue el estándar canóni
 | Runtime gestionado | `projectctl` (`status`, `start`, `stop`, `restart`, `rebuild`, `env validate`, `doctor`, `logs`, `tunnel *`, `test *`) | Control de entornos prod/dev (sandbox no expone docker). |
 | Docs funcionales | `docs/app-map/**` + `docs/app-map/navigation.yaml` | Única SoT documental consumida por UI (vista `home`). |
 | Registro de skills | `.atl/skill-registry.md` + `docs/00-context/agents_skills.md` | Skills instaladas en el repo. |
-| Guía del flujo de tareas | `docs/04-process/task.md` | Cómo operar tareas (cita el binding v9.0.0). |
+| Guía del flujo de tareas | `docs/04-process/task.md` | Cómo operar tareas (cita el binding v10.0.0). |
 | Coordinación de tarea | `taskReadme/<task_id>-<task_slug>.md` | Índice de coordinación de cada tarea. |
 
 ## Cómo correr los tests
@@ -48,6 +48,6 @@ bun test <path/to/test>     # tests puntuales
 ## Recursos normativos
 
 - Standard de compatibilidad `/projectctl`: `.agents/skills/projectctl-requirements/`.
-- Flujo de tareas (binding): `.agents/skills/projectctl-requirements/references/tareas.md`
-  (bloque `task-flow-binding` v9.0.0) — única SoT normativa de fases/estados/lanes/gates.
+- Flujo de tareas (binding): `.agents/skills/projectctl-requirements/references/tasks/binding.md`
+  (bloque `task-flow-binding`, `TaskFlowBindingV2` v10.0.0) — única SoT normativa de fases/estados/lanes/gates.
 - Reglas de operación de agentes: `AGENTS.md`.
