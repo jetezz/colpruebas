@@ -80,6 +80,9 @@ app.get('/health', (req, res) => {
   res.json(payload);
 });
 
+// @criterion HSS-03
+// @trace ac=HSS-03 req=REQ-CODETRACE-002 domain=home resource=status operation=read block=status-handler
+// @contract auth=none ownership=none side-effects=none
 app.get('/api/status', (req, res) => {
   const payload: AppStatus = {
     app: APP_NAME,

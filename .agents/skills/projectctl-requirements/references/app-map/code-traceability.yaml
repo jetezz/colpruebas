@@ -1,0 +1,98 @@
+schemaVersion: code-traceability/v1
+readOnly: true
+marker:
+  comments: ["//", "--", "<!--"]
+  criterion: "@criterion"
+  trace: "@trace"
+  ac: "@ac"
+  contract: "@contract"
+roots:
+  front:
+    - frontend/src/pages
+    - frontend/src/views
+    - frontend/src/components
+    - frontend/src/shared
+  back:
+    - backend/src
+  tests:
+    - tests
+excludes:
+  - path: "**/generated/**"
+    role: generated
+    owner: projectctl-tooling
+    reason: Generated source is derived from the task-flow authority and is not edited as a traceability target.
+    replacement: source
+  - path: "frontend/src/env.d.ts"
+    role: config
+    owner: frontend-platform
+    reason: Astro environment declarations contain no eligible runtime responsibility.
+    replacement: source
+  - path: "**/*.mmd"
+    role: generated
+    owner: app-map
+    reason: Mermaid diagrams document the App Map but do not contain executable blocks.
+    replacement: markdown bundle
+  - path: "**/*.config.*"
+    role: config
+    owner: project-tooling
+    reason: Tool configuration is not an eligible product responsibility for this migration.
+    replacement: source
+  - path: "backend/src/ac-header.ts"
+    role: adapter
+    owner: backend-tooling
+    reason: Test-marker extraction helpers support tooling and do not implement a published product criterion.
+    replacement: tests and code-traceability scanner
+  - path: "backend/src/coverage-writer.ts"
+    role: adapter
+    owner: backend-tooling
+    reason: Coverage persistence adapter is test and App Map tooling, not an eligible product responsibility.
+    replacement: App Map coverage authority
+  - path: "backend/src/test-inventory.ts"
+    role: adapter
+    owner: backend-tooling
+    reason: Test inventory discovery is tooling without a published product criterion.
+    replacement: tests and coverage tooling
+  - path: "frontend/src/views/projectctl/data/tareas-tab.view-model.ts"
+    role: generated
+    owner: projectctl-tooling
+    reason: Generated task-flow projection is derived from the binding and is not edited as a traceability target.
+    replacement: frontend/src/shared/sdd/task-flow.generated.ts
+lifecycle: [active, planned, partial, deprecated, retired]
+policyMode: warn
+targets:
+  - criterion_id: HOME-01
+    surface: front
+    path: frontend/src/components/Header.astro
+    symbol: Header
+    block: identity
+    owner: home-identity
+    lifecycle: active
+    multi_surface: allowed
+    multi_surface_reason: The home identity is rendered by the frontend and evidenced by the home test surface.
+  - criterion_id: HSS-01
+    surface: front
+    path: frontend/src/components/InfoCard.astro
+    symbol: InfoCard
+    block: status-summary
+    owner: home-status-summary
+    lifecycle: active
+    multi_surface: allowed
+    multi_surface_reason: The status summary is rendered by the frontend and evidenced by the home test surface.
+  - criterion_id: HRM-02
+    surface: front
+    path: frontend/src/components/Footer.astro
+    symbol: Footer
+    block: runtime-metadata
+    owner: home-runtime-metadata
+    lifecycle: active
+    multi_surface: allowed
+    multi_surface_reason: Runtime metadata is rendered by the frontend and evidenced by the home test surface.
+  - criterion_id: HSS-03
+    surface: back
+    path: backend/src/index.ts
+    symbol: status-handler
+    block: status
+    owner: home-status-summary
+    lifecycle: active
+    multi_surface: allowed
+    multi_surface_reason: The backend status payload supports the API status represented by the home status summary.

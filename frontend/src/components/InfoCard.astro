@@ -10,6 +10,9 @@ interface Props {
 const { appName, environment, frontendStatus, apiStatus, gitBranch } = Astro.props;
 ---
 
+<!-- @criterion HSS-01 -->
+<!-- @trace ac=HSS-01 req=REQ-CODETRACE-002 view=home tab=none block=status-summary -->
+<!-- @contract auth=none ownership=none side-effects=none -->
 <div class="info-card">
   <div class="info-row">
     <span class="label">Aplicación:</span>

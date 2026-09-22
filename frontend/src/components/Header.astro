@@ -6,6 +6,9 @@ interface Props {
 const { title } = Astro.props;
 ---
 
+<!-- @criterion HOME-01 -->
+<!-- @trace ac=HOME-01 req=REQ-CODETRACE-002 view=home tab=none block=identity -->
+<!-- @contract auth=none ownership=none side-effects=none -->
 <header>
   <h1>🚀 {title}</h1>
 </header>
