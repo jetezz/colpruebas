@@ -186,7 +186,7 @@ for (const item of criteria) {
 }
 
 const codeFiles: string[] = [];
-for (const directory of ['frontend/src', 'backend/src', 'api/src', 'shared', 'scripts']) filesUnder(directory, file => /\.(?:ts|tsx|js|jsx|sql)$/.test(file) && !/\.(?:test|spec)\./.test(file), codeFiles);
+for (const directory of ['frontend/src', 'backend/src', 'api/src', 'shared', 'scripts']) filesUnder(directory, file => /\.(?:ts|tsx|js|jsx|astro|sql)$/.test(file) && !/\.(?:test|spec)\./.test(file), codeFiles);
 const codeClaims = new Map<string, Set<string>>();
 for (const file of codeFiles) {
   const lines = (safe(file) ?? '').split(/\r?\n/);

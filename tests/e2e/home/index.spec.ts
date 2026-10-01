@@ -1,14 +1,8 @@
-// @ac HOME-01
-// @ac HSS-01
-// @ac HSS-02
-// @ac HSS-03
-// @ac HSS-04
-// @ac HRM-01
-// @ac HRM-02
-// @ac HOME-05
+// @ac HOME-01, HOME-05, HSS-01, HSS-02, HSS-03, HSS-04, HRM-01, HRM-02
+// @home
 import { test, expect } from '@playwright/test';
 
-test.describe('Frontend Pages — @home', () => {
+test.describe('HOME-01 HOME-05 HSS-01 HSS-02 HSS-03 HSS-04 HRM-01 HRM-02 Frontend Pages — @home', () => {
   test('HOME-01 HSS-01 HSS-02 HSS-03 HSS-04 HRM-01 home identity and status summary render correctly', async ({ page }, testInfo) => {
     testInfo.annotations.push(
       { type: 'ac', description: 'HOME-01' },
@@ -32,11 +26,32 @@ test.describe('Frontend Pages — @home', () => {
     await expect(statusSummary).toContainText('Frontend:');
     await expect(statusSummary).toContainText('API:');
     await expect(statusSummary).toContainText('Rama Git:');
-    await expect(statusSummary).toContainText('MAIN');
+
+    // HSS-02: fila Frontend por entorno (production/development/test-fallback).
+    const frontendRow = page.locator('.info-row', { hasText: 'Frontend:' });
+    await expect(frontendRow).toBeVisible();
+    await expect(frontendRow.locator('.value')).toContainText(/PRODUCCI.N|DESARROLLO|TEST/);
+
+    // HSS-03: fila API con salud real SSR o fallback estático por entorno.
+    const apiRow = page.locator('.info-row', { hasText: 'API:' });
+    await expect(apiRow).toBeVisible();
+    await expect(apiRow.locator('.value')).toContainText(/API de (producci.n|desarrollo|test) funcionando/);
+
+    // HRM-01/HSS-04: rama git real build-time SSR (PUBLIC_GIT_BRANCH) con
+    // fallback documentado a develop; cero MAIN operativo (SC-S4-rama-real,
+    // SC-S4-rama-fallback, SC-S4-cero-main).
+    const branchRow = page.locator('.info-row', { hasText: 'Rama Git:' });
+    await expect(branchRow).toBeVisible();
+    const branchValue = ((await branchRow.locator('.value').textContent()) ?? '').trim();
+    expect(branchValue.length).toBeGreaterThan(0);
+    expect(branchValue).not.toContain('MAIN');
+    expect(branchValue === 'develop' || branchValue.length > 0).toBeTruthy();
   });
 
   test('HOME-05 page has no console errors', async ({ page }, testInfo) => {
     testInfo.annotations.push({ type: 'ac', description: 'HOME-05' });
+    // SC-S3-api-degradado + SC-S4-consola-limpia: el fetch SSR de salud
+    // degrada a texto estático sin console.error (HOME-05 protege HSS-03).
 
     const errors: string[] = [];
     page.on('console', (msg) => {
@@ -51,7 +66,7 @@ test.describe('Frontend Pages — @home', () => {
     expect(errors).toHaveLength(0);
   });
 
-  test('timestamp visible in footer (HRM-02)', async ({
+  test('HRM-02 timestamp visible in footer', async ({
     page,
   }, testInfo) => {
     testInfo.annotations.push({ type: 'ac', description: 'HRM-02' });

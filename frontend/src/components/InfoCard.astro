@@ -19,6 +19,9 @@ const { appName, environment, frontendStatus, apiStatus, gitBranch } = Astro.pro
     <span class="value">{appName}</span>
   </div>
  
+  <!-- @criterion HSS-02 -->
+  <!-- @trace ac=HSS-02 req=REQ-CODETRACE-002 view=home tab=none block=frontend-row -->
+  <!-- @contract auth=none ownership=none side-effects=none -->
   <div class="info-row">
     <span class="label">Frontend:</span>
     <span class={`value ${environment}`}>{frontendStatus}</span>
@@ -27,6 +30,9 @@ const { appName, environment, frontendStatus, apiStatus, gitBranch } = Astro.pro
     <span class="label">API:</span>
     <span class={`value ${environment}`}>{apiStatus}</span>
   </div>
+  <!-- @criterion HSS-04 -->
+  <!-- @trace ac=HSS-04 req=REQ-CODETRACE-002 view=home tab=none block=branch-row -->
+  <!-- @contract auth=none ownership=none side-effects=none -->
   <div class="info-row">
     <span class="label">Rama Git:</span>
     <span class={`value ${environment}`}>{gitBranch}</span>
@@ -59,6 +65,9 @@ const { appName, environment, frontendStatus, apiStatus, gitBranch } = Astro.pro
   }
   .value.production {
     color: #28a745;
+  }
+  .value.development {
+    color: #17a2b8;
   }
   .value.test {
     color: #ffc107;

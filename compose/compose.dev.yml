@@ -13,6 +13,8 @@ services:
       - NODE_ENV=${NODE_ENV}
       - APP_NAME=${APP_NAME}
       - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+      - PUBLIC_API_URL=${PUBLIC_API_URL}
+      - PUBLIC_GIT_BRANCH=${PUBLIC_GIT_BRANCH:-develop}
       - API_URL=http://api-dev:3000
     depends_on:
       - api-dev
