@@ -5,12 +5,6 @@
     "sdd-spec": {},
     "sdd-tasks": {},
     "sdd-design": {},
-    "sdd-archive": {
-      "model": "inherit"
-    },
-    "sdd-onboard": {
-      "model": "inherit"
-    },
     "sdd-apply-doc": {},
     "sdd-verify-code": {},
     "sdd-explore-code": {},
@@ -25,7 +19,6 @@
     "sdd-explore-research": {},
     "sdd-apply-code-medium": {},
     "sdd-apply-pwauto-tests": {},
-    "sdd-propose": {},
-    "judgment-day": {}
+    "sdd-propose": {}
   }
 }
