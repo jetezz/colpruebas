@@ -323,10 +323,10 @@
   },
   "source": {
     "binding_id": "projectctl-requirements.task-flow",
-    "binding_version": "14.0.0",
+    "binding_version": "15.0.0",
     "generated_at": "2026-09-30",
     "source_path": ".agents/skills/projectctl-sdd/references/tasks/binding.md",
-    "source_sha256": "9ed23bed92921dc724fe2beb82b0371f418d70f86644d1e0ee1a57598cbe1da1"
+    "source_sha256": "db186166047b8f417d05abb32870167ca71f40a98f1b769f857913076c60083f"
   },
   "state_model": {
     "controls": [

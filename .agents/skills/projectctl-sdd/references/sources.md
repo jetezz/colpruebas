@@ -19,10 +19,10 @@ La tab Tareas y `projectctl tasks create/update` pertenecen a este satélite. El
 | `PCT-116` | Aceptación funcional | `tasks/binding.md` `/gates` |
 | `PCT-117` | Entrega | `tasks/binding.md` `/delivery`; extensión RDD seleccionada |
 | `PCT-118` | Aliases retirados | `tasks/binding.md` `/retired_aliases` y `/active_sources/exclude` |
-| `PCT-119` | Mapping histórico AC↔PCT de origen; no operativo en v14. Migrar su fuente original antes de regenerar el inventario | `criteria-integration.md`; `tasks/binding.md` `/criteria_identity` |
+| `PCT-119` | Mapping histórico AC↔PCT de origen; no operativo en v15. Migrar su fuente original antes de regenerar el inventario | `criteria-integration.md`; `tasks/binding.md` `/criteria_identity` |
 | `PCT-120` | Envelopes y routing | `tasks/binding.md` `/status` y `/phases`; `../modules/sd-protocol/workflow-runtime-context.md` |
 | `PCT-121` | Recuperación y precedencia | `tasks/binding.md` `/artifact_store` |
 | `PCT-53`, `PCT-54` | Contrato profesional y selección explícita del CLI tasks | `tasks/binding.md` `/task_skill_selection/cli` y registro de la instancia destino |
 | `PCT-155` | La proposal declara el delta de criterios con IDs | `../modules/sdd/sdd-propose/module.md`; identidad del criterio en el App Map de la instancia |
 
-Comprobar con `bun test ./.agents/skills/projectctl-sdd/scripts/__tests__` y `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check`.
+Comprobar con `bun test ./.agents/skills/projectctl-sdd/scripts/__tests__` y `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check` (instancia) / `--check-package` (árbol portable sin locator).

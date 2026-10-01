@@ -128,8 +128,8 @@ export const DEFAULT_PACKAGE_SKILL_PATH =
  * Editorial Markdown is out of scope; only locator/config/code/binding JSON.
  */
 export const CANONICAL_BASELINE = Object.freeze({
-  packageVersion: '24.0.0',
-  bindingVersion: '14.0.0',
+  packageVersion: '25.0.0',
+  bindingVersion: '15.0.0',
   contractKind: 'TaskFlowBindingV2',
   modelVersion: 2,
   locatorContractVersion: 2,
@@ -446,70 +446,73 @@ function parsePackageMetadataVersion(raw: string): string | null {
  */
 export function checkMachineBaseline(
   repoRoot: string,
-  options: { readonly bindingPath?: string } = {},
+  options: { readonly bindingPath?: string; readonly skipLocator?: boolean } = {},
 ): BaselineCheckReport {
   const drifts: BaselineDrift[] = [];
   const record = (path: string, key: string, expected: string, actual: string): void => {
     drifts.push({ path, key, expected, actual });
   };
 
-  const locatorRaw = readRepoText(repoRoot, DEFAULT_LOCATOR_PATH);
+  const skipLocator = options.skipLocator ?? false;
+  const locatorRaw = skipLocator ? null : readRepoText(repoRoot, DEFAULT_LOCATOR_PATH);
   const packageRaw = readRepoText(repoRoot, DEFAULT_PACKAGE_SKILL_PATH);
   const bindingPath = options.bindingPath ?? DEFAULT_BINDING_PATH;
   const bindingRaw = readRepoText(repoRoot, bindingPath);
 
-  if (locatorRaw === null) {
-    record(DEFAULT_LOCATOR_PATH, 'file', 'readable JSON locator V2', 'missing');
-  } else {
-    try {
-      const locator = JSON.parse(locatorRaw) as Record<string, unknown>;
-      if (locator.contract_version !== CANONICAL_BASELINE.locatorContractVersion) {
+  if (!skipLocator) {
+    if (locatorRaw === null) {
+      record(DEFAULT_LOCATOR_PATH, 'file', 'readable JSON locator V2', 'missing');
+    } else {
+      try {
+        const locator = JSON.parse(locatorRaw) as Record<string, unknown>;
+        if (locator.contract_version !== CANONICAL_BASELINE.locatorContractVersion) {
+          record(
+            DEFAULT_LOCATOR_PATH,
+            'contract_version',
+            String(CANONICAL_BASELINE.locatorContractVersion),
+            JSON.stringify(locator.contract_version),
+          );
+        }
+        if (locator.machine_block_id !== CANONICAL_BASELINE.machineBlockId) {
+          record(
+            DEFAULT_LOCATOR_PATH,
+            'machine_block_id',
+            CANONICAL_BASELINE.machineBlockId,
+            JSON.stringify(locator.machine_block_id),
+          );
+        }
+        if (locator.expected_binding_id !== CANONICAL_BASELINE.bindingId) {
+          record(
+            DEFAULT_LOCATOR_PATH,
+            'expected_binding_id',
+            CANONICAL_BASELINE.bindingId,
+            JSON.stringify(locator.expected_binding_id),
+          );
+        }
+        if (locator.expected_binding_version !== CANONICAL_BASELINE.bindingVersion) {
+          record(
+            DEFAULT_LOCATOR_PATH,
+            'expected_binding_version',
+            CANONICAL_BASELINE.bindingVersion,
+            JSON.stringify(locator.expected_binding_version),
+          );
+        }
+        if (locator.binding_path !== DEFAULT_BINDING_PATH) {
+          record(
+            DEFAULT_LOCATOR_PATH,
+            'binding_path',
+            DEFAULT_BINDING_PATH,
+            JSON.stringify(locator.binding_path),
+          );
+        }
+      } catch (error) {
         record(
           DEFAULT_LOCATOR_PATH,
-          'contract_version',
-          String(CANONICAL_BASELINE.locatorContractVersion),
-          JSON.stringify(locator.contract_version),
+          'json',
+          'parseable LocatorV2',
+          error instanceof Error ? error.message : 'invalid JSON',
         );
       }
-      if (locator.machine_block_id !== CANONICAL_BASELINE.machineBlockId) {
-        record(
-          DEFAULT_LOCATOR_PATH,
-          'machine_block_id',
-          CANONICAL_BASELINE.machineBlockId,
-          JSON.stringify(locator.machine_block_id),
-        );
-      }
-      if (locator.expected_binding_id !== CANONICAL_BASELINE.bindingId) {
-        record(
-          DEFAULT_LOCATOR_PATH,
-          'expected_binding_id',
-          CANONICAL_BASELINE.bindingId,
-          JSON.stringify(locator.expected_binding_id),
-        );
-      }
-      if (locator.expected_binding_version !== CANONICAL_BASELINE.bindingVersion) {
-        record(
-          DEFAULT_LOCATOR_PATH,
-          'expected_binding_version',
-          CANONICAL_BASELINE.bindingVersion,
-          JSON.stringify(locator.expected_binding_version),
-        );
-      }
-      if (locator.binding_path !== DEFAULT_BINDING_PATH) {
-        record(
-          DEFAULT_LOCATOR_PATH,
-          'binding_path',
-          DEFAULT_BINDING_PATH,
-          JSON.stringify(locator.binding_path),
-        );
-      }
-    } catch (error) {
-      record(
-        DEFAULT_LOCATOR_PATH,
-        'json',
-        'parseable LocatorV2',
-        error instanceof Error ? error.message : 'invalid JSON',
-      );
     }
   }
 
@@ -569,7 +572,7 @@ export function checkMachineBaseline(
     ok: drifts.length === 0,
     drifts,
     digest: {
-      locatorSha256: locatorRaw === null ? null : sha256OfString(locatorRaw),
+      locatorSha256: skipLocator || locatorRaw === null ? null : sha256OfString(locatorRaw),
       bindingSha256: bindingRaw === null ? null : sha256OfString(bindingRaw),
       packageSkillSha256: packageRaw === null ? null : sha256OfString(packageRaw),
       prodOverlaySha256: null,
@@ -580,7 +583,7 @@ export function checkMachineBaseline(
 
 export function assertMachineBaseline(
   repoRoot: string,
-  options: { readonly bindingPath?: string } = {},
+  options: { readonly bindingPath?: string; readonly skipLocator?: boolean } = {},
 ): BaselineCheckReport {
   const report = checkMachineBaseline(repoRoot, options);
   if (!report.ok) {

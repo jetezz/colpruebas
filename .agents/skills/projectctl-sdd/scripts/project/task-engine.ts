@@ -49,13 +49,25 @@ function within(root: string, file: string): string {
   return absolute;
 }
 function readLocator(root: string): { binding: Binding; path: string } {
-  const locator = JSON.parse(readFileSync(within(root, '.agents/sdd-workflow.json'), 'utf8')) as Entry;
-  if (locator.contract_version !== 2 || locator.machine_block_id !== 'task-flow-binding' || typeof locator.binding_path !== 'string') throw new Error('invalid workflow locator');
-  const path = locator.binding_path;
-  within(root, path);
-  const { binding } = parseBindingFile(root, path);
-  if (binding.binding_id !== locator.expected_binding_id || binding.binding_version !== locator.expected_binding_version) throw new Error('locator/binding identity mismatch');
-  return { binding: binding as unknown as Binding, path };
+  try {
+    const locator = JSON.parse(readFileSync(within(root, '.agents/sdd-workflow.json'), 'utf8')) as Entry;
+    if (locator.contract_version !== 2 || locator.machine_block_id !== 'task-flow-binding' || typeof locator.binding_path !== 'string') throw new Error('invalid workflow locator');
+    const path = locator.binding_path;
+    within(root, path);
+    const { binding } = parseBindingFile(root, path);
+    if (binding.binding_id !== locator.expected_binding_id || binding.binding_version !== locator.expected_binding_version) throw new Error('locator/binding identity mismatch');
+    return { binding: binding as unknown as Binding, path };
+  } catch (error) {
+    const message = (error as Error).message ?? String(error);
+    const code = (error as NodeJS.ErrnoException | undefined)?.code;
+    const isMissing = code === 'ENOENT' || message.includes('ENOENT') || message.includes('no such file');
+    const isBadJson = error instanceof SyntaxError || message.includes('is not valid JSON') || message.includes('Unexpected token');
+    if (message.includes('invalid workflow locator') || message.includes('locator/binding identity mismatch') || isMissing || isBadJson) {
+      if (message.includes(' — fix: cp .agents/skills/projectctl-sdd/assets/sdd-workflow.example.json .agents/sdd-workflow.json')) throw error;
+      throw new Error(`${message} — fix: cp .agents/skills/projectctl-sdd/assets/sdd-workflow.example.json .agents/sdd-workflow.json`);
+    }
+    throw error;
+  }
 }
 function target(binding: Binding, id: string, slug: string): string {
   if (!new RegExp(binding.task.id_pattern).test(id) || !new RegExp(binding.task.slug_pattern).test(slug)) throw new Error('invalid task id or slug');

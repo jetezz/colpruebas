@@ -135,7 +135,7 @@ describe('portable SDD task engine', () => {
   it('uses the current sdd-orchestrator binding for an existing task index', () => {
     const { root, engine, file } = setup();
     const raw = readFileSync(join(root, file), 'utf8');
-    expect(raw).toContain('binding_version: "14.0.0"');
+    expect(raw).toContain('binding_version: "15.0.0"');
     expect(engine.validate(file)).toEqual([]);
     expect(engine.inspect(file).transitions[0]?.to).toBe('p1_exploring');
   });
@@ -265,7 +265,7 @@ describe('portable SDD task engine', () => {
   it('preserves an old binding index as invalid instead of silently migrating its approvals', () => {
     const { root, engine, file } = setup();
     const path = join(root, file);
-    writeFileSync(path, readFileSync(path, 'utf8').replace('binding_version: "14.0.0"', 'binding_version: "13.0.0"'));
+    writeFileSync(path, readFileSync(path, 'utf8').replace('binding_version: "15.0.0"', 'binding_version: "13.0.0"'));
     expect(engine.validate(file)).toContain('binding identity mismatch');
     expect(() => engine.transition(file, 'p1_exploring')).toThrow('binding identity');
     expect(readFileSync(path, 'utf8')).toContain('binding_version: "13.0.0"');

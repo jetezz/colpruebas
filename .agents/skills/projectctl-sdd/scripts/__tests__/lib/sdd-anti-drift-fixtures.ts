@@ -589,7 +589,7 @@ export function codegenDriftDiagnostic(check: CodegenDriftCheck): string {
 // relax the existing v8 gold fixtures; WU-07 alone owns regenerated SHAs.
 export const RDD_V2_EXPECTED_IDENTITY = Object.freeze({
   contractKind: "TaskFlowBindingV2",
-  bindingVersion: "14.0.0",
+  bindingVersion: "15.0.0",
   modelVersion: 2,
   packageVersion: "18.0.0",
 });

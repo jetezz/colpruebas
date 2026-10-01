@@ -28,9 +28,9 @@ Planificar preparación machine de los bundles antes de crear tests/código que 
 
 `tasks.ts proposal check TASK --stage applied` verifica materialización contra la proposal aprobada. Una modificación de proposal tras aprobación invalida esa autoridad. Cambios adicionales de aceptación requieren regresar al circuito de propuesta; no registrar manualmente los tres evidence IDs calculados de `criteria_identity`.
 
-## Migración v13 → v14
+## Migración v14 → v15
 
-Actualizar conjuntamente core v26, satélite v24, binding v14, locator y pins de extensiones seleccionables; regenerar proyección. El binding_id permanece estable. Una instalación mixed falla antes de routing.
+Actualizar conjuntamente core v26, satélite v25, binding v15, locator y pins de extensiones seleccionables; regenerar proyección. El binding_id permanece estable. Una instalación mixed falla antes de routing.
 
 Los índices anteriores no se convierten automáticamente: inventariar AC locales, comprobar definición/owner y corregir referencias activas con los IDs canónicos. Preservar el índice y sus artifacts originales como historia; crear un índice vigente para el trabajo restante cuando la identidad/approval anterior no sea demostrable. Reconstruir proposal con baseline y delta, volver a obtener aprobación y regenerar spec/tasks links. No copiar approvals ni estados verdes antiguos por coincidencia numérica. Los artifacts antiguos no satisfacen los nuevos gates.
 

@@ -6,14 +6,13 @@ import { assertMachineBaseline, generatePhaseStateSchema, parseBindingFile, reso
 import { parseCriteriaChange } from '../project/criteria-change.ts';
 
 const RETIRED = ['ready_for_branch', 'branching', 'pushing', 'verified', 'completed', 'paused', 'phase1_generating', 'phase2_branching', 'phase3_implementing', 'phase4_pushing'];
-const INCLUDED = [
+const INCLUDED_PACKAGE = [
   '.agents/skills/projectctl-sdd/SKILL.md',
   '.agents/skills/projectctl-sdd/references/tasks/binding.md',
   '.agents/skills/projectctl-sdd/references/sources.md',
   '.agents/skills/projectctl-sdd/references/maintenance.md',
   '.agents/skills/projectctl-sdd/references/decisions.md',
   '.agents/skills/projectctl-sdd/generated/phase-state-schema.json',
-  '.agents/sdd-workflow.json',
 ];
 const EXCLUDED = [
   'taskReadme/<task_id>-<task_slug>.md#historical_other_than_active',
@@ -52,18 +51,25 @@ function checkSkillFrontmatter(repoRoot: string, failures: string[]): void {
   }
 }
 
-export function checkSdd(repoRoot: string = resolve(import.meta.dir, '../../../../..')): { ok: boolean; failures: string[] } {
+export type SddCheckMode = 'package' | 'installed';
+
+export function checkSdd(repoRoot: string = resolve(import.meta.dir, '../../../../..'), options: { mode?: SddCheckMode } = {}): { ok: boolean; failures: string[] } {
+  const mode: SddCheckMode = options.mode ?? 'installed';
   const failures: string[] = [];
   checkSkillFrontmatter(repoRoot, failures);
   try {
     const parsed = parseBindingFile(repoRoot);
     const { binding } = parsed;
-    assertMachineBaseline(repoRoot);
+    if (mode === 'installed') {
+      assertMachineBaseline(repoRoot);
+    } else {
+      assertMachineBaseline(repoRoot, { skipLocator: true });
+    }
     const projection = resolve(repoRoot, '.agents/skills/projectctl-sdd/generated/phase-state-schema.json');
     if (!existsSync(projection) || readFileSync(projection, 'utf8') !== generatePhaseStateSchema(parsed)) failures.push('base projection stale');
     for (const lane of Object.keys(binding.lanes as Record<string, unknown>)) resolveLaneSkillContext(repoRoot, binding, lane);
     if (binding.binding_id !== 'projectctl-requirements.task-flow') failures.push('binding_id must equal projectctl-requirements.task-flow');
-    if (binding.binding_version !== '14.0.0') failures.push(`binding_version must equal 14.0.0, got=${JSON.stringify(binding.binding_version)}`);
+    if (binding.binding_version !== '15.0.0') failures.push(`binding_version must equal 15.0.0, got=${JSON.stringify(binding.binding_version)}`);
     const retired = binding.retired_aliases;
     if (!Array.isArray(retired)) failures.push('binding retired_aliases must be an array');
     else for (const alias of RETIRED) if (!retired.includes(alias)) failures.push(`retired_aliases missing: ${alias}`);
@@ -74,8 +80,8 @@ export function checkSdd(repoRoot: string = resolve(import.meta.dir, '../../../.
     const exclude = binding.active_sources?.exclude;
     if (!Array.isArray(include)) failures.push('binding active_sources.include must be an array');
     else {
-      for (const rel of INCLUDED) if (!include.includes(rel)) failures.push(`active_sources.include missing: ${rel}`);
-      if (include.length !== INCLUDED.length) failures.push(`active_sources.include must have exactly ${INCLUDED.length} entries, got=${include.length}`);
+      for (const rel of INCLUDED_PACKAGE) if (!include.includes(rel)) failures.push(`active_sources.include missing: ${rel}`);
+      if (include.length !== INCLUDED_PACKAGE.length) failures.push(`active_sources.include must have exactly ${INCLUDED_PACKAGE.length} entries, got=${include.length}`);
     }
     if (!Array.isArray(exclude)) failures.push('binding active_sources.exclude must be an array');
     else for (const rel of EXCLUDED) if (!exclude.includes(rel)) failures.push(`active_sources.exclude missing: ${rel}`);
@@ -94,12 +100,40 @@ export function checkSdd(repoRoot: string = resolve(import.meta.dir, '../../../.
 }
 
 if (import.meta.main) {
-  if (process.argv.includes('--help') || process.argv.includes('-h')) {
-    console.log('Usage: bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts [--check]');
+  const argv = process.argv.slice(2);
+  if (argv.includes('--help') || argv.includes('-h')) {
+    console.log(
+      [
+        'Usage: bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts [--check|--check-installed|--check-package] [--mode package|installed]',
+        '',
+        'Modes (compat fail-closed):',
+        '  installed (default): validates package + binding + instance locator (.agents/sdd-workflow.json).',
+        '    --check (no modifier) = installed; --check-installed is the explicit alias.',
+        '  package: validates the portable copy-tree without the instance locator (skips locator).',
+        '    --check-package or --mode package.',
+      ].join('\n'),
+    );
     process.exit(0);
   }
-  const result = checkSdd();
-  for (const failure of result.failures) console.error(`[sdd-check] FAIL ${failure}`);
-  if (result.ok) console.log('[sdd-check] ok — binding + canonical criteria policy + active_sources + proposal/task templates');
+  let mode: SddCheckMode = 'installed';
+  if (argv.includes('--check-package')) mode = 'package';
+  else if (argv.includes('--check-installed')) mode = 'installed';
+  else {
+    const modeFlag = argv.find((entry) => entry === '--mode' || entry.startsWith('--mode='));
+    if (modeFlag) {
+      const eq = modeFlag.indexOf('=');
+      const value = eq >= 0
+        ? modeFlag.slice(eq + 1)
+        : argv[argv.indexOf(modeFlag) + 1];
+      if (value !== 'package' && value !== 'installed') {
+        console.error(`[sdd-check] FAIL invalid --mode ${JSON.stringify(value)} (expected package|installed)`);
+        process.exit(2);
+      }
+      mode = value;
+    }
+  }
+  const result = checkSdd(undefined, { mode });
+  for (const failure of result.failures) console.error(`[sdd-check:${mode}] FAIL ${failure}`);
+  if (result.ok) console.log(`[sdd-check:${mode}] ok — binding + canonical criteria policy + active_sources + proposal/task templates`);
   process.exit(result.ok ? 0 : 1);
 }

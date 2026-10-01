@@ -150,8 +150,8 @@ describe('WU-UT-CLI-01 — task_skill_selection v10 portable contract', () => {
     const binding = parsed.binding as Record<string, any>;
     const selection = binding.task_skill_selection;
 
-    expect(parsed.frontmatter.version).toBe('14.0.0');
-    expect(binding.binding_version).toBe('14.0.0');
+    expect(parsed.frontmatter.version).toBe('15.0.0');
+    expect(binding.binding_version).toBe('15.0.0');
     expect(selection).toMatchObject({
       optional: true,
       schema: 'task-skills/v1',

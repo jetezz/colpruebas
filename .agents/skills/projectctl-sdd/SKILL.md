@@ -3,7 +3,7 @@ name: projectctl-sdd
 description: Flujo SDD portable de projectctl: binding, lanes, protocolo, resolver y proyecciones base.
 metadata:
   id: projectctl-sdd
-  version: 24.0.0
+  version: 25.0.0
   layer: repo
   type: satellite
   sot_policy: satellite-extension
@@ -15,7 +15,7 @@ metadata:
 
 # projectctl-sdd
 
-Satélite instalable del flujo SDD de `/projectctl`. La autoridad única del workflow es el bloque `task-flow-binding` de [`references/tasks/binding.md`](references/tasks/binding.md), `TaskFlowBindingV2` v14.0.0 (model 2). El `binding_id` `projectctl-requirements.task-flow` permanece estable: cambiarlo requiere migración de locator, proyecciones y consumidores.
+Satélite instalable del flujo SDD de `/projectctl`. La autoridad única del workflow es el bloque `task-flow-binding` de [`references/tasks/binding.md`](references/tasks/binding.md), `TaskFlowBindingV2` v15.0.0 (model 2). El `binding_id` `projectctl-requirements.task-flow` permanece estable: cambiarlo requiere migración de locator, proyecciones y consumidores.
 
 Los criterios conservan el ID canónico del bundle App Map durante proposal → spec → tasks → apply → verify. No hay catálogo AC por tarea ni aliases. Cargar [`references/criteria-integration.md`](references/criteria-integration.md) para proposals, aprobación, altas/bajas y migración; el contrato de identidad pertenece al core.
 
@@ -27,6 +27,6 @@ Los criterios conservan el ID canónico del bundle App Map durante proposal → 
 - [`references/requirements-verification.md`](references/requirements-verification.md) explica los perfiles de requirements, preparación machine y receipts con vigencia selectiva; sus valores se resuelven exclusivamente del binding.
 - El locator del proyecto `.agents/sdd-workflow.json` apunta al binding de este satélite. Este binding posee la tab Tareas; `projectctl-requirements` conserva la cadena de criterios, docs, test, estructura y código. La tab CLI pertenece a la instancia destino (sin skill portable) y RDD/Judgment Day a sus propios satélites.
 
-Instalación: copiar el árbol completo a `.agents/skills/projectctl-sdd/` junto con el core para la compatibilidad `/projectctl`; configurar el locator del destino con la ruta nueva y el id legacy. Verificar con `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check`.
+Instalación: copiar el árbol completo a `.agents/skills/projectctl-sdd/` junto con el core para la compatibilidad `/projectctl` (`copy-tree-no-mods`); inicializar el locator del destino con `cp .agents/skills/projectctl-sdd/assets/sdd-workflow.example.json .agents/sdd-workflow.json` (ejemplo fijado a `expected_binding_version` 15.0.0; al subir de binding, re-sincronizar ejemplo y proyección según `references/maintenance.md`). Verificación portable (árbol sin locator) con `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check-package`; verificación de instancia (con locator) con `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check` (= `--check-installed`).
 
 Operaciones del índice de tarea: [`scripts/project/tasks.ts`](scripts/project/tasks.ts) y su [guía](references/task-engine.md). El motor y sus pruebas residen dentro del satélite; resuelve el binding desde el locator de la instancia destino. `sdd-orchestrator` es el único operador/escritor del índice y utiliza el motor para toda operación que este soporta; los phase artifacts siguen siendo propiedad de sus lanes.

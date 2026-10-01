@@ -4,13 +4,13 @@ parent_skill: projectctl-sdd
 owner: sdd-orchestrator + SDD lanes
 purpose: base binding operational contract for task creation, core phases, evidence and delivery; optional mechanisms declared as extensions
 sot_policy: canonical-standard
-version: 14.0.0
+version: 15.0.0
 last_full_regen: 2026-09-30
 binding_id: projectctl-requirements.task-flow
 model_version: 2
 ---
 
-# Task flow binding — `projectctl-sdd` v14.0.0 (binding ID heredado)
+# Task flow binding — `projectctl-sdd` v15.0.0 (binding ID heredado)
 
 ## Purpose
 
@@ -65,12 +65,13 @@ A reader (human or agent) navigating this file MUST follow three rules:
 | Property | Value |
 |---|---|
 | `binding_id` | `projectctl-requirements.task-flow` |
-| `binding_version` | `14.0.0` |
+| `binding_version` | `15.0.0` |
 | `model_version` | `2` |
 | Marker opening | `<!-- task-flow-binding:start -->` |
 | Marker closing | `<!-- task-flow-binding:end -->` |
 | Path (repo-relative) | `.agents/skills/projectctl-sdd/references/tasks/binding.md` |
 | Locator | `.agents/sdd-workflow.json` |
+| Locator scope | runtime de instancia, no auditado en `active_sources` |
 | Generated state projection | `.agents/skills/projectctl-sdd/generated/phase-state-schema.json` |
 | Skill version policy | bump MAJOR on contract change per `references/maintenance.md` R-006 |
 | Active-source allow-list | declared in JSON `active_sources.include` |
@@ -124,7 +125,7 @@ The remainder of this file is the delimited binding block. Do not add prose comm
 {
   "contract_kind": "TaskFlowBindingV2",
   "binding_id": "projectctl-requirements.task-flow",
-  "binding_version": "14.0.0",
+  "binding_version": "15.0.0",
   "model_version": 2,
   "bootstrap_locator": {
     "accessor": "workflow_binding_locator/v1",
@@ -989,8 +990,7 @@ The remainder of this file is the delimited binding block. Do not add prose comm
       ".agents/skills/projectctl-sdd/references/sources.md",
       ".agents/skills/projectctl-sdd/references/maintenance.md",
       ".agents/skills/projectctl-sdd/references/decisions.md",
-      ".agents/skills/projectctl-sdd/generated/phase-state-schema.json",
-      ".agents/sdd-workflow.json"
+      ".agents/skills/projectctl-sdd/generated/phase-state-schema.json"
     ],
     "exclude": [
       "taskReadme/<task_id>-<task_slug>.md#historical_other_than_active",
