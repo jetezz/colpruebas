@@ -14,9 +14,7 @@
     "sdd-apply-doc": {},
     "sdd-verify-code": {},
     "sdd-explore-code": {},
-    "sdd-orchestrator": {
-      "model": "minimax/MiniMax-M3"
-    },
+    "sdd-orchestrator": {},
     "sdd-verify-pwcli": {},
     "sdd-verify-units": {},
     "sdd-explore-pwcli": {},
