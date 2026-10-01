@@ -1,0 +1,14 @@
+{
+  "schema": "task-flow-extension/v1",
+  "id": "judgment-day",
+  "selector": "review_mode",
+  "selected": "judgment-day",
+  "base_binding_id": "projectctl-requirements.task-flow",
+  "base_binding_version": "14.0.0",
+  "target": {"required": ["identity", "revision", "kind", "scope", "criteria", "evidence_refs", "snapshot"], "kinds": ["code", "research", "implementation", "proposal", "documentation", "other"], "phase": "any", "immutable": true},
+  "judges": {"minimum": 2, "independent": true, "same_target_and_scope": true, "explicit_evidence": true, "max_rounds": 3},
+  "lane": {"skill": "judgment-day", "role": "verification", "artifact_class": "adversarial_review", "owner_phase": null},
+  "module_paths": {"judgment-day": "modules/judgment-day/module.md"},
+  "operations": [{"op": "register_review_mechanism", "target_ref": "/target", "judges_ref": "/judges", "lane_ref": "/lane"}],
+  "failure": "mode_config_invalid"
+}

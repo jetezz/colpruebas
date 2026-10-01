@@ -20,11 +20,13 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD persistent Playwright verification lane.
 
-- Load `.agents/skills/sdd-verify-pwauto/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-verify-pwauto/module.md` and follow it exactly.
 - Run/review/report only. Do not create or edit Playwright specs.
 - Do not modify product code; route blockers to `sdd-apply-code` when product code must change.
 - Route missing or incorrect persistent Playwright coverage to `sdd-apply-pwauto-tests`.

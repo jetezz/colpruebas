@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "projectctl-coverage-ledger/v1",
+  "title": "Projectctl coverage ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source_revision", "criteria_revision", "entries"],
+  "properties": {
+    "schema": { "const": "projectctl-coverage-ledger/v1" },
+    "source_revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "criteria_revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "criterion_id",
+        "method",
+        "status",
+        "revision",
+        "target",
+        "actor",
+        "recorded_at",
+        "evidence_ref",
+        "result"
+      ],
+      "properties": {
+        "criterion_id": { "type": "string", "minLength": 1 },
+        "method": {
+          "enum": ["Unit", "PW-AUTO", "PW-CLI", "Manual", "docs-check"]
+        },
+        "status": {
+          "enum": ["recorded", "incomplete", "overridden", "rejected"]
+        },
+        "revision": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "actor": { "type": "string", "minLength": 1 },
+        "recorded_at": { "type": "string", "minLength": 1 },
+        "evidence_ref": { "type": "string", "minLength": 1 },
+        "result": {
+          "enum": ["pass", "fail", "incomplete", "not-run"]
+        },
+        "approval": { "$ref": "#/$defs/approval" },
+        "override": { "$ref": "#/$defs/override" },
+        "source_run": { "type": "string", "minLength": 1 }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "actor", "recorded_at", "approved_revision"],
+      "properties": {
+        "kind": { "enum": ["proposal", "severe", "pre-merge"] },
+        "actor": { "type": "string", "minLength": 1 },
+        "recorded_at": { "type": "string", "minLength": 1 },
+        "approved_revision": { "type": "string", "minLength": 1 }
+      }
+    },
+    "override": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "risk", "scope", "actor", "timestamp", "approval"],
+      "properties": {
+        "reason": { "type": "string", "minLength": 1 },
+        "risk": { "type": "string", "minLength": 1 },
+        "scope": { "type": "string", "minLength": 1 },
+        "actor": { "type": "string", "minLength": 1 },
+        "timestamp": { "type": "string", "minLength": 1 },
+        "target_revision": { "type": "string", "minLength": 1 },
+        "expires_at": { "type": "string", "minLength": 1 },
+        "approval": { "$ref": "#/$defs/approval" }
+      }
+    }
+  }
+}

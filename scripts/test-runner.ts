@@ -12,7 +12,7 @@
 // duplicating them (AD-06). Header discovery / summary.json shape mirror the
 // existing implementations and run-dirs (46 legacy runs preserved — REQ-TST-005).
 
-import { dirname, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { tmpdir } from 'node:os';
@@ -163,12 +163,12 @@ function walk(dir: string, cb: (file: string) => void, depth = 0): void {
 
 function discoverUnitFiles(): string[] {
   // Mirrors buildInventory's unit roots (backend/src/test-inventory.ts):
-  // `tests/back`, `backend/src` and `frontend/__tests__` (design §8 — AD-06, same
-  // discovery as the gate/backend so no test is silently unreachable).
+  // the canonical `tests/unit` tree is authoritative (HOME-3 / TST-36 — the
+  // same discovery as the gate/backend so no test is silently unreachable).
+  // Legacy roots (`tests/back`, `backend/src`, `frontend/__tests__`) are NOT
+  // scanned.
   const roots = [
-    join(repoRoot, 'tests', 'back'),
-    join(repoRoot, 'backend', 'src'),
-    join(repoRoot, 'frontend', '__tests__'),
+    join(repoRoot, 'tests', 'unit'),
   ];
   const files: string[] = [];
   const seen = new Set<string>();
@@ -184,7 +184,9 @@ function discoverUnitFiles(): string[] {
 }
 
 function discoverPwautoSpecs(): string[] {
-  const root = join(repoRoot, 'tests', 'front', 'tests');
+  // Canonical PW-AUTO discovery root (HOME-3 / TST-36): `tests/e2e` is the
+  // only spec tree. The legacy `tests/front/tests` root is NOT scanned.
+  const root = join(repoRoot, 'tests', 'e2e');
   const files: string[] = [];
   const seen = new Set<string>();
   walk(root, (p) => {
@@ -258,19 +260,22 @@ function parseJunitTotals(xml: string): { tests: number; failures: number; skipp
   return { tests: attr('tests'), failures: attr('failures'), skipped: attr('skipped') };
 }
 
-// Per-file stats from bun's JUnit XML: the file-level <testsuite> carries the
-// relative path as `name` and the totals as attributes.
+// Per-file stats from Playwright/Bun JUnit XML: the file-level <testsuite>
+// carries `name` as the relative file (Bun) or the basename (Playwright).
 function fileJunitStats(
   xml: string,
   relFile: string,
 ): { tests: number; failures: number; skipped: number } | null {
-  const re = new RegExp(
-    `<testsuite\\b[^>]*name=["']${escapeRegExp(relFile)}["'][^>]*tests=["'](\\d+)["'][^>]*failures=["'](\\d+)["'][^>]*skipped=["'](\\d+)["']`,
-    'i',
-  );
-  const m = re.exec(xml);
-  if (!m) return null;
-  return { tests: Number(m[1]), failures: Number(m[2]), skipped: Number(m[3]) };
+  const names = [relFile, basename(relFile)];
+  for (const n of names) {
+    const re = new RegExp(
+      `<testsuite\\b[^>]*name=["']${escapeRegExp(n)}["'][^>]*tests=["'](\\d+)["'][^>]*failures=["'](\\d+)["'][^>]*skipped=["'](\\d+)["']`,
+      'i',
+    );
+    const m = re.exec(xml);
+    if (m) return { tests: Number(m[1]), failures: Number(m[2]), skipped: Number(m[3]) };
+  }
+  return null;
 }
 
 // Derive criterion coverage from the REAL junit output (W1): no test executed for
@@ -350,7 +355,7 @@ function resolvePwautoProject(view: string, feature: string | null): string | nu
   }
 }
 
-function runPwautoExecution(view: string, feature: string | null, junitOut: string): ExecOutcome {
+function runPwautoExecution(view: string, feature: string | null): ExecOutcome {
   const project = resolvePwautoProject(view, feature);
   if (!project) {
     return {
@@ -363,17 +368,24 @@ function runPwautoExecution(view: string, feature: string | null, junitOut: stri
       perCriterion: new Map(),
     };
   }
+  // Single canonical config (HOME-3 / TST-36): `frontend/playwright.config.ts`
+  // with `testDir` = `tests/e2e` (the root `playwright.config.ts` is only a
+  // symlink to it). The explicit `--config` keeps discovery deterministic no
+  // matter how the symlink resolves.
   const args = [
     'playwright',
     'test',
+    '--config=frontend/playwright.config.ts',
     `--project=${project}`,
-    '--reporter=junit',
-    `--reporter-outfile=${junitOut}`,
   ];
   const res = spawnSync('bunx', args, { cwd: repoRoot, encoding: 'utf8' });
+  // The canonical frontend/playwright.config.ts writes the JUnit report to
+  // frontend/playwright/test-results/.last-run.junit.xml (relative to the
+  // config file); read that file for real per-file/criterion results.
+  const junitPath = join(repoRoot, 'frontend', 'playwright', 'test-results', '.last-run.junit.xml');
   let xml = '';
   try {
-    xml = readFileSync(junitOut, 'utf8');
+    xml = readFileSync(junitPath, 'utf8');
   } catch {
     xml = '';
   }
@@ -384,7 +396,7 @@ function runPwautoExecution(view: string, feature: string | null, junitOut: stri
     failed: t.failures,
     skipped: t.skipped,
     exitCode: res.status ?? (res.error ? 1 : 0),
-    junitPath: junitOut,
+    junitPath,
     perCriterion: new Map(),
   };
 }
@@ -490,7 +502,8 @@ async function writeRunArtifacts(opts: {
 
 async function runCommand(args: string[]): Promise<number> {
   let method: 'unit' | 'pwauto' | 'all' = 'unit';
-  let targetSpec = 'projectctl';
+  // Home-only repo (HOME-3): the default target is `home`, not `projectctl`.
+  let targetSpec = 'home';
   let persist = false;
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
@@ -627,11 +640,13 @@ async function runCommand(args: string[]): Promise<number> {
   }
 
   if (wantsPwauto && scopedPwauto.size > 0) {
-    const junitOut = join(execTmpDir, `pwauto-${target.view}-${Date.now()}.junit.xml`);
-    const outcome = runPwautoExecution(target.view, target.feature, junitOut);
+    const outcome = runPwautoExecution(target.view, target.feature);
+    const pwautoXmlPath = outcome.junitPath && existsSync(outcome.junitPath)
+      ? outcome.junitPath
+      : '';
     const coverage = deriveCriterionCoverage(
       scopedPwauto,
-      existsSync(junitOut) ? readFileSync(junitOut, 'utf8') : '',
+      pwautoXmlPath ? readFileSync(pwautoXmlPath, 'utf8') : '',
     );
     mergeCoverage(coverage);
     anyMethodFailed = anyMethodFailed || (outcome.ran && (outcome.failed > 0 || (outcome.exitCode ?? 0) > 0));
@@ -759,6 +774,9 @@ function walkNavBundles(
   while ((m = bundleRelRe.exec(navRaw))) {
     const rel = (m[1] ?? '').trim();
     if (!rel) continue;
+    // Home-only gate (HOME-3 / TST-13): only bundles under `views/home/` are
+    // evaluated. No global coverage/test-system logic lives here.
+    if (rel !== 'views/home/index' && !rel.startsWith('views/home/')) continue;
     const abs = join(repoRoot, 'docs', 'app-map', `${rel}.md`);
     if (seen.has(abs)) continue;
     seen.add(abs);

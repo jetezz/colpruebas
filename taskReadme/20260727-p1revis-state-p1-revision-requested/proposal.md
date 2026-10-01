@@ -1,3 +1,8 @@
+---
+task_id: "20260727-p1revis"
+task_slug: "state-p1-revision-requested"
+phase: "fase_1_propuesta"
+---
 # Proposal: Fixture state-test `p1_revision_requested`
 
 ## Fixture intent

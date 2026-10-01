@@ -1,6 +1,6 @@
 FROM oven/bun:1-alpine
 
-WORKDIR /app
+WORKDIR /app/backend
 
 COPY backend/package.json ./package.json
 COPY backend/bun.lock ./bun.lock
@@ -9,6 +9,7 @@ RUN bun install --frozen-lockfile
 COPY backend/src ./src
 COPY docs ./docs
 COPY tests ./tests
+COPY shared /app/shared
 
 EXPOSE 3000
 

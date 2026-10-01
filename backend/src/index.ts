@@ -16,12 +16,13 @@ import {
   type AppMapCoverageState,
 } from './coverage-writer.ts';
 import { buildInventory } from './test-inventory.ts';
+import type { AppStatus, RuntimeEnvironment } from '../../shared/contracts/runtime.ts';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const APP_NAME = process.env.APP_NAME || 'colpruebas';
-const ENVIRONMENT = process.env.ENVIRONMENT || 'production';
+const ENVIRONMENT = (process.env.ENVIRONMENT || 'production') as RuntimeEnvironment;
 
 const here = dirname(fileURLToPath(import.meta.url));
 const envRoot = process.env.PROJECTS_ROOT;
@@ -58,29 +59,38 @@ app.get('/', (req, res) => {
       ? 'API de test funcionando'
       : 'API de prod funcionando';
 
-  res.json({
+  const payload: AppStatus = {
     app: APP_NAME,
-    message,
     environment: ENVIRONMENT,
+    message,
     version: '1.0.0',
     timestamp: new Date().toISOString(),
-  });
+  };
+
+  res.json(payload);
 });
 
 app.get('/health', (req, res) => {
-  res.json({
+  const payload: Pick<AppStatus, 'environment' | 'status' | 'timestamp'> = {
     status: 'ok',
     environment: ENVIRONMENT,
     timestamp: new Date().toISOString(),
-  });
+  };
+
+  res.json(payload);
 });
 
+// @criterion HSS-03
+// @trace ac=HSS-03 req=REQ-CODETRACE-002 domain=home resource=status operation=read block=status-handler
+// @contract auth=none ownership=none side-effects=none
 app.get('/api/status', (req, res) => {
-  res.json({
+  const payload: AppStatus = {
     app: APP_NAME,
     environment: ENVIRONMENT,
     timestamp: new Date().toISOString(),
-  });
+  };
+
+  res.json(payload);
 });
 
 app.get('/api/projects/:id/docs/app-map', (req, res) => {

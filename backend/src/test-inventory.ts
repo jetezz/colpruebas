@@ -133,13 +133,14 @@ function extractPwautoAcFromFile(filePath: string): string[] {
 export function buildInventory(projectsRoot: string): Inventory {
   const criteria: Record<string, CriterionInventory> = {};
 
+  // Canonical home-only layout (HOME-3 / TST-36): `tests/unit` and `tests/e2e`
+  // are authoritative. Legacy roots (`tests/back`, `backend/src`,
+  // `frontend/__tests__`, `tests/front/tests`) are NOT scanned.
   const unitRoots: string[] = [
-    join(projectsRoot, 'tests', 'back'),
-    join(projectsRoot, 'backend', 'src'),
-    join(projectsRoot, 'frontend', '__tests__'),
+    join(projectsRoot, 'tests', 'unit'),
   ];
   const pwautoRoots: string[] = [
-    join(projectsRoot, 'tests', 'front', 'tests'),
+    join(projectsRoot, 'tests', 'e2e'),
   ];
 
   const unitFiles = new Set<string>();

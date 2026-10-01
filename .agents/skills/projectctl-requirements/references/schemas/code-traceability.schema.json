@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "projectctl-code-traceability/v1",
+  "title": "Projectctl code traceability manifest",
+  "description": "Locator shape for code-traceability/v1. Declares roots, excludes and lifecycle only; it never creates criteria, titles or coverage (identity authority stays in the App Map union + criteria.yaml).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "readOnly", "marker", "roots", "excludes", "lifecycle", "policyMode"],
+  "properties": {
+    "schemaVersion": { "const": "code-traceability/v1" },
+    "readOnly": { "const": true },
+    "marker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["comments", "criterion", "trace", "ac", "contract"],
+      "properties": {
+        "comments": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "type": "string" },
+          "prefixItems": [{ "const": "//" }, { "const": "--" }, { "const": "<!--" }]
+        },
+        "criterion": { "const": "@criterion" },
+        "trace": { "const": "@trace" },
+        "ac": { "const": "@ac" },
+        "contract": { "const": "@contract" }
+      }
+    },
+    "roots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["front", "back", "tests"],
+      "properties": {
+        "front": { "$ref": "#/$defs/rootList" },
+        "back": { "$ref": "#/$defs/rootList" },
+        "tests": { "$ref": "#/$defs/rootList" }
+      }
+    },
+    "excludes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exclude" }
+    },
+    "lifecycle": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["active", "planned", "partial", "deprecated", "retired"] }
+    },
+    "policyMode": { "const": "warn" },
+    "targets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/target" }
+    }
+  },
+  "$defs": {
+    "relativePosix": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![/\\\\])(?!.*\\.\\.).*$"
+    },
+    "rootList": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/relativePosix" }
+    },
+    "exclude": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "role", "owner", "reason"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePosix" },
+        "role": { "enum": ["generated", "fixture", "config", "entrypoint", "wiring", "adapter"] },
+        "owner": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "replacement": { "type": "string", "minLength": 1 },
+        "revision": { "type": "string", "minLength": 1 }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion_id", "surface", "path", "owner", "lifecycle"],
+      "properties": {
+        "criterion_id": { "type": "string", "minLength": 1 },
+        "surface": { "enum": ["front", "back", "test"] },
+        "path": { "$ref": "#/$defs/relativePosix" },
+        "symbol": { "type": "string", "minLength": 1 },
+        "block": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "lifecycle": { "enum": ["active", "planned", "partial", "deprecated", "retired"] },
+        "introduced_in": { "type": "string", "minLength": 1 },
+        "deprecated_in": { "type": "string", "minLength": 1 },
+        "remove_after": { "type": "string", "minLength": 1 },
+        "replacement": { "type": "string", "minLength": 1 },
+        "multi_surface": { "const": "allowed" },
+        "multi_surface_reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

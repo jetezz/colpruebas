@@ -1,0 +1,128 @@
+---
+title: "Ejemplo control — final_push_pending"
+task_id: "20261001-sdd1425"
+task_slug: "ex-final-push-pending"
+sdd_change_id: ""
+binding_id: "projectctl-requirements.task-flow"
+binding_version: "14.0.0"
+binding_path: ".agents/skills/projectctl-sdd/references/tasks/binding.md"
+sdd_persistence: "taskReadme index + phase artifacts"
+phase_artifacts_dir: "taskReadme/20261001-sdd1425-ex-final-push-pending/"
+status: documenting
+phase: fase_4_documentacion
+state: final_push_pending
+priority: medium
+type: feature
+area: fullstack
+created: 2026-10-01T00:00:00Z
+updated: 2026-10-01T00:00:00Z
+source_branch: develop
+target_branch: develop
+branch_name: "feature/20261001-sdd1425-ex-final-push-pending"
+pr_url: ""
+browser_validation: required
+docker_validation: required
+docs_impact: pending
+blocked_reason: ""
+---
+
+# Task: Ejemplo control — final_push_pending
+
+> **Origen de los valores**: este ejemplo es un **asset derivado del binding `projectctl-requirements.task-flow` v14.0.0**. Todo valor escribible se valida contra el binding canónico `TaskFlowBindingV2` (model `2`).
+>
+> **Modelo de persistencia v11.** Este archivo es el índice compacto de coordinación y el detalle completo vive en los phase artifacts referenciados. Ambos son la fuente canónica y suficiente de persistencia y recuperación. El binding configura `mirrors: []`; herramientas opcionales de soporte no son evidencia ni fuente de verdad SDD.
+>
+> **Nota didáctica**: ejemplo canónico del control `final_push_pending` (copia literal de `binding.controls[].value`: `phase: fase_4_documentacion`, `state: final_push_pending`, `status: documenting`). `kind: "action"`, `writes_state: true`, `owner: "sdd-orchestrator"`. No es un state de fase: es un control de delivery.
+
+## 1. Objetivo
+
+Mostrar la forma canónica de un taskReadme en el control `final_push_pending` según plantilla v14.
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["1_objetivo"]`).
+
+## 2. Contexto operativo
+
+- **Origen del pedido**: ejemplo didáctico (cobertura total del binding v14).
+- **Motivación**: referencia auditable del control de push final, con gates `pending_environment_close_block` y `requirements_current_close_block`.
+- **Restricciones** (el detalle va a los phase artifacts):
+  - Persistencia única: índice + phase artifacts; `mirrors: []`.
+  - Cierre solo en forma terminal única `{ phase: null, state: "done", status: "done" }`.
+  - `phase`/`state` se resuelven desde `binding.phases[]` y `binding.controls[]`; los `retired_aliases` **no** son escribibles.
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["2_contexto_operativo"]`).
+
+## 3. Criterios de aceptación
+
+Solo IDs canónicos + veredicto + método. Este ejemplo no aporta cobertura (los ejemplos no son evidencia).
+
+| Criterion-ID | Veredicto | Método |
+| --- | --- | --- |
+| `— (ejemplo didáctico, sin cobertura)` | `not_applicable` | `not_required` |
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["3_criterios_de_aceptacion"]`).
+
+## 4. Fases
+
+| Fase | Estado | Resumen (≤10 líneas) | Artefacto |
+| --- | --- | --- | --- |
+| Documentación | `final_push_pending` | Ejemplo canónico del control de push final (propiedad de `sdd-orchestrator`). | `taskReadme/20261001-sdd1425-ex-final-push-pending/verify-code.md` |
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["4_fases"]`).
+
+## 5. Work units
+
+Sin work units (ejemplo didáctico, no una tarea ejecutable).
+
+| WU-id | Lane | apply_lane | Estado | Artefacto de evidencia |
+| --- | --- | --- | --- | --- |
+| `—` | `—` | `—` | `—` | `—` |
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["5_work_units"]`).
+
+## 6. Verificación
+
+- **Estado consolidado**: `not_required` (ejemplo didáctico)
+- **Lanes requeridos / ejecutados**: `ninguno`
+- **Cobertura contra specs**: `n/a`
+- **Refs**: `—`
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["6_verificacion"]`).
+
+## 7. Estado actual / Siguiente paso / Handoff
+
+- **Estado actual**: `documenting`
+- **Fase / State**: `fase_4_documentacion` / `final_push_pending`
+- **Siguiente paso**: push final por `sdd-orchestrator` (transición didáctica hacia `final_pr_pending`, guard `push_recorded`).
+- **Handoff para resume**: ejemplo estático; sin resume operativo.
+- **Resume checkpoint**: `null`.
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["7_estado_actual_siguiente_paso_handoff"]`).
+
+## 8. Problemas / Blockers
+
+Sin blockers (ejemplo didáctico).
+
+| Severidad | Problema | Resolución / siguiente paso |
+| --- | --- | --- |
+| `—` | `—` | `—` |
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["8_problemas_blockers"]`).
+
+## 9. Git y PR
+
+- **Rama actual**: `feature/20261001-sdd1425-ex-final-push-pending` (per `binding.delivery.branch_pattern`; no creada — ejemplo didáctico)
+- **PR URL**: `` (vacío)
+- **Base target**: `develop` (per `binding.delivery.target_branch`)
+- **Estado de PR**: `not_created`
+
+### Checklist de cierre (gate antes de pasar a `done`)
+
+- [ ] Todas las unidades `apply_lane: code-*` en `done` o `blocked` (tabla §5)
+- [ ] Las lanes de verificación requeridas en `passed` o `not_required` (mapping en `apply-work-unit-schema.md`)
+- [ ] Branch + PR registrados arriba
+- [ ] Documentación actualizada registrada en el phase artifact `apply-<unit>` de doc y reflejada en §4/§5
+- [ ] Gate `AC-009.app_map_close` verificado si hay criterios `modificar`/`eliminar`/`añadir` en §3 (ver `acceptance-criteria-gates.md`)
+- [ ] Receipts técnicos y documentales vigentes para todos los targets; pending_environment resuelto (per `binding.gates["documentation_gate_passed"]`).
+- [ ] Forma terminal única: `status: done`, `phase: null`, `state: "done"` (per `binding.controls["done"].value`)
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["9_git_y_pr"]`).

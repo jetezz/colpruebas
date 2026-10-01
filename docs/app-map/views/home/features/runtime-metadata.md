@@ -8,62 +8,68 @@ summary: >-
 source_of_truth: app-map
 criteria:
   - id: HRM-01
+    type: ui
     title: >-
-      La referencia visible de la rama git coincide con el branch resuelto en
-      tiempo de render del servidor (no se muestra un placeholder generico si el
-      dato esta disponible).
+      La tarjeta muestra una referencia visible de la rama git para
+      contextualizar la ejecucion observada.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/Footer.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
       PW-AUTO: covered
       Manual: missing
     notes: >-
-      Renderizado por InfoCard.astro (`Rama Git:` + `gitBranch`). El dato puede
-      ser estatico en este proyecto de ejemplo (placeholder `MAIN`) pero el
-      label y la presencia son contractuales. Anota `@ac HRM-01` en
-      tests/front/tests/index.spec.ts.
+      Renderizado por InfoCard.astro (`Rama Git:` + `gitBranch`). En este
+      proyecto de ejemplo el valor es constante (`MAIN`); el contrato
+      documentado es la presencia de la referencia, no la resolucion dinamica
+      del branch. Cubierto por tests/e2e/home/index.spec.ts con `@ac HRM-01`.
   - id: HRM-02
+    type: ui
     title: >-
       El timestamp visible en el pie de la landing esta en formato ISO 8601 y
       refleja el momento del render SSR, no del cliente.
     functional: implemented
+    evidence_paths:
+      - frontend/src/components/Footer.astro
+      - tests/e2e/home/index.spec.ts
     coverage:
       Unit: covered
       PW-CLI: missing
       PW-AUTO: covered
       Manual: missing
     notes: >-
-      Footer.astro consume `new Date().toISOString()` en el servidor. Garantia
-      de formato enforced por serializacion automatica de Date.
+      Footer.astro consume `new Date().toISOString()` en el servidor. El spec
+      persistente verifica el formato ISO 8601 con `@ac HRM-02`.
 ---
 
-# Metadatos de ejecución
+## 1. URL
 
-## Qué cubre
+/
 
-- Referencia visible de rama git en la tarjeta principal.
-- Timestamp visible en el pie de la pagina.
-- Contexto minimo para interpretar el momento de la validacion manual.
+## 2. Tab
 
-## Valor para el usuario
+Landing principal (`/`).
+
+## 3. Objetivo
 
 Ayuda a distinguir rapidamente el contexto operativo sin tener que inspeccionar configuracion interna ni salir de la landing.
 
-## Trazabilidad
+## 4. Criterios de calidad
 
 | ID | Nivel | Cubre |
 |---|---|---|
-| HRM-01 | esperado | Rama git visible en la tarjeta principal |
+| HRM-01 | esperado | Referencia de rama git visible en la tarjeta principal |
 | HRM-02 | deseado | Timestamp ISO 8601 visible en el pie |
 
-## Estados principales
+## 5. Diagrama Mermaid
 
-- rama visible
-- timestamp visible
-- referencia operativa lista para consulta rápida
+El sibling `runtime-metadata.mmd` representa la referencia de rama y el timestamp visibles.
 
-## Notas del diagrama
+## 6. Sources
 
-- La rama actual es un dato de referencia visible y no implica sincronización dinámica con Git real.
-- El timestamp aporta contexto temporal de render y no reemplaza monitoreo del sistema.
+- Implementación: `frontend/src/pages/index.astro` y `frontend/src/components/Footer.astro`
+- Cobertura: `tests/e2e/home/index.spec.ts`
+- Navegación: `docs/app-map/navigation.yaml`

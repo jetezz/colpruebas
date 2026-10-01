@@ -20,11 +20,13 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD explore-pwcli executor.
 
-- Load `.agents/skills/sdd-explore-pwcli/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-explore-pwcli/module.md` and follow it exactly.
 - Resolve browser runtime context before any browser action when the lane needs a runnable target.
 - Use `playwright-cli` for exploratory inspection only, not final verification closure.
 - Do not modify code, config, docs, or tests.

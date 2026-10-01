@@ -26,8 +26,8 @@ Para ser publicable, el frontend se une a la red externa `mis-proyectos-edge`
 
 | Entorno | Overlay | Alias edge |
 | --- | --- | --- |
-| **prod** | `compose.yml` | `colpruebas-origin` |
-| **dev** | `compose.dev.yml` | `test-colpruebas-origin` |
+| **prod** | `compose/compose.prod.yml` | `colpruebas-origin` |
+| **dev** | `compose/compose.dev.yml` | `test-colpruebas-origin` |
 
 - El alias prod (`<app>-origin`) es el `service` real que Cloudflare resuelve.
 - El alias dev (`test-<app>-origin`) se usa para el entorno de test.
@@ -50,8 +50,8 @@ Estado clave: **`TUNNEL_NOT_PUBLISHABLE`**.
 
 ### Acciones concretas (remediation)
 
-1. **Verificar los overlays canónicos**: comprobar que `compose.yml` (prod) declara el alias
-   `colpruebas-origin` y `compose.dev.yml` (dev) declara `test-colpruebas-origin` en
+1. **Verificar los overlays canónicos**: comprobar que `compose/compose.prod.yml` (prod) declara el alias
+   `colpruebas-origin` y `compose/compose.dev.yml` (dev) declara `test-colpruebas-origin` en
    `services.frontend.networks.edge.aliases`. Corregir el alias si falta o está mal.
 2. **Verificar la red `mis-proyectos-edge`**: debe existir como red externa
    (`external: true`, key `edge`, `name: mis-proyectos-edge`). Si no existe, crearla/recrearla
@@ -66,5 +66,6 @@ Estado clave: **`TUNNEL_NOT_PUBLISHABLE`**.
    `projectctl rebuild dev` (o `prod`) y reintentar `projectctl tunnel status`.
 
 La política normativa y los IDs PCT asociados (PCT-98, PCT-38/PCT-42..PCT-45) viven en
-`.agents/skills/projectctl-requirements/references/entorno.md` y el bundle
-`docs/app-map/views/projectctl/index.md`.
+`.agents/skills/projectctl-requirements/references/entorno.md`. Este checkout es home-only:
+no contiene un bundle local `projectctl`; la aplicación del contrato al runtime se describe en
+`docs/00-context/entornos.md`.

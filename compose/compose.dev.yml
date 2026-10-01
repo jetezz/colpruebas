@@ -1,0 +1,42 @@
+services:
+  frontend-dev:
+    build:
+      context: ..
+      dockerfile: frontend/Dockerfile.dev
+      target: dev
+    env_file:
+      - path: ../.env.dev
+        required: false
+    ports:
+      - "${FRONTEND_DEV_PORT}:4321"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - PUBLIC_ENVIRONMENT=${ENVIRONMENT}
+      - API_URL=http://api-dev:3000
+    depends_on:
+      - api-dev
+    networks:
+      internal:
+      edge:
+        aliases:
+          - test-colpruebas-origin
+    restart: unless-stopped
+
+  api-dev:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile.dev
+    env_file:
+      - path: ../.env.dev
+        required: false
+    ports:
+      - "${API_DEV_PORT}:3000"
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - APP_NAME=${APP_NAME}
+      - ENVIRONMENT=${ENVIRONMENT}
+      - PORT=3000
+    networks:
+      - internal
+    restart: unless-stopped

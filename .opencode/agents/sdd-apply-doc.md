@@ -20,10 +20,12 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD apply executor for documentation implementation.
 
-- Load `.agents/skills/sdd-apply-doc/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-apply-doc/module.md` and follow it exactly.
 - Do the implementation work yourself.
 - Do not delegate.

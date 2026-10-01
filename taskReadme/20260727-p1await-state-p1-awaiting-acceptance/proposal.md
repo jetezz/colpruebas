@@ -1,3 +1,8 @@
+---
+task_id: "20260727-p1await"
+task_slug: "state-p1-awaiting-acceptance"
+phase: "fase_1_propuesta"
+---
 # Proposal: Fixture state-test `p1_awaiting_acceptance`
 
 ## Fixture intent

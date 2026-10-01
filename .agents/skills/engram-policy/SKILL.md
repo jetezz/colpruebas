@@ -2,9 +2,10 @@
 name: engram-policy
 description: "Trigger: Engram, memory, taskReadme recovery, resume. Apply repo-local persistence and recall rules."
 metadata:
+  id: engram-policy
   version: 1.0.0
   categories:
-    - sdd
+    - utilidad
 ---
 
 # Engram Policy Overlay
@@ -23,7 +24,7 @@ Use it when work touches:
 
 In `mis-proyectos`, the persistence contract is intentionally split as a **repo-local SDD overlay inspired by OpenSpec/OpenCode**:
 
-- **`taskReadme` under `coordinador` policy** = the **only canonical operational + filesystem persistence artifact**
+- **`taskReadme` under `sdd-orchestrator` policy** = the **only canonical operational + filesystem persistence artifact**
   - current status
   - next step
   - branch / PR traceability
@@ -52,9 +53,9 @@ Engram is a required runtime prerequisite for fully compliant coordinated SDD, b
 - Static checks cannot prove Engram availability because Engram lives in the agent runtime, not in a normal Bun process.
 - `sdd-init` must check and record Engram availability for active SDD work.
 - Every SDD phase must write/update `taskReadme` first, then mirror the artifact to Engram.
-- If Engram is unavailable or a mirror write fails, preserve the full artifact in `taskReadme`, record the exact mirror failure, and return `blocked` unless the coordinator explicitly allowed a non-closing degraded planning step.
-- When Engram is unavailable, bootstrap, exploration, and planning may continue only as explicit degraded non-closing work. Implementation, verification closure, `done`, and archive remain blocked until mirrors are restored or an explicit coordinator exception is recorded in `taskReadme`.
-- A task must not move to `done` or archive while required Engram mirrors are missing, unless the coordinator records an explicit policy exception in `taskReadme`.
+- If Engram is unavailable or a mirror write fails, preserve the full artifact in `taskReadme`, record the exact mirror failure, and return `blocked` unless `sdd-orchestrator` explicitly allowed a non-closing degraded planning step.
+- When Engram is unavailable, bootstrap, exploration, and planning may continue only as explicit degraded non-closing work. Implementation, verification closure, `done`, and archive remain blocked until mirrors are restored or an explicit sdd-orchestrator exception is recorded in `taskReadme`.
+- A task must not move to `done` or archive while required Engram mirrors are missing, unless `sdd-orchestrator` records an explicit policy exception in `taskReadme`.
 - Never compensate for missing Engram by creating filesystem mirrors under `proposals/`, `specs/`, `designs/`, `tasks/`, or `openspec/`.
 
 ## When to search memory
@@ -125,7 +126,7 @@ For this repo-local SDD pipeline, persistence is **always `taskReadme`-first wit
   - `sdd-verify-units` reads proposal/spec/design/tasks/apply context first, writes `Unit tests`, and mirrors `sdd/{change-name}/verify-units`
   - `sdd-verify-pwauto` reads proposal/spec/design/tasks/apply plus quality context first, writes `PW-AUTO`, and mirrors `sdd/{change-name}/verify-pwauto`
   - `sdd-verify-pwcli` reads proposal/spec/design/tasks/apply plus browser validation context first, writes `PW-CLI`, and mirrors `sdd/{change-name}/verify-pwcli`
-  - coordinator consolidates lane outputs into `Estado consolidado` and mirrors `sdd/{change-name}/verify-report`
+  - `sdd-orchestrator` consolidates lane outputs into `Estado consolidado` and mirrors `sdd/{change-name}/verify-report`
 - `sdd-archive`
   - read prior artifacts first
   - write/update the archive / closure summary section in `taskReadme`

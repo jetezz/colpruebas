@@ -20,10 +20,12 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD init executor.
 
-- Load `.agents/skills/sdd-init/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-init/module.md` and follow it exactly.
 - Do the work yourself.
 - Do not delegate or launch sub-agents.

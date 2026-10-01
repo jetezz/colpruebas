@@ -20,10 +20,12 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD code verification lane.
 
-- Load `.agents/skills/sdd-verify-code/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-verify-code/module.md` and follow it exactly.
 - Do not fix issues unless explicitly asked in a later phase.
 - Do not delegate.

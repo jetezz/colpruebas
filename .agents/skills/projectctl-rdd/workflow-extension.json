@@ -1,0 +1,71 @@
+{
+  "schema": "task-flow-extension/v1",
+  "id": "rdd",
+  "selector": "rdd_mode",
+  "selected": "receipt-driven",
+  "authority": "Gentle-AI",
+  "base_binding_id": "projectctl-requirements.task-flow",
+  "base_binding_version": "14.0.0",
+  "modes": {"rdd_mode": {"default": "disabled", "allowed": ["disabled", "receipt-driven"], "skills": ["rdd-phase", "rdd-review", "rdd-correct", "rdd-validate"]}},
+  "artifact_keys": ["rdd-report"],
+  "statuses": ["reviewing"],
+  "evaluators": ["rdd_delivery_gate"],
+  "evaluator_contracts": {"rdd_delivery_gate": "modules/rdd-phase/module.md"},
+  "module_paths": {"rdd-review": "modules/rdd-review/module.md", "rdd-correct": "modules/rdd-correct/module.md", "rdd-validate": "modules/rdd-validate/module.md", "rdd-phase": "modules/rdd-phase/module.md"},
+  "operations": [
+    {"op": "replace_transition", "phase": "fase_4_documentacion", "expected": {"from": "p4_complete", "to": "final_commit_pending", "blocking_gates": ["pending_environment_close_block", "requirements_current_close_block"]}, "value_ref": "/entry"},
+    {"op": "add_phase", "value_ref": "/phase"},
+    {"op": "add_statuses", "value_ref": "/statuses"},
+    {"op": "register_lanes", "value_ref": "/lanes"},
+    {"op": "register_gates", "value_ref": "/gates"},
+    {"op": "add_blocking_gates", "value_ref": "/delivery/transition_gates"},
+    {"op": "add_close_gate", "control": "final_pr_pending", "to": "done", "value_ref": "/delivery/close_gate"},
+    {"op": "set_mode", "key": "rdd_mode", "value_ref": "/modes/rdd_mode"},
+    {"op": "add_artifact_keys", "value_ref": "/artifact_keys"},
+    {"op": "set_delivery", "key": "rdd", "value_ref": "/delivery"}
+  ],
+  "entry": {"phase": "fase_4_documentacion", "from": "p4_complete", "to": "p5_started", "guard": "rdd_mode_receipt_driven", "blocking_gates": ["pending_environment_close_block", "requirements_current_close_block"]},
+  "phase": {
+    "id": "fase_5_rdd", "status": "reviewing",
+    "states": ["p5_started", "p5_reviewing", "p5_correction_required", "p5_validating", "p5_complete", "p5_escalated"],
+    "allowed_lanes": ["rdd-review-risk", "rdd-review-readability", "rdd-review-reliability", "rdd-review-resilience", "rdd-refuter", "rdd-correct", "rdd-validate"],
+    "transitions": [
+      {"from": "p5_started", "to": "p5_reviewing", "guard": "rdd_authority_started"},
+      {"from": "p5_reviewing", "to": "p5_correction_required", "guard": "rdd_correction_required"},
+      {"from": "p5_reviewing", "to": "p5_validating", "guard": "rdd_review_results_complete"},
+      {"from": "p5_correction_required", "to": "p5_validating", "guard": "rdd_correction_validated"},
+      {"from": "p5_validating", "to": "p5_complete", "guard": "rdd_receipt_approved"},
+      {"from": "p5_reviewing", "to": "p5_escalated", "guard": "rdd_escalated"},
+      {"from": "p5_correction_required", "to": "p5_escalated", "guard": "rdd_escalated"},
+      {"from": "p5_validating", "to": "p5_escalated", "guard": "rdd_escalated"},
+      {"from": "p5_escalated", "to": "p5_started", "guard": "rdd_recovery_authorized"},
+      {"from": "p5_complete", "to": "final_commit_pending", "guard": "rdd_precommit_gate_allowed"}
+    ]
+  },
+  "lanes": {
+    "rdd-review-risk": {"skill": "rdd-review", "role": "rdd-review", "artifact_class": "rdd_review_result", "owner_phase": "fase_5_rdd"},
+    "rdd-review-readability": {"skill": "rdd-review", "role": "rdd-review", "artifact_class": "rdd_review_result", "owner_phase": "fase_5_rdd"},
+    "rdd-review-reliability": {"skill": "rdd-review", "role": "rdd-review", "artifact_class": "rdd_review_result", "owner_phase": "fase_5_rdd"},
+    "rdd-review-resilience": {"skill": "rdd-review", "role": "rdd-review", "artifact_class": "rdd_review_result", "owner_phase": "fase_5_rdd"},
+    "rdd-refuter": {"skill": "rdd-review", "role": "rdd-review", "artifact_class": "rdd_refutation_result", "owner_phase": "fase_5_rdd"},
+    "rdd-correct": {"skill": "rdd-correct", "role": "rdd-correction", "artifact_class": "rdd_correction_evidence", "owner_phase": "fase_5_rdd"},
+    "rdd-validate": {"skill": "rdd-validate", "role": "rdd-validation", "artifact_class": "rdd_validation_evidence", "owner_phase": "fase_5_rdd"}
+  },
+  "gates": {
+    "rdd_mode_receipt_driven": {"evaluator": "transition_gate", "required_evidence": ["mode_context.rdd.selected_receipt_driven", "rdd_authority_available_and_managed"], "failure": "retain_phase_and_state"},
+    "rdd_authority_started": {"evaluator": "hard_gate", "required_evidence": ["rdd_provider_result_current", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_correction_required": {"evaluator": "hard_gate", "required_evidence": ["rdd_provider_result_current", "rdd_correction_request", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_review_results_complete": {"evaluator": "hard_gate", "required_evidence": ["rdd_provider_result_current", "rdd_required_results_complete", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_correction_validated": {"evaluator": "hard_gate", "required_evidence": ["rdd_provider_result_current", "rdd_post_apply_allowed", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_receipt_approved": {"evaluator": "hard_gate", "required_evidence": ["rdd_provider_result_current", "rdd_receipt_outcome_approved", "rdd_receipt_applies_to_live_target", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_escalated": {"evaluator": "hard_gate", "required_evidence": ["rdd_provider_result_current", "rdd_escalation_recorded", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_recovery_authorized": {"evaluator": "hard_gate", "required_evidence": ["explicit_rdd_recovery_authorization", "rdd_provider_recovery_transition_current", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "rdd_precommit_gate_allowed": {"evaluator": "hard_gate", "required_evidence": ["rdd_pre_commit_allowed", "rdd_receipt_applies_to_live_target", "rdd_lineage_id", "rdd_authority_revision", "rdd_target_identity", "task_revision"], "failure": "retain_phase_and_state"},
+    "post-apply": {"evaluator": "rdd_delivery_gate", "required_evidence": ["authority_gate_result_current", "allowed_true", "live_target_identity_match"], "failure": "retain_phase_and_state"},
+    "pre-commit": {"evaluator": "rdd_delivery_gate", "required_evidence": ["authority_gate_result_current", "allowed_true", "approved_receipt_applicable", "live_target_identity_match"], "failure": "retain_final_commit_pending"},
+    "pre-push": {"evaluator": "rdd_delivery_gate", "required_evidence": ["authority_gate_result_current", "allowed_true", "approved_receipt_applicable", "live_target_identity_match"], "failure": "retain_final_push_pending"},
+    "pre-pr": {"evaluator": "rdd_delivery_gate", "required_evidence": ["authority_gate_result_current", "allowed_true", "approved_receipt_applicable", "delivery_target_branch_used_as_base_ref"], "failure": "retain_final_pr_pending"},
+    "release": {"evaluator": "rdd_delivery_gate", "required_evidence": ["authority_gate_result_current", "allowed_true", "approved_receipt_applicable", "live_target_identity_match"], "failure": "block_transition_to_done"}
+  },
+  "delivery": {"required_gates": ["post-apply", "pre-commit", "pre-push", "pre-pr", "release"], "gate_behavior": "read-only-live-candidate-validation", "pre_pr_base_ref_source": "delivery.target_branch", "deny_or_error": "preserve_pending_control_and_block_action", "transition_gates": {"p5_correction_required:p5_validating": "post-apply", "final_commit_pending:final_push_pending": "pre-commit", "final_push_pending:final_pr_pending": "pre-push", "final_pr_pending:done": "pre-pr"}, "close_gate": "release"}
+}

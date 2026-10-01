@@ -1,3 +1,8 @@
+---
+task_id: "20260727-p1strt"
+task_slug: "state-p1-started"
+phase: "fase_1_propuesta"
+---
 # Proposal: Fixture state-test `p1_started`
 
 ## Fixture intent

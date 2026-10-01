@@ -1,0 +1,112 @@
+<testsuites id="" name="" tests="3" failures="1" skipped="0" errors="2" time="49.70541899999999">
+<testsuite name="test-tab.spec.ts" timestamp="2026-09-04T08:28:34.857Z" hostname="pwauto-test-tab" tests="3" failures="1" skipped="0" time="46.162" errors="2">
+<testcase name="Tab Test funcional — @test-tab (PWT-12) › la página /project/[id]?tab=test carga y muestra los 8 estados" classname="test-tab.spec.ts" time="5.652">
+<properties>
+<property name="ac" value="PWT-01">
+</property>
+<property name="ac" value="PWT-02">
+</property>
+<property name="ac" value="PWT-08">
+</property>
+<property name="ac" value="PWT-12">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-tab-Tab-Test-funciona-22657-rga-y-muestra-los-8-estados-pwauto-test-tab/error-context.md]]
+]]>
+</system-out>
+<failure message="expect(locator).toBeVisible() failed" type="expect.toBeVisible">
+<![CDATA[  [pwauto-test-tab] › test-tab.spec.ts:10:3 › Tab Test funcional — @test-tab (PWT-12) › la página /project/[id]?tab=test carga y muestra los 8 estados 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-testid="test-tab-section-quickrun"]')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 5000ms
+      - waiting for locator('[data-testid="test-tab-section-quickrun"]')
+
+
+      26 |     await expect(
+      27 |       page.locator('[data-testid="test-tab-section-quickrun"]'),
+    > 28 |     ).toBeVisible();
+         |       ^
+      29 |
+      30 |     await expect(page.locator('[data-testid="test-tab-quickrun-legend"]')).toBeVisible();
+      31 |
+        at /workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/tests/front/tests/test-tab.spec.ts:28:7
+
+    Error Context: ../../../frontend/playwright/test-results/test-tab-Tab-Test-funciona-22657-rga-y-muestra-los-8-estados-pwauto-test-tab/error-context.md
+]]>
+</failure>
+</testcase>
+<testcase name="Tab Test funcional — @test-tab (PWT-12) › abrir modal Reset coverage muestra texto verbatim del contrato" classname="test-tab.spec.ts" time="30.058">
+<properties>
+<property name="ac" value="PWT-10">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-tab-Tab-Test-funciona-7a882-texto-verbatim-del-contrato-pwauto-test-tab/error-context.md]]
+]]>
+</system-out>
+<error message="Test timeout of 30000ms exceeded." type="Error">
+<![CDATA[  [pwauto-test-tab] › test-tab.spec.ts:72:3 › Tab Test funcional — @test-tab (PWT-12) › abrir modal Reset coverage muestra texto verbatim del contrato 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: locator.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="test-tab-quickrun-reset-coverage"]')
+
+
+      80 |     await page
+      81 |       .locator('[data-testid="test-tab-quickrun-reset-coverage"]')
+    > 82 |       .click();
+         |        ^
+      83 |     const modal = page.locator(
+      84 |       '[data-testid="test-tab-quickrun-reset-coverage-modal"]',
+      85 |     );
+        at /workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/tests/front/tests/test-tab.spec.ts:82:8
+
+    Error Context: ../../../frontend/playwright/test-results/test-tab-Tab-Test-funciona-7a882-texto-verbatim-del-contrato-pwauto-test-tab/error-context.md
+]]>
+</error>
+</testcase>
+<testcase name="Tab Test funcional — @test-tab (PWT-12) › botones per-criterio PW-CLI y Manual existen y abren modales (PWT-09)" classname="test-tab.spec.ts" time="10.452">
+<properties>
+<property name="ac" value="PWT-09">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-tab-Tab-Test-funciona-4d7f3-ten-y-abren-modales-PWT-09--pwauto-test-tab/error-context.md]]
+]]>
+</system-out>
+<error message="page.waitForSelector: Timeout 10000ms exceeded." type="TimeoutError">
+<![CDATA[  [pwauto-test-tab] › test-tab.spec.ts:101:3 › Tab Test funcional — @test-tab (PWT-12) › botones per-criterio PW-CLI y Manual existen y abren modales (PWT-09) 
+
+    TimeoutError: page.waitForSelector: Timeout 10000ms exceeded.
+    Call log:
+      - waiting for locator('[data-action="pwcli"]') to be visible
+
+
+      108 |     );
+      109 |
+    > 110 |     await page.waitForSelector('[data-action="pwcli"]', { timeout: 10000 });
+          |                ^
+      111 |
+      112 |     const pwcliButtons = page.locator('[data-action="pwcli"]');
+      113 |     const pwcliCount = await pwcliButtons.count();
+        at /workspace/projects/511a017a-01d4-4553-a063-ba01438b15cd/tests/front/tests/test-tab.spec.ts:110:16
+
+    Error Context: ../../../frontend/playwright/test-results/test-tab-Tab-Test-funciona-4d7f3-ten-y-abren-modales-PWT-09--pwauto-test-tab/error-context.md
+]]>
+</error>
+</testcase>
+</testsuite>
+</testsuites>

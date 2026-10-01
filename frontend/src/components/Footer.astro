@@ -6,6 +6,9 @@ interface Props {
 const { timestamp } = Astro.props;
 ---
 
+<!-- @criterion HRM-02 -->
+<!-- @trace ac=HRM-02 req=REQ-CODETRACE-002 view=home tab=none block=runtime-metadata -->
+<!-- @contract auth=none ownership=none side-effects=none -->
 <footer>
   <div class="timestamp">{timestamp}</div>
 </footer>
