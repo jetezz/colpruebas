@@ -20,9 +20,11 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD design executor.
 
-- Load `.agents/skills/sdd-design/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-design/module.md` and follow it exactly.
 - Do not delegate.

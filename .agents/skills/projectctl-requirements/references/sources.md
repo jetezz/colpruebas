@@ -2,78 +2,67 @@
 file: references/sources.md
 parent_skill: projectctl-requirements
 owner: documentation maintenance
-purpose: machine-grepeable SoT table for all PCT-89..PCT-121 + criterios nuevos PCT-149..155/TST-38/AC-329/PCT-169..175 + cross-tab/standard requirements
+purpose: machine-grepeable SoT table for core criteria, docs, testing, structure and code traceability
 sot_policy: canonical-standard
-last_full_regen: 2026-09-20
+last_full_regen: 2026-09-27
 generated_by: merge resolution after develop integration
-binding_role: cites_task_flow_binding_block_only
 ---
 
 # `.agents/skills/projectctl-requirements/references/sources.md` — Tabla de trazabilidad machine-grepeable
 
-> **Tabla de trazabilidad** para el contenido de la skill `projectctl-requirements`. La autoridad normativa del workflow es exclusivamente el bloque delimitado de `.agents/skills/projectctl-requirements/references/tasks/binding.md`; esta tabla no crea una segunda autoridad. **last-verified: 2026-09-20**. Los detalles de tunnel, secretos, red y topología pertenecen a los docs locales del repositorio destino.
+> **Tabla de trazabilidad del core**: criterios, docs, test, estructura y code. La trazabilidad del flujo de tareas PCT-106..PCT-121 pertenece a `projectctl-sdd/references/sources.md`. **last-verified: 2026-09-28**. Contrato portable: `.agents/skills/projectctl-requirements/scripts/<skill|project>/...` + wrapper local `<repo>/scripts/...` (proveído por el destino). Los IDs retired se conservan sin reciclar.
 >
-> La tabla mantiene paths en inline-code para trazabilidad. `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` verifica un conjunto explícito y acotado de paths e invariantes; no escanea genéricamente cada cita de esta tabla.
+> La tabla mantiene paths en inline-code para trazabilidad. `scripts/skill/requirements-check.ts` valida las autoridades locales de criterios y ledger; las suites SDD son independientes.
 
-## Rol respecto al bloque `task-flow-binding`
+> **Traza del diagnóstico acotado (2026-09-29)**: `scripts/project/app-map-inventory.ts` deriva nodos, bundles y criterios de `docs/app-map/navigation.yaml` y del frontmatter inline para `scripts/project/doctor-{docs,test,structure}.ts`. El selector `--target=<view>[:<feature>]` no cambia la autoridad ni la semántica de los checks gestionados globales. Pruebas: `scripts/__tests__/doctor-target.test.ts`.
 
-Este archivo no duplica valores del bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2).
+## Frontera con el flujo de tareas
 
-- **Traza**: cita el path del binding, su `binding_id`, `binding_version` y el delimitador del bloque (`` `<!-- task-flow-binding:start -->` `` / `` `<!-- task-flow-binding:end -->` ``) para que el consumidor sepa dónde extraerlo.
-- **No inventa machine values**: las entries de la tabla `Task flow binding (PCT-106..PCT-121)` apuntan al bloque delimitado; nunca reproducen el catálogo de estados, lanes, gates, `artifact_store` (primary index, `phase_artifacts`, `mirrors[].role`), `heading_owners`, `delivery` o `active_sources` en esta tabla. Cualquier divergencia con el bloque se considera drift y bloquea la entry hasta regenerarse.
-- **No redefine fases/lanes/gates**: si una entry necesita un valor del workflow, cita `task.required_inputs`, `task.heading_owners`, `phases[].id`, `lanes[id]`, `gates[id]`, `artifact_store.primary`, `artifact_store.phase_artifacts`, `mirrors[]`, etc., por su identificador dentro del bloque; el bloque sigue siendo la única fuente normativa de esos valores.
+Ninguna fila de este índice define fases, lanes, gates, stores ni entrega SDD. Los IDs históricos del flujo conservan su trazabilidad y check en `projectctl-sdd/references/sources.md`.
 
 ## Cómo regenerar este archivo
 
-Per `.agents/skills/projectctl-requirements/references/maintenance.md` §"Contrato anti-drift":
+Per `.agents/skills/projectctl-requirements/references/maintenance.md`:
 
 1. Detectar el cambio upstream en una SoT (skill path / bundle path / CLI / API / test path).
-2. Actualizar la entry correspondiente en cualquiera de los 9 archivos `.md` que viven bajo `references/` (cli, doc, test, entorno, tareas, standard, sources, maintenance, decisions) con la nueva ruta/contrato.
-3. Regenerar **completo** este `.agents/skills/projectctl-requirements/references/sources.md` (no se editan cells sueltas; la tabla es invariante por construcción).
+2. Actualizar la entry correspondiente en los archivos `.md` bajo `references/` (`criterios/reglas`, `docs/reglas`, `test/reglas`, `estructura/reglas`, `code/reglas` y las referencias transversales de la raíz) con la nueva ruta/contrato.
+3. Revisar este `.agents/skills/projectctl-requirements/references/sources.md`: si la tabla sigue consistente (mismos IDs PCT, mismas columnas), NO regenerar — solo bumpear `last-verified` de las filas afectadas; si la tabla diverge, regenerar completa (no editar cells sueltas).
 4. Bumpear `last-verified` de las entries afectadas (formato `YYYY-MM-DD`) — un bump por entry, no global.
-5. Bumpear `metadata.version` en el frontmatter del archivo `.agents/skills/projectctl-requirements/SKILL.md` per la regla PATCH/MINOR/MAJOR (ver `.agents/skills/projectctl-requirements/references/maintenance.md` §"Versionado cross-repo").
-6. Correr el comando Bun test sobre el archivo `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` (presente desde WU-TEST-3) y confirmar verde.
+5. Bumpear `metadata.version` en `.agents/skills/projectctl-requirements/SKILL.md`: retirar paths públicos exige MAJOR; cambios aditivos compatibles MINOR; aclaraciones no contractuales PATCH (ver `references/maintenance.md`).
+6. Ejecutar `bun .agents/skills/projectctl-requirements/scripts/skill/requirements-check.ts --check` y las suites de las superficies cambiadas.
 
-> **Traza del maintenance-contract — formato del skill-registry**: el contrato anti-drift
-> cubre también el formato del row del skill-registry, documentado en
-> `.agents/skills/projectctl-requirements/references/maintenance.md` §10
-> "Skill-registry generator format (SoT del row shape del registry)". El generador
-> canónico `gentle-ai skill-registry refresh --force` es la SoT del shape (header
-> `Auto-generated`, 4 columnas con backticks discipline y path absoluto derivado de
-> `REPO_ROOT`), emite exactamente **24 project skills** y **excluye por contrato** las
-> workflow skills `sdd-*` (resolubles en disco vía Check A del test). Este archivo traza
-> esa sección sin redefinir sus machine values: el shape y el conteo de filas los valida
-> `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` (Check B, registry →
-> formato). Cualquier cambio de formato/scope del generador MUST bumpear
-> `metadata.version` del package per `maintenance.md` §5. **last-verified: 2026-09-07**
-> (regenerar ante cualquier cambio en el generador o en su output).
+> **MAP portable**: `scripts/skill/projectctl-map.ts` valida el formato y el digest
+> del `MAP.md`; `requirements-check.ts` comprueba MAP, criterios y ledger sin
+> importar satélites ni el manifest de capacidades de la instancia. Los
+> registros de skills y los catálogos de lanes pertenecen a sus dueños.
 
 > **Traza del maintenance-contract — shape del criterio app-map (PCT-85)**: el contrato
-> `criteria[]` de `docs/app-map/**` requiere el campo **obligatorio** `type` (enum cerrado de 9:
-> `ui | functionality | a11y | backend | data | integration | security | performance | tooling`,
-> T-1) — shape post-rollout `{id, title, functional, coverage, type}` con `type` requerido
+> `criteria[]` de `docs/app-map/**` requiere el campo **obligatorio** `type` (enum cerrado T-1, autoridad `.agents/skills/projectctl-requirements/references/standard.md` §1 con árbol T-5 y verificación por defecto; mapping type→carpeta en `.agents/skills/projectctl-requirements/references/estructura/reglas.md`)
+> — shape post-rollout `{id, title, functional, coverage, type}` con `type` requerido
 > (hardening R-A: cláusula T-3 opcional retirada y set faseado `TYPE_MIGRATION_PENDING_BUNDLES`
 > eliminado; criterio sin `type` = hard error de `docs:lint` con
 > `[app-map-contract] <file>: criterion <id> requires type`), documentado en
-> `.agents/skills/projectctl-requirements/references/doc.md` PCT-85 y en
+> `.agents/skills/projectctl-requirements/references/docs/reglas.md` PCT-85 y en
 > `.agents/skills/projectctl-requirements/references/standard.md` §1 (árbol de clasificación T-5,
 > verificación por defecto y contrato bidireccional R-B + "Auditoría de criterios"). La tabla SoT
 > de este archivo NO contiene filas PCT-83..88 (la tabla completa de la tab Doc vive en
-> `references/doc.md`); las filas PCT-89..105 de esta tabla no citan el shape del criterio y sus
-> `last-verified` están pineados por `sot-coherence` (PCT-91/97/98/99 en `2026-09-06`, resto en
-> `2026-07-24`); las filas PCT-106..121 trazan el bloque `task-flow-binding` sin cambios (binding
-> v10.0.0). Este archivo traza el cambio sin redefinir sus machine values. **last-verified: 2026-09-07**
+> `references/docs/reglas.md`); las filas PCT-89..105 de esta tabla no citan el shape del criterio y sus
+> `last-verified` siguen lo pineado por `sot-coherence`; las filas PCT-106..121 se mantienen únicamente en `projectctl-sdd/references/sources.md`. La canonicalidad del frontmatter la garantiza el normalizador portable
+> `.agents/skills/projectctl-requirements/scripts/project/app-map-format.ts` (normalizador portable;
+> wrapper local `<repo>/scripts/...` proveído por el destino, suite portable
+> `scripts/__tests__/app-map-format.portable.test.ts`;
+> PASO 3, pineado por `sot-coherence`). Este archivo traza el cambio sin redefinir sus machine values. **last-verified: 2026-09-28**
 > (regenerar ante cualquier cambio en el shape del criterio o en `standard.md` §1).
 
-## Cómo lo lee `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts`
+## Cómo lo lee `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts`
 
-La suite actual enumera los paths canónicos que deben existir y valida explícitamente locator, identidad del binding/projections, `active_sources`, aliases retirados y ausencia de catálogos duplicados. El snippet histórico siguiente no es el contrato actual y se retira para evitar afirmar un scanner genérico inexistente.
+La suite del core enumera sus paths canónicos y valida criterios y evidencia sin locator ni binding SDD. La suite independiente de `projectctl-sdd` verifica locator, binding y proyecciones cuando ese satélite está instalado.
 
 Cada garantía nueva debe aparecer como una aserción dedicada; no hay promesa de cobertura exhaustiva sobre todos los backticks.
 
 ---
 
-## Tabla SoT por criterio (PCT-89..PCT-100 + cross-tab/skill)
+## Tabla SoT por criterio (PCT-89..PCT-94 + cross-tab/skill)
 
 > Cada fila es 1 criterio. Columnas:
 >
@@ -89,82 +78,63 @@ Cada garantía nueva debe aparecer como una aserción dedicada; no hay promesa d
 
 | PCT ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
 | --- | --- | --- | --- | --- | --- | --- |
-| `PCT-89` | Panel Test existe y lista reglas del sistema de testing | `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/views/project-workspace/features/test-tab.md` | n/a (filesystem) | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` + `frontend/__tests__/projectctl-test-bundle.test.ts` | `2026-09-10` |
-| `PCT-90` | Contrato AC mandatorio (`// @ac` + `test.info().annotations.push`) | `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/views/project-workspace/features/test-tab.md` | `scripts/test-runner.ts` | `frontend/__tests__/TestPanel.quickrun-top-level-view.test.ts` | `2026-09-10` |
-| `PCT-91` | Runner unificado + mapping 1:1 con `projectctl test *` (PCT-75..78) | `.agents/skills/projectctl-requirements/references/standard.md` §2 + `.agents/skills/projectctl-requirements/references/standard.md` §4 | `docs/app-map/views/projectctl/index.md` (PCT-75..PCT-78) | `scripts/test-runner.ts` + `sandbox/src/bin/projectctl.ts` | `frontend/__tests__/projectctl-test-bundle.test.ts` | `2026-09-10` |
-| `PCT-92` | Persistencia `.runtime/test-results/<projectId>/<run-id>/`; auto-writeback de coverage diferido en v1 y estado `pending/not accepted` | `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/views/project-workspace/features/test-tab.md` | `sandbox/src/services/test-results-writer.ts` | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-10` |
-| `PCT-93` | Gate `bun run test:check` (TST-13) + layout/discovery canónicos (TST-36) | `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/views/project-workspace/features/test-tab.md` | `playwright.config.ts` + `scripts/test-runner.ts` | `frontend/__tests__/projectctl-test-bundle.test.ts` | `2026-09-10` |
-| `PCT-94` | References: `playwright/TEST_PLAN.md` mapping + integrated testing policy | `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/views/project-workspace/features/test-tab.md` | `playwright/TEST_PLAN.md` | `frontend/__tests__/projectctl-test-bundle.test.ts` | `2026-09-10` |
+| `PCT-89` | Panel Test existe y lista reglas del sistema de testing | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (SoT CLI portable) + wrapper local `<repo>/scripts/...` (proveído por el destino, runtime de la instancia) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-28` |
+| `PCT-90` | Contrato AC mandatorio (`// @ac` + `test.info().annotations.push`) | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (SoT CLI portable) + wrapper local `<repo>/scripts/...` (proveído por el destino, runtime de la instancia) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-28` |
+| `PCT-91` | Runner unificado + mapping 1:1 con `projectctl test *` (PCT-75..78) | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2/§4 | bundle de la instancia destino (instancia origen: `docs/app-map/views/projectctl/index.md`, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (SoT CLI portable) + wrapper local `<repo>/scripts/...` (proveído por el destino, runtime de la instancia) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-28` |
+| `PCT-92` | Persistencia `.runtime/test-results/<projectId>/<run-id>/`; write-back V2 aceptado solo tras patch y >0 tests; fallback V1 pending | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (fallback portable) + wrapper local `<repo>/scripts/...` (proveído por el destino, writer de la instancia) + `.agents/skills/projectctl-requirements/scripts/project/doctor-test.ts` (diagnóstico del proyecto) | `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-28` |
+| `PCT-93` | Gate `bun run test:check` (TST-13) + layout/discovery canónicos (TST-36) | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (SoT CLI portable) + wrapper local `<repo>/scripts/...` (proveído por el destino, runtime de la instancia) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-28` |
+| `PCT-94` | References: `playwright/TEST_PLAN.md` mapping + integrated testing policy | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (SoT CLI portable) + `playwright/TEST_PLAN.md` (proveído por el destino) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-28` |
 
-### Tab Entorno (PCT-95..PCT-100)
+### Anexo descubrimiento gestionado (TST-39..TST-42)
 
-| PCT ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
+| TST ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
 | --- | --- | --- | --- | --- | --- | --- |
-| `PCT-95` | Panel Entorno existe y lista reglas para arrancar + ser publicable + tunnel | `.agents/skills/projectctl-requirements/references/standard.md` §3 + `.agents/skills/sandbox-runtime-policy/SKILL.md` | `docs/00-context/entornos.md` | n/a (filesystem) | `frontend/__tests__/projectctl-entorno-bundle.test.ts` | `2026-09-10` |
-| `PCT-96` | Overlays canónicos (`compose.yml` prod + `compose.dev.yml` dev) | `.agents/skills/projectctl-requirements/references/standard.md` §3 | `docs/00-context/entornos.md` + `docs/00-context/architecture.md` | `compose.yml` + `compose.dev.yml` + `.env.example` | `frontend/__tests__/projectctl-entorno-bundle.test.ts` | `2026-09-10` |
-| `PCT-97` | Puertos canónicos por overlay: `FRONTEND_PORT`/`API_PORT` obligatorios en `.env` y `FRONTEND_DEV_PORT`/`API_DEV_PORT` obligatorios en `.env.dev` | `.agents/skills/projectctl-requirements/references/standard.md` §3 | `docs/app-map/views/projectctl/index.md` (PCT-35) | `projectctl env validate` (PCT-35) + `compose.yml` + `compose.dev.yml` + `.env.example` + `.env.dev.example` | `frontend/__tests__/projectctl-entorno-bundle.test.ts` | `2026-09-10` |
-| `PCT-98` | Contrato edge externo + alias por entorno + guardrail `TUNNEL_NOT_PUBLISHABLE` | `.agents/skills/projectctl-requirements/references/standard.md` §3 | `docs/00-context/architecture.md` + `docs/02-features/tunnel.md` + `docs/app-map/views/projectctl/index.md` | `projectctl tunnel status` (PCT-38) + `compose.yml` + `compose.dev.yml` | `frontend/__tests__/projectctl-entorno-bundle.test.ts` | `2026-09-10` |
-| `PCT-99` | Sandbox sin Docker CLI/socket — control de runtime exclusivamente via `projectctl` | `.agents/skills/sandbox-runtime-policy/SKILL.md` + `.agents/skills/projectctl-requirements/references/standard.md` §3 + `.agents/skills/projectctl-requirements/references/standard.md` §4 | `docs/app-map/views/projectctl/index.md` (PCT-30..PCT-45) | `sandbox/src/bin/projectctl.ts` | `frontend/__tests__/projectctl-entorno-bundle.test.ts` | `2026-09-10` |
-| `PCT-100` | References: integrated runtime policy in `projectctl-requirements` | `.agents/skills/projectctl-requirements/references/standard.md` §3 | `docs/04-process/development.md` + `docs/02-features/tunnel.md` | n/a | `frontend/__tests__/projectctl-entorno-bundle.test.ts` | `2026-09-10` |
+| `TST-39` | Copia única `@playwright/test` (el proyecto no la declara; resuelve a plataforma) | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | `.agents/skills/projectctl-requirements/scripts/project/doctor-test.ts` (`TST-39-SINGLE-COPY`) + wrapper local `<repo>/scripts/...` (proveído por el destino, runtime de la instancia) | `projectctl test run --method=pwauto --target=<view>` (run gestionado) | `2026-09-28` |
+| `TST-40` | Owner `// @<view>` en las primeras 10 líneas de cada spec | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/navigation.yaml` (IDs de views) | `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (`validateOwnerAnnotation`) + `.agents/skills/projectctl-requirements/scripts/project/doctor-test.ts` (`TST-40-OWNER`) | `projectctl test run --method=pwauto --target=<view>` (specInventory sin gaps) | `2026-09-28` |
+| `TST-41` | Ubicaciones acotadas `tests/e2e/<view>/` y `tests/unit/<view>/` | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/navigation.yaml` (IDs de views) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/doctor-test.ts` (`TST-41-BOUNDED-LOCATION`) + wrapper local `<repo>/scripts/...` (proveído por el destino, `discoveryRoots` de la instancia) | `projectctl test run --method=all --target=<view>` (resolvedFiles + specInventory) | `2026-09-28` |
+| `TST-42` | Títulos `test('...')` con ID trazado al header `// @ac` | `.agents/skills/projectctl-requirements/references/test/reglas.md` + `.agents/skills/projectctl-requirements/references/standard.md` §2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts` (`validateSpecTitleIds`) + `.agents/skills/projectctl-requirements/scripts/project/doctor-test.ts` (`TST-42-SPEC-TITLE`) | `projectctl test run --method=pwauto --target=<view>` (filtro `--grep` ejecuta) | `2026-09-28` |
+
+### Entorno (PCT-95..PCT-100)
+
+La trazabilidad de esos IDs pertenece a [`projectcl-enviorement/references/sources.md`](../../projectcl-enviorement/references/sources.md). El core no define ni diagnostica el runtime gestionado.
 
 ### Cross-tab + skill portability (PCT-101..PCT-105 — extracto; tabla completa en `.agents/skills/projectctl-requirements/references/maintenance.md` y en los archivos `.md` de `references/` para `cli` y `doc` por WU-SKILL-1)
 
 | PCT ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
 | --- | --- | --- | --- | --- | --- | --- |
-| `PCT-101` | 8 tabs internos en orden fijo `cli → tareas → agentes → doc → criterios → test → entorno → estructura` | `.agents/skills/frontend-policy/SKILL.md` + `.agents/skills/fsd-architecture/SKILL.md` | `docs/app-map/views/projectctl/index.md` + `docs/app-map/navigation.yaml` | `frontend/src/views/projectctl/ui/ProjectctlView.tsx` + `frontend/src/views/projectctl/stores/tabs.store.ts` | `tests/e2e/projectctl/tabs.spec.ts` | `2026-09-20` |
-| `PCT-102` | Cada tab MUST citar sources en un bloque aside con `data-testid="projectctl-tab-sources-<tab>"` (kebab-case; tab id ∈ `cli | tareas | agentes | doc | criterios | test | entorno | estructura`) | `.agents/skills/frontend-policy/SKILL.md` | `docs/app-map/views/projectctl/features/{cli,doc,criterios,test,entorno,tareas,estructura}.md` | `frontend/src/views/projectctl/ui/TabSources.tsx` | `tests/e2e/projectctl/tabs.spec.ts` | `2026-09-20` |
-| `PCT-103` | El bundle raíz `index.md` preserva PCT-01..78 + tabla de mapeo a bundles por tab, incluyendo `features/criterios.md` y PCT-169..174 | `.agents/skills/projectctl-requirements/references/standard.md` heading `Documentación y app-map` | `docs/app-map/views/projectctl/index.md` + `docs/app-map/views/projectctl/features/{cli,doc,criterios,test,entorno,tareas}.md` | n/a | `frontend/__tests__/projectctl-doc-bundle.test.ts` + `frontend/__tests__/projectctl-test-bundle.test.ts` + `frontend/__tests__/projectctl-entorno-bundle.test.ts` + `frontend/__tests__/projectctl-tareas-bundle.test.ts` | `2026-09-20` |
-| `PCT-104` | `data-testid` discipline kebab-case `<purpose>-<scope>` | `.agents/skills/frontend-policy/SKILL.md` + `.agents/skills/fsd-architecture/SKILL.md` | `docs/app-map/views/projectctl/index.md` | `frontend/src/views/projectctl/ui/ProjectctlView.tsx` | `frontend/__tests__/projectctl-tabs.test.ts` | `2026-09-10` |
-| `PCT-105` | Paquete copiable sin modificaciones + Maintenance contract + prerequisitos de instalación explícitos | `.agents/skills/skill-creator/SKILL.md` + `.agents/skills/projectctl-requirements/references/standard.md` + `.agents/skills/projectctl-requirements/modules/coordinator/module.md` | `docs/00-context/agents_skills.md` + `docs/04-process/task.md` | n/a (filesystem-only) | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` (presente) | `2026-09-10` |
+| `PCT-101` | retired — instancia origen, no portable (tabs UI de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-102` | retired — instancia origen, no portable (aside sources UI de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-103` | retired — instancia origen, no portable (bundle raíz de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-104` | retired — instancia origen, no portable (`data-testid` UI de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-105` | Paquete core copiable sin SDD + mantenimiento y prerequisitos explícitos | `.agents/skills/projectctl-requirements/SKILL.md` + `.agents/skills/projectctl-requirements/scripts/skill/requirements-check.ts` | docs de la instancia destino (no portable) | n/a (filesystem-only) | `.agents/skills/projectctl-requirements/scripts/__tests__/core-only-check.test.ts` | `2026-09-27` |
 
-### Task flow binding (PCT-106..PCT-121)
+### Tareas opcionales (PCT-106..PCT-121)
 
-> El binding integral vive en el bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2) dentro de `.agents/skills/projectctl-requirements/references/tasks/binding.md`. RDD se traza por identificadores del bloque; esta tabla no republica estados, lanes, guards ni gates.
+La autoridad y trazabilidad de estos IDs pertenecen a `projectctl-sdd/references/sources.md`. El core solo ofrece la tab informativa cuando el satélite está instalado; los criterios, la documentación y la evidencia siguen funcionando sin ella.
 
-| PCT ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
-| --- | --- | --- | --- | --- | --- | --- |
-| `PCT-106` | Creación con exactamente `task.required_inputs` obligatorios (binding integral) | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointer `/task/required_inputs` | n/a (bundle owned by WU-04) | n/a (taskReadme/coordinator contract) | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-10` |
-| `PCT-107` | Identidad, naming, `task.file_pattern`, `task.id_pattern`, `task.slug_pattern`, `delivery.branch_pattern` | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointers `/task` + `/delivery/branch_pattern` | n/a (bundle owned by WU-04) | n/a (taskReadme/coordinator contract) | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-10` |
-| `PCT-108` | `artifact_store.primary` (role index + `index_budget`), `artifact_store.phase_artifacts`, empty `mirrors[]`, `write_order` | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointer `/artifact_store` | n/a (bundle owned by WU-04) | n/a (filesystem-only) | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-10` |
-| `PCT-109` | Fases, states por fase y `controls[]`; incluye entrada RDD condicional y sin salida incondicional de documentación a commit | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointers `/phases` + `/controls` + `/modes/rdd_mode` | n/a (bundle owned by WU-04) | n/a (taskReadme state contract) | `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-110` | Contrato, agentes, gate y loops de Fase 1 | `.agents/skills/projectctl-requirements/references/tasks/binding.md` identifiers `phases[id=fase_1_propuesta]` + `gates[AC-010.*]` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-111` | Boundary de lanes y helpers opcionales: lane → surfaces → task-selected, dedupe first-wins y obligatorias preservadas | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointer `/task_skill_selection` + identifiers `lanes[sdd-apply-code-*]`, `lanes[sdd-verify-code]`, `gates[code_review_passed]`; runtime projections in `.agents/skills/projectctl-requirements/modules/sd-protocol/workflow-runtime-context.md` y `.agents/skills/projectctl-requirements/modules/sd-protocol/skill-resolver.md` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/coordinator-state-machine.test.ts` + `scripts/sdd-executor-delegation.test.ts` | `2026-09-10` |
-| `PCT-112` | Boundary de tests y cobertura mínima de Fase 3 | `.agents/skills/projectctl-requirements/references/tasks/binding.md` identifiers `lanes[sdd-apply-unit-tests|sdd-apply-pwauto-tests|sdd-verify-units|sdd-verify-pwauto|sdd-verify-pwcli]` + `gates[coverage_gate_passed]` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-10` |
-| `PCT-113` | Fase documental obligatoria y entrega condicional; RDD opt-in se resuelve exclusivamente desde el binding | `.agents/skills/projectctl-requirements/references/tasks/binding.md` identifiers `lanes[sdd-apply-doc]`, `phases[id=fase_4_documentacion]`, `phases[id=fase_5_rdd]`, `modes.rdd_mode`; JSON Pointer `/delivery` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` + `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-114` | Separación entre tab global informativa y workspace mutable | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointer `/active_sources/include` | n/a (bundle owned by WU-04) | `/projectctl?tab=tareas` + `/project/[id]` | `frontend/__tests__/projectctl-tareas-bundle.test.ts` | `2026-09-10` |
-| `PCT-115` | Aprobación explícita y branch gate (`AC-010.passed_and_branch_available`) | `.agents/skills/projectctl-requirements/references/tasks/binding.md` identifiers `gates[AC-010.*]` + `controls[id=branch_creation_pending]` | n/a (bundle owned by WU-04) | `branch_creation_pending` | `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-116` | Aceptación funcional antes de cobertura | `.agents/skills/projectctl-requirements/references/tasks/binding.md` identifier `gates[functional_acceptance_*]` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-117` | Branch-only y entrega ordenada; en RDD opt-in cada boundary consume el gate read-only declarado por el binding | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointer `/delivery` | n/a (bundle owned by WU-04) | `delivery.action_order` | `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-118` | Eliminación dura del contrato sustituido y de catálogos duplicados | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointers `/retired_aliases` + `/active_sources/exclude` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-10` |
-| `PCT-119` | Trazabilidad AC↔PCT sin alterar el baseline | `.agents/skills/projectctl-requirements/references/tasks/binding.md` machine block identifier `task-flow-binding`; mapping published in `docs/app-map/views/projectctl/features/tareas.md` heading `Trazabilidad` | `docs/app-map/views/projectctl/features/tareas.md` | n/a | `frontend/__tests__/projectctl-tareas-bundle.test.ts` | `2026-09-10` |
-| `PCT-120` | Envelopes no vacíos y routing por fase (`status`/`phase`/`state`/`sections_touched`/`criteria_covered`) | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointers `/status` + `/phases`; envelope contract in `.agents/skills/projectctl-requirements/modules/sd-protocol/workflow-runtime-context.md` | n/a (bundle owned by WU-04) | n/a | `frontend/__tests__/coordinator-state-machine.test.ts` | `2026-09-10` |
-| `PCT-121` | Precedencia del taskReadme/phase artifacts; `rdd-report` es proyección no autoritativa y no sustituye receipts ni recovery | `.agents/skills/projectctl-requirements/references/tasks/binding.md` JSON Pointers `/artifact_store` + `/active_sources/include` | n/a (bundle owned by WU-04) | n/a (filesystem-only) | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` + `frontend/__tests__/task-template.test.ts` | `2026-09-10` |
+### Criterios nuevos 2026-09-07 — backfill + reglas (PCT-149..154, TST-38, AC-329)
 
-> **Block trace**: el binding integral está delimitado por los marcadores `<!-- task-flow-binding:start -->` y `<!-- task-flow-binding:end -->` dentro de `.agents/skills/projectctl-requirements/references/tasks/binding.md` v10.0.0.
-
-### Criterios nuevos 2026-09-07 — backfill + reglas (PCT-149..155, TST-38, AC-329)
+La trazabilidad de `PCT-155` (proposal SDD) está en `projectctl-sdd/references/sources.md`.
 
 > Filas del backfill de 21 criterios (G-8, born-typed con el shape post-rollout
 > `{id, title, functional, coverage, type}`) y de las reglas R-B/R-C. El catálogo completo de
 > cada criterio vive en su bundle (principio anti-duplicación: esta tabla cita paths, NO
-> reproduce catálogos). Los 9 criterios de esta sección son los del scope `/projectctl` + tab
+> reproduce catálogos). Los 8 IDs de esta sección son los del scope `/projectctl` + tab
 > Test de esta tabla; los demás criterios nuevos del backfill (`PRJ-100..107`,
 > `TNL-30..32`, `MDL-63`) viven en bundles de otras vistas (`project-workspace`,
 > `tunnel-management`, `models`) fuera del alcance `/projectctl` de esta tabla — su SoT es su
-> bundle. Los títulos en `Requisito` son verbatim del bundle (pinned por
-> `scripts/app-map-criteria-types.test.ts`).
+> bundle. El corpus y sus títulos se verifican por la instancia en
+> `integration-tests/projectctl/app-map-criteria-types.test.ts`, no por el core.
 
 | ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
 | --- | --- | --- | --- | --- | --- | --- |
-| `PCT-149` | Regla spawn: `spawn(cmd, args, {shell:false})`, NUNCA `exec()` ni `shell:true` | `AGENTS.md` (regla #1) | `docs/app-map/views/projectctl/features/entorno.md` | `sandbox/src/services/spawn.ts` + `sandbox/src/bin/projectctl.ts` + `scripts/test-runner.ts` | `scripts/app-map-criteria-types.test.ts` | `2026-09-07` |
-| `PCT-150` | `/activity` expone trail de auditoría (PCT-72/73) con consumidor declarado | n/a (filesystem) | `docs/app-map/views/projectctl/index.md` | `api/src/routes/activity.ts` | `scripts/app-map-criteria-types.test.ts` | `2026-09-07` |
-| `PCT-151` | Familia `/internal/*` token-gated fail-closed; legacy test-runs preservado | n/a (filesystem) | `docs/app-map/views/projectctl/features/cli.md` | `api/src/index.ts` | `api/src/routes/__tests__/internal-projectctl.test.ts` + `scripts/app-map-criteria-types.test.ts` | `2026-09-07` |
-| `PCT-152` | Wrapper `projectctl-root`: bridge autenticado sin credencial por uso (lane `/internal`) | `.agents/skills/projectctl-requirements/modules/projectctl-root/module.md` | `docs/app-map/views/projectctl/features/cli.md` | `scripts/projectctl-root.ts` | `scripts/app-map-criteria-types.test.ts` | `2026-09-10` |
-| `PCT-153` | El webhook central aplica autenticación y allowlist configuradas por el operador | `AGENTS.md` (regla #7) | `docs/app-map/views/projectctl/features/entorno.md` | `webhook-listener/src/handlers/webhook.js` + `webhook-listener/src/listener.js` + `webhook-listener/src/config.js` | `scripts/app-map-criteria-types.test.ts` | `2026-09-10` |
-| `PCT-154` | Contrato bidireccional código⇒criterio con procedimiento de auditoría en close | `.agents/skills/projectctl-requirements/references/standard.md` §1 + `.agents/skills/projectctl-requirements/references/doc.md` (PCT-85) | `docs/app-map/views/projectctl/features/doc.md` | `scripts/docs-lint.ts` (mitad mecánica código⇒criterio) | `scripts/app-map-criteria-types.test.ts` | `2026-09-07` |
-| `PCT-155` | La proposal declara el delta de criterios con IDs | `.agents/skills/projectctl-requirements/modules/sdd/sdd-propose/module.md` + `.agents/skills/projectctl-requirements/references/standard.md` §5 | `docs/app-map/views/projectctl/features/tareas.md` | n/a (taskReadme/coordinator contract) | `scripts/app-map-criteria-types.test.ts` | `2026-09-10` |
-| `TST-38` | `docs-lint` valida trazabilidad código⇒criterio contra SoT `docs/app-map` (checks 1-5) | n/a (filesystem) | `docs/app-map/views/project-workspace/features/test-tab.md` | `scripts/docs-lint.ts` | `scripts/app-map-criteria-types.test.ts` | `2026-09-07` |
-| `AC-329` | La auditoría doc⇒código verifica que cada criterio declarado tiene evidencia o justificación | `.agents/skills/projectctl-requirements/references/standard.md` §1 | `docs/app-map/views/project-workspace/features/test-tab.md` | `scripts/docs-lint.ts` (mitad mecánica) | `scripts/app-map-criteria-types.test.ts` | `2026-09-07` |
+| `PCT-149` | retired — instancia origen, no portable (regla spawn sandbox de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-150` | retired — instancia origen, no portable (ruta API de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-151` | retired — instancia origen, no portable (familia API de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-153` | retired — instancia origen, no portable (webhook de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-154` | Contrato bidireccional código⇒criterio con procedimiento de auditoría en close | `.agents/skills/projectctl-requirements/references/standard.md` §1 + `.agents/skills/projectctl-requirements/references/docs/reglas.md` (PCT-85) | bundle de la instancia destino (instancia origen: `docs/app-map/views/projectctl/features/doc.md`, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/docs-lint-core.ts` (checks 1-5 puros) + wrapper local `<repo>/scripts/...` (proveído por el destino) | wrapper local `<repo>/scripts/...` (proveído por el destino, evidencia de la instancia) | `2026-09-28` |
+| `TST-38` | `docs-lint` valida trazabilidad código⇒criterio contra SoT `docs/app-map` (checks 1-5) | `.agents/skills/projectctl-requirements/references/test/reglas.md` (TST-38) + `.agents/skills/projectctl-requirements/references/standard.md` §1/§2 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/docs-lint-core.ts` (checks 1-5 puros) + wrapper local `<repo>/scripts/...` (proveído por el destino) | wrapper local `<repo>/scripts/...` (proveído por el destino, evidencia de la instancia) | `2026-09-28` |
+| `AC-329` | La auditoría doc⇒código verifica que cada criterio declarado tiene evidencia o justificación | `.agents/skills/projectctl-requirements/references/standard.md` §1 | patrón portable `docs/app-map/views/<view>/` (instancia destino, no portable) | Contrato portable: `.agents/skills/projectctl-requirements/scripts/project/docs-lint-core.ts` (checks 1-5 puros) + wrapper local `<repo>/scripts/...` (proveído por el destino) | wrapper local `<repo>/scripts/...` (proveído por el destino, evidencia de la instancia) | `2026-09-27` |
 
 ---
 
@@ -172,28 +142,23 @@ Cada garantía nueva debe aparecer como una aserción dedicada; no hay promesa d
 
 | ID | Requisito | SoT skill path | SoT bundle path | SoT CLI/API/Runtime | SoT test path | last-verified |
 | --- | --- | --- | --- | --- | --- | --- |
-| `PCT-169` | Tab criterios, posición y routing fail-closed | `.agents/skills/projectctl-requirements/references/criterios.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/decisions.md` D-8 | `docs/app-map/views/projectctl/features/criterios.md` | `frontend/src/views/projectctl/lib/resolve-tab.ts` | `tests/e2e/projectctl/tabs.spec.ts` | `2026-09-20` |
-| `PCT-170` | Autoridad inline y referencia derivada cita-no-copia | `.agents/skills/projectctl-requirements/references/criterios.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/decisions.md` D-3/D-5 | `docs/app-map/views/projectctl/features/criterios.md` | n/a | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-20` |
-| `PCT-171` | Distinción de enums PCT/App Map y mapping preservado | `.agents/skills/projectctl-requirements/references/criterios.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/estructura.md` | `docs/app-map/views/projectctl/features/criterios.md` | n/a | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-20` |
-| `PCT-172` | Ledger de coverage separado de la autoridad `criteria[]` | `.agents/skills/projectctl-requirements/references/criterios.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/standard.md` §2 | `docs/app-map/views/projectctl/features/criterios.md` | n/a | `frontend/__tests__/projectctl-requirements.sot-coherence.test.ts` | `2026-09-20` |
-| `PCT-173` | Sources de la tab con citas sin republicación | `.agents/skills/projectctl-requirements/references/criterios.md` (índice derivado) | `docs/app-map/views/projectctl/features/criterios.md` | `frontend/src/views/projectctl/ui/TabSources.tsx` | `tests/e2e/projectctl/tabs.spec.ts` | `2026-09-20` |
-| `PCT-174` | Bundle, par Mermaid y proyecciones coherentes | `.agents/skills/projectctl-requirements/references/criterios.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/standard.md` §1 | `docs/app-map/views/projectctl/features/criterios.md` + `docs/app-map/views/projectctl/features/criterios.mmd` | `scripts/projectctl-docs.ts` | `frontend/__tests__/projectctl-doc-bundle.test.ts` | `2026-09-20` |
-| `PCT-175` | `projectctl criteria check` valida calidad semántica MVP y preserva autoridad inline/cita-no-copia | `.agents/skills/projectctl-requirements/SKILL.md` + `.agents/skills/projectctl-requirements/references/criterios.md` | `docs/app-map/views/projectctl/index.md` | `projectctl criteria check` + `scripts/projectctl-criteria-integrity.ts` | `scripts/projectctl-criteria-integrity.test.ts` | `2026-09-21` |
+| `PCT-169` | retired — instancia origen, no portable (routing de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-170` | Autoridad inline y referencia derivada cita-no-copia | `.agents/skills/projectctl-requirements/references/criterios/reglas.md` (índice derivado) | bundle de la instancia destino (no portable) | n/a | `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-requirements.sot-coherence.test.ts` (contrato core) + `integration-tests/projectctl/bundle-contracts.test.ts` (instancia) | `2026-09-28` |
+| `PCT-171` | Enum vigente de 9 (T-1); 7 valores PCT como alias históricos con mapping preservado | `.agents/skills/projectctl-requirements/references/criterios/reglas.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/estructura/reglas.md` | bundle de la instancia destino (no portable) | n/a | `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-criteria-integrity.test.ts` (contrato core) + `integration-tests/projectctl/bundle-contracts.test.ts` (instancia) | `2026-09-28` |
+| `PCT-172` | Ledger de coverage separado de la autoridad `criteria[]` | `.agents/skills/projectctl-requirements/references/criterios/reglas.md` (índice derivado) + `.agents/skills/projectctl-requirements/references/standard.md` §2 | bundle de la instancia destino (no portable) | n/a | `.agents/skills/projectctl-requirements/scripts/__tests__/projectctl-criteria-integrity.test.ts` (contrato core) + `integration-tests/projectctl/bundle-contracts.test.ts` (instancia) | `2026-09-28` |
+| `PCT-173` | retired — instancia origen, no portable (sources UI de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-174` | retired — instancia origen, no portable (generador de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
+| `PCT-175` | `projectctl criteria check` valida calidad semántica MVP y preserva autoridad inline/cita-no-copia | `.agents/skills/projectctl-requirements/SKILL.md` + `.agents/skills/projectctl-requirements/references/criterios/reglas.md` | bundle de la instancia destino (no portable) | Contrato portable: `projectctl criteria check` + `.agents/skills/projectctl-requirements/scripts/skill/projectctl-criteria-integrity.ts` | wrapper local `<repo>/scripts/...` (proveído por el destino, evidencia de la instancia) | `2026-09-28` |
+| `PCT-176` | retired — instancia origen, no portable (catálogo registry de la instancia; v20.0.0) | retired | retired | retired | retired | `2026-09-27` |
 
 ---
 
 ## Reglas machine-grepeable (para validación automatizada)
 
-> Estas reglas mantienen formato machine-grepeable para herramientas futuras. El test actual solo aplica sus checks explícitos y acotados; no garantiza cada regla mediante un scanner genérico.
-
-1. **Todo path en este archivo que es filesystem-referente va entre backticks** con extensión que coincida con la regex `/`(.[^`]+\.(ts|tsx|md|json|ya?ml|sh))`/g`.
-2. **Comandos CLI van entre backticks con prefijo `projectctl`** (ej. `` `projectctl env validate` ``); los args después del comando van en el mismo backtick. Si la salida del comando incluye paths, esos paths van en su propio par de backticks.
-3. **Rutas API van entre backticks con prefijo `/api/`** (ej. `` `GET /api/projects/{id}/docs/app-map` ``). Las variables entre `{}` van literales (NO se interpolan en runtime).
-4. **`last-verified` por entry, formato `YYYY-MM-DD`**. Si una entry tiene el mismo `last-verified` que sus vecinas pero uno de los paths citados cambió, regenerar entry-specific.
-5. **Toda entry que cite una skill inexistente en el repo destino** debe mantener un aviso explícito "skill no encontrada en este repo; verifique localmente" (ADDED-SKILL-005). El aviso se considera parte del contenido, no de la SoT.
+Los paths, comandos CLI (`projectctl ...`) y rutas API (`/api/...`) van entre backticks en formato legible; el contrato machine solo existe donde un test lo pinnee explícitamente (`sot-coherence` tiene checks acotados, no scanner genérico).
 
 ## Criterios cubiertos por este archivo
 
 `PCT-89..PCT-121` + criterios nuevos `PCT-149..PCT-155`, `TST-38`, `AC-329`, `PCT-175` (secciones "Criterios nuevos 2026-09-07 — backfill + reglas" y "Apartado de criterios").
 
-(Véase `.agents/skills/projectctl-requirements/references/tasks/binding.md` v10.0.0 para el bloque integral `task-flow-binding`.)
+(Véase `.agents/skills/projectctl-sdd/references/tasks/binding.md` v13.0.0 para el bloque integral `task-flow-binding`.)

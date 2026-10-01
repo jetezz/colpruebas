@@ -1,8 +1,8 @@
 schema: projectctl-criteria/v1
-source_revision: 428464a7860d678c362bef25e0907693d828fe57ff5f877c197fefbbce869ef9
+source_revision: c77927a9fade32b88eff84b0314dba0bb4800bfc31a0ab157fd9181b5d0d5d17
 criteria:
   - id: PCT-01
-    type: contract
+    type: backend
     title: "Ruta `/projectctl` autenticada server-side; redirige a `/login` sin sesión"
     requirement: "Ruta `/projectctl` autenticada server-side; redirige a `/login` sin sesión"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -11,7 +11,7 @@ criteria:
     revision: c555ea89a1e57c80130660763da9d25fff952f22cc8f12bff0dc3bf967361f6b
     status: active
   - id: PCT-02
-    type: visual
+    type: ui
     title: "Dashboard expone botón que navega a `/projectctl`"
     requirement: "Dashboard expone botón que navega a `/projectctl`"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -20,7 +20,7 @@ criteria:
     revision: 112caf1f35a048748eba9d5cabb39e3ffac0e6053588e0387f8f147fdb79b58a
     status: active
   - id: PCT-03
-    type: visual
+    type: ui
     title: "Vista expone botón/link \"← Volver al dashboard\" en la cabecera"
     requirement: "Vista expone botón/link \"← Volver al dashboard\" en la cabecera"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -30,15 +30,15 @@ criteria:
     status: active
   - id: PCT-04
     type: tooling
-    title: "Fuente única reusable de metadata en `data/projectctl-commands.ts`; cero duplicación"
-    requirement: "Fuente única reusable de metadata en `data/projectctl-commands.ts`; cero duplicación"
+    title: "Fuente única de render `CLI_CATALOG` registry-only en `data/cli-catalog.generated.ts`; `projectctl-commands.ts` aporta tipos y referencia drift-guard; cero duplicación"
+    requirement: "Fuente única de render `CLI_CATALOG` registry-only en `data/cli-catalog.generated.ts`; `projectctl-commands.ts` aporta tipos y referencia drift-guard; cero duplicación"
     owner: "docs/app-map/views/projectctl/index.md"
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 75ca02d35d8458c30ce026e8184e7282ec71e53767acb7123a709fe6d25213d4
     status: active
   - id: PCT-05
-    type: visual
+    type: ui
     title: "Comandos agrupados visualmente por `family`"
     requirement: "Comandos agrupados visualmente por `family`"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -47,7 +47,7 @@ criteria:
     revision: 0ca14bf1a6f084ec8a2e8fa7ddc848b26892c8a7ca5fb321884b9b1aabcf57d8
     status: active
   - id: PCT-06
-    type: visual
+    type: ui
     title: "Filtro `<input>` filtra solo por `name` (case-insensitive, substring)"
     requirement: "Filtro `<input>` filtra solo por `name` (case-insensitive, substring)"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -56,7 +56,7 @@ criteria:
     revision: 3c11c07ad5b105a318eeff516cd8a062a0a876e48a73d7e6fbc34400d430345c
     status: active
   - id: PCT-07
-    type: visual
+    type: ui
     title: "Botón copiar muestra feedback `✓ Copiado` durante ~1.5s preservando placeholders"
     requirement: "Botón copiar muestra feedback `✓ Copiado` durante ~1.5s preservando placeholders"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -335,9 +335,9 @@ criteria:
     revision: 86a058f9fa9c6fb8495b7489c02fb1b49f62e0a6334a67af980a61e70bca2b15
     status: active
   - id: PCT-38
-    type: tooling
-    title: "tunnel: `projectctl tunnel status` — Show tunnel configuration, publishability and remediation"
-    requirement: "tunnel: `projectctl tunnel status` — Show tunnel configuration, publishability and remediation"
+    type: integration
+    title: "Readiness/guardrail abstracto de publicabilidad con remediation accionable"
+    requirement: "El contrato portable conserva únicamente la forma abstracta del resultado de readiness/guardrail: publicabilidad, canales y servicios comprobados, y remediation accionable; la implementación concreta pertenece a la skill operator/local."
     owner: "docs/app-map/views/projectctl/index.md"
     source:
       - "docs/app-map/views/projectctl/index.md"
@@ -351,7 +351,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 388f9fdf8ceff681995623a3cef9ba867e5eb4f1254c15bc80bd476f56dab2ce
-    status: active
+    status: historical
   - id: PCT-40
     type: tooling
     title: "tunnel: `projectctl tunnel routes` — Show enriched tunnel-agent routes for active tunnels"
@@ -360,7 +360,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 3055d55978300508cabd80fc9d8b7aab8455775e6f53c9161fe3d2f05ca25267
-    status: active
+    status: historical
   - id: PCT-41
     type: tooling
     title: "tunnel: `projectctl tunnel domains` — Show available tunnel domains derived from tunnel settings"
@@ -369,7 +369,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: c2b6b37f4657d36b3600f265f8ee5b189b6a834f6d1c394c57ea0cc3dad6b277
-    status: active
+    status: historical
   - id: PCT-42
     type: tooling
     title: "tunnel: `projectctl tunnel set-domain <domain>` — Set tunnel_domain and clear subdomains"
@@ -378,7 +378,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 5c1f410d90f78b5c4c8b9257d6935a81ca7577b2fdc8adae45032506e91a1cc4
-    status: active
+    status: historical
   - id: PCT-43
     type: tooling
     title: "tunnel: `projectctl tunnel set prod <hostname>` — [DEPRECATED] Use \"tunnel assignment set prod --token-id <id> --hostname <hostname>\". Updates compatibility tunnel_hostname (prod) during rollout only."
@@ -387,7 +387,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 0fdc48eceef5c75303eee683d4207bf70eff4d5e12af5bd7dd5bffc921238805
-    status: active
+    status: historical
   - id: PCT-44
     type: tooling
     title: "tunnel: `projectctl tunnel set dev <hostname>` — [DEPRECATED] Use \"tunnel assignment set dev --token-id <id> --hostname <hostname>\". Updates compatibility test_tunnel_hostname (dev) during rollout only."
@@ -396,7 +396,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: ad57096baaa247dc90b71d70751dcbf665bbdf4654754543fb914411c8bf07d7
-    status: active
+    status: historical
   - id: PCT-45
     type: tooling
     title: "tunnel: `projectctl tunnel clear prod|dev|all` — Clear tunnel hostname(s) with confirmation or --yes"
@@ -405,7 +405,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: ac6d04ffbdd485e241f4f76df1ed6d504e5dc8e071c85ed2633fcb00816ab47e
-    status: active
+    status: historical
   - id: PCT-46
     type: tooling
     title: "commands: `projectctl commands list` — List all quick commands for this project"
@@ -704,7 +704,7 @@ criteria:
     revision: e97e219a2d38c8519c43488ce430aa9e1aadf7e8d3804ffd54418417ef23e73b
     status: active
   - id: PCT-79
-    type: visual
+    type: ui
     title: "Tab `cli` (default) existe como segmented control interno y queda activa por query param `?tab=cli` o sin query param"
     requirement: "Tab `cli` (default) existe como segmented control interno y queda activa por query param `?tab=cli` o sin query param"
     owner: "docs/app-map/views/projectctl/features/cli.md"
@@ -714,24 +714,25 @@ criteria:
     status: active
   - id: PCT-80
     type: tooling
-    title: "El panel CLI reusa 1:1 `frontend/src/views/projectctl/data/projectctl-commands.ts` como única fuente de metadata; cero duplicación"
-    requirement: "El panel CLI reusa 1:1 `frontend/src/views/projectctl/data/projectctl-commands.ts` como única fuente de metadata; cero duplicación"
+    title: "El panel CLI consume `CLI_CATALOG` registry-only de `frontend/src/views/projectctl/data/cli-catalog.generated.ts` como única fuente de render; `projectctl-commands.ts` aporta tipos y referencia drift-guard; cero duplicación"
+    requirement: "El panel CLI consume `CLI_CATALOG` registry-only de `frontend/src/views/projectctl/data/cli-catalog.generated.ts` como única fuente de render; `projectctl-commands.ts` aporta tipos y referencia drift-guard; cero duplicación"
     owner: "docs/app-map/views/projectctl/features/cli.md"
     source:
       - "docs/app-map/views/projectctl/features/cli.md"
     revision: 8b4ba41737c52595e6ec5258fb5d185714e62c70b5c1b1ee7be159d995ebd497
     status: active
+  # PCT-81 — detalle de instancia destino: el `data-testid` concreto y CLI_CATALOG pertenecen a la instancia (su App Map + catálogo publicado), fuera del core portable.
   - id: PCT-81
-    type: visual
-    title: "Cada familia MUST exponer `<span data-testid=\"projectctl-cli-family-summary-{family}\">{N} comandos</span>` con conteos pinneados al registry backend"
-    requirement: "Cada familia MUST exponer `<span data-testid=\"projectctl-cli-family-summary-{family}\">{N} comandos</span>` con conteos pinneados al registry backend"
+    type: ui
+    title: "Cada familia MUST exponer `<span data-testid=\"projectctl-cli-family-summary-{family}\">{N} comandos</span>` con conteos leídos del output generado (CLI_CATALOG)"
+    requirement: "Cada familia MUST exponer `<span data-testid=\"projectctl-cli-family-summary-{family}\">{N} comandos</span>` con conteos leídos del output generado (CLI_CATALOG)"
     owner: "docs/app-map/views/projectctl/features/cli.md"
     source:
       - "docs/app-map/views/projectctl/features/cli.md"
     revision: b24d54a9c00beb8210ed3caf5cba7818b32b1d357b4ffcaf82c97e1d86187005
     status: active
   - id: PCT-82
-    type: visual
+    type: ui
     title: "Cambio de tab desde CLI preserva query string + scroll position; URL es compartible"
     requirement: "Cambio de tab desde CLI preserva query string + scroll position; URL es compartible"
     owner: "docs/app-map/views/projectctl/features/cli.md"
@@ -740,7 +741,7 @@ criteria:
     revision: e54f2f748dc5b529313e97f07b7b30207197fb256eb389a410dc293fd7e53782
     status: active
   - id: PCT-83
-    type: visual
+    type: ui
     title: "Tab `doc` existe y lista las reglas documentales que un proyecto debe cumplir para que su `docs/app-map/` se renderice read-only desde la tab Doc del workspace"
     requirement: "Tab `doc` existe y lista las reglas documentales que un proyecto debe cumplir para que su `docs/app-map/` se renderice read-only desde la tab Doc del workspace"
     owner: "docs/app-map/views/projectctl/features/doc.md"
@@ -749,7 +750,7 @@ criteria:
     revision: 439e26827dbba5135b86058c11e06e9d47b1f1ff9014394c2d84ffda9a87426a
     status: active
   - id: PCT-84
-    type: visual
+    type: ui
     title: "El panel Doc lista las 6 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources) en formato checklist navigable"
     requirement: "El panel Doc lista las 6 secciones canónicas MUST por bundle (URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources) en formato checklist navigable"
     owner: "docs/app-map/views/projectctl/features/doc.md"
@@ -794,7 +795,7 @@ criteria:
     revision: 23c2bfe2cf1c724313a8382be4125cc7d2e5abe4ca8b7d91ba487e7de95ffc84
     status: active
   - id: PCT-89
-    type: visual
+    type: ui
     title: "Tab `test` existe y lista las reglas del sistema de testing del repo aplicables a cualquier proyecto gestionado"
     requirement: "Tab `test` existe y lista las reglas del sistema de testing del repo aplicables a cualquier proyecto gestionado"
     owner: "docs/app-map/views/projectctl/features/test.md"
@@ -820,15 +821,6 @@ criteria:
       - "docs/app-map/views/projectctl/features/test.md"
     revision: 0f992a0a262f3307964209ef363f9c7553cc8a310705f19a46c2039581311030
     status: active
-  - id: PCT-92
-    type: contract
-    title: "El panel Test explica que los artefactos persistentes de cada run se conservan bajo `.runtime/test-results/<projectId>/<run-id>/`; el auto-writeback de coverage queda diferido en v1, por lo que la cobertura permanece pendiente/no aceptada y no muta automáticamente criterios ni ledger"
-    requirement: "El panel Test explica que los artefactos persistentes de cada run se conservan bajo `.runtime/test-results/<projectId>/<run-id>/`; el auto-writeback de coverage queda diferido en v1, por lo que la cobertura permanece pendiente/no aceptada y no muta automáticamente criterios ni ledger"
-    owner: "docs/app-map/views/projectctl/features/test.md"
-    source:
-      - "docs/app-map/views/projectctl/features/test.md"
-    revision: c2e61df7b61417610e297334480bd1079a4bf4ef03834d14d2592102b131787c
-    status: active
   - id: PCT-93
     type: tooling
     title: "El panel Test explica el gate `bun run test:check` (TST-13: falla si `functional: implemented` sin `Unit + PW-AUTO = covered`) y el layout canónico `frontend/__tests__/<view>/<feature>.test.ts` + `tests/e2e/<view>/<feature>.spec.ts` (TST-36)"
@@ -848,7 +840,7 @@ criteria:
     revision: bb711c380399f4c21d24868162e915104d5c1f13a37c87d666b61a04e520120f
     status: active
   - id: PCT-95
-    type: visual
+    type: ui
     title: "Tab `entorno` existe y lista las reglas para que un proyecto gestionado arranque, sea publicable y se conecte al tunnel compartido"
     requirement: "Tab `entorno` existe y lista las reglas para que un proyecto gestionado arranque, sea publicable y se conecte al tunnel compartido"
     owner: "docs/app-map/views/projectctl/features/entorno.md"
@@ -875,7 +867,7 @@ criteria:
     revision: 0fd9ad9dd1fda0cf68a1a799624363f5c2c1ad378661b1fcf8006fccb546269d
     status: active
   - id: PCT-98
-    type: operational
+    type: integration
     title: "El panel Entorno explica que la publicación gestionada usa una red edge externa proporcionada por el operador y aliases por entorno; la validación falla cerrada si faltan prerrequisitos de publicación, y los fallbacks o nombres legacy quedan en la documentación local del repositorio"
     requirement: "El panel Entorno explica que la publicación gestionada usa una red edge externa proporcionada por el operador y aliases por entorno; la validación falla cerrada si faltan prerrequisitos de publicación, y los fallbacks o nombres legacy quedan en la documentación local del repositorio"
     owner: "docs/app-map/views/projectctl/features/entorno.md"
@@ -884,9 +876,9 @@ criteria:
     revision: cd691e0fa83898a5ba2bb29f4c883dcfb649c08a8854f9cadc5e22398a4c2881
     status: active
   - id: PCT-99
-    type: contract
-    title: "El panel Entorno explica que el sandbox NO expone Docker CLI ni socket; el control de runtime se hace exclusivamente vía `projectctl env *` (PCT-30..PCT-37), `projectctl tunnel *` (PCT-38..PCT-45) y `projectctl start|stop|restart|rebuild|promote|deploy|doctor`"
-    requirement: "El panel Entorno explica que el sandbox NO expone Docker CLI ni socket; el control de runtime se hace exclusivamente vía `projectctl env *` (PCT-30..PCT-37), `projectctl tunnel *` (PCT-38..PCT-45) y `projectctl start|stop|restart|rebuild|promote|deploy|doctor`"
+    type: backend
+    title: "El panel Entorno explica que el sandbox NO expone Docker CLI ni socket; el control de runtime se hace exclusivamente vía `projectctl` y su boundary privilegiado"
+    requirement: "El panel Entorno explica que el sandbox NO expone Docker CLI ni socket; el control de runtime portable se hace exclusivamente vía `projectctl` y el ejecutor privilegiado, sin enumerar operaciones operator-only"
     owner: "docs/app-map/views/projectctl/features/entorno.md"
     source:
       - "docs/app-map/views/projectctl/features/entorno.md"
@@ -894,15 +886,15 @@ criteria:
     status: active
   - id: PCT-100
     type: tooling
-    title: "El panel Entorno referencia `.agents/skills/projectctl-requirements/ references/standard.md` como policy integrada de runtime cross-service y frontera de cambio/migración de compose/env para publicabilidad"
-    requirement: "El panel Entorno referencia `.agents/skills/projectctl-requirements/ references/standard.md` como policy integrada de runtime cross-service y frontera de cambio/migración de compose/env para publicabilidad"
+    title: "El panel Entorno referencia la policy portable integrada y la skill de proyecto para la implementación concreta del edge"
+    requirement: "El panel Entorno referencia la policy portable integrada del runtime y delega la implementación concreta del canal edge abstracto a la implementación local del operador, no portable"
     owner: "docs/app-map/views/projectctl/features/entorno.md"
     source:
       - "docs/app-map/views/projectctl/features/entorno.md"
     revision: 6a389083449961f28d5ad340da5d1727888a6d36b0c6fd2d651215d50ed1f2b6
     status: active
   - id: PCT-101
-    type: visual
+    type: ui
     title: "Segmented control interno expone las 8 tabs canónicas en orden fijo: cli, tareas, agentes, doc, criterios, test, entorno, estructura"
     requirement: "Segmented control interno expone las 8 tabs canónicas en orden fijo: cli, tareas, agentes, doc, criterios, test, entorno, estructura"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -911,7 +903,7 @@ criteria:
     revision: a98ee67cebe80f2f2f4996f1866872c9faefa6e1e92a4954503224080cc7dde3
     status: active
   - id: PCT-102
-    type: visual
+    type: ui
     title: "Cada una de las 8 tabs expone su panel y aside de fuentes con data-testid canónico, incluyendo agentes y criterios"
     requirement: "Cada una de las 8 tabs expone su panel y aside de fuentes con data-testid canónico, incluyendo agentes y criterios"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -929,7 +921,7 @@ criteria:
     revision: a2cf029e5e3ed59373d4ef4604733e1c9b4e445b2d8670df193e40fb6dc4b357
     status: active
   - id: PCT-104
-    type: visual
+    type: ui
     title: "Tab inicial, deep links y data-testid mantienen el contrato cross-tab"
     requirement: "Tab inicial, deep links y data-testid mantienen el contrato cross-tab"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -1019,7 +1011,7 @@ criteria:
     revision: 8420808c3dfdaf4543e4e229032c2f116e5ec688f926a39406a59a5fda28c4a3
     status: active
   - id: PCT-114
-    type: visual
+    type: ui
     title: "`/projectctl?tab=tareas` es informativa/no mutable; la tab `/project/[id]` conserva CRUD/ejecución; el contrato agente completo vive en el binding declarado"
     requirement: "`/projectctl?tab=tareas` es informativa/no mutable; la tab `/project/[id]` conserva CRUD/ejecución; el contrato agente completo vive en el binding declarado"
     owner: "docs/app-map/views/projectctl/features/tareas.md"
@@ -1029,8 +1021,8 @@ criteria:
     status: active
   - id: PCT-115
     type: tooling
-    title: "El estado declarado por el binding para `p1_awaiting_acceptance` permanece bloqueado hasta que el coordinador registre la aprobación explícita con los campos exigidos por el gate"
-    requirement: "El estado declarado por el binding para `p1_awaiting_acceptance` permanece bloqueado hasta que el coordinador registre la aprobación explícita con los campos exigidos por el gate"
+    title: "El estado declarado por el binding para `p1_awaiting_acceptance` permanece bloqueado hasta que sdd-orchestrator registre la aprobación explícita con los campos exigidos por el gate"
+    requirement: "El estado declarado por el binding para `p1_awaiting_acceptance` permanece bloqueado hasta que sdd-orchestrator registre la aprobación explícita con los campos exigidos por el gate"
     owner: "docs/app-map/views/projectctl/features/tareas.md"
     source:
       - "docs/app-map/views/projectctl/features/tareas.md"
@@ -1038,8 +1030,8 @@ criteria:
     status: active
   - id: PCT-116
     type: tooling
-    title: "Fase 2 llega al estado declarado por el binding para aceptación funcional únicamente con code review verde; Fase 3 permanece bloqueada hasta que el coordinador registre la aceptación funcional explícita"
-    requirement: "Fase 2 llega al estado declarado por el binding para aceptación funcional únicamente con code review verde; Fase 3 permanece bloqueada hasta que el coordinador registre la aceptación funcional explícita"
+    title: "Fase 2 llega al estado declarado por el binding para aceptación funcional únicamente con code review verde; Fase 3 permanece bloqueada hasta que sdd-orchestrator registre la aceptación funcional explícita"
+    requirement: "Fase 2 llega al estado declarado por el binding para aceptación funcional únicamente con code review verde; Fase 3 permanece bloqueada hasta que sdd-orchestrator registre la aceptación funcional explícita"
     owner: "docs/app-map/views/projectctl/features/tareas.md"
     source:
       - "docs/app-map/views/projectctl/features/tareas.md"
@@ -1134,7 +1126,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 1eb0559ec9610826904bc892f10f189d36a513b2d8d70dff7c7065c6185ecc2f
-    status: active
+    status: historical
   - id: PCT-127
     type: tooling
     title: "`projectctl tunnel assignment set` command is present in the global catalog"
@@ -1143,7 +1135,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 5ca1ba718b838cc24148f30c44aaf2ee554ee98dd6689258e36589455439697a
-    status: active
+    status: historical
   - id: PCT-128
     type: tooling
     title: "`projectctl tunnel assignment clear` command is present in the global catalog"
@@ -1152,7 +1144,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: 8006d25d5dfaff5d84c5bdaf0c5e25d252add8fc147e721b4c2c34492e9c6bda
-    status: active
+    status: historical
   - id: PCT-129
     type: tooling
     title: "`projectctl tunnel assignment reconcile` command is present in the global catalog"
@@ -1161,7 +1153,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: a53c812a0318dc9b8f1c76267d5f7f9e34e0568a6f52d580a0a90eb28c5e8d34
-    status: active
+    status: historical
   - id: PCT-130
     type: tooling
     title: "`projectctl sdd agent set` command is present in the global catalog"
@@ -1343,7 +1335,7 @@ criteria:
     revision: 15696f2e6caa2dc8d461824adf5a84498305eb434b512e8cb0cd8b76b8637268
     status: active
   - id: PCT-150
-    type: contract
+    type: backend
     title: "`/activity` expone trail de auditoría (PCT-72/73) con consumidor declarado"
     requirement: "`/activity` expone trail de auditoría (PCT-72/73) con consumidor declarado"
     owner: "docs/app-map/views/projectctl/index.md"
@@ -1352,7 +1344,7 @@ criteria:
     revision: 205e81adbb5ce12bc4e0a3bc1f6b7cbcfcbbea78f27ed0d7b5d4f0be8850c7b8
     status: active
   - id: PCT-151
-    type: contract
+    type: backend
     title: "Familia `/internal/*` token-gated fail-closed; legacy test-runs preservado"
     requirement: "Familia `/internal/*` token-gated fail-closed; legacy test-runs preservado"
     owner: "docs/app-map/views/projectctl/features/cli.md"
@@ -1360,6 +1352,7 @@ criteria:
       - "docs/app-map/views/projectctl/features/cli.md"
     revision: 721e159b921ad2baa8d41315dc59e8f8c6d71ee96b854efd23f7b716a773a8c3
     status: active
+    # retired 2026-09-28: wrapper root de instancia, skill projectctl-root eliminada
   - id: PCT-152
     type: tooling
     title: "Wrapper `projectctl-root`: bridge autenticado sin credencial por uso (lane `/internal`)"
@@ -1368,16 +1361,7 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/features/cli.md"
     revision: e084f75b886d4c9f69c4d691bded1634544a31ae61fdb81842ebae6f9db79c0e
-    status: active
-  - id: PCT-153
-    type: contract
-    title: "Frontera de webhook autenticada y allowlist de red/origen configuradas por el operador"
-    requirement: "Frontera de webhook autenticada y allowlist de red/origen configuradas por el operador"
-    owner: "docs/app-map/views/projectctl/features/entorno.md"
-    source:
-      - "docs/app-map/views/projectctl/features/entorno.md"
-    revision: 828c1da48b791661a8b0f24420b791a1376b512b9c974a07fa32fdb5290a6030
-    status: active
+    status: retired
   - id: PCT-154
     type: tooling
     title: "Contrato bidireccional código⇒criterio con procedimiento de auditoría en close"
@@ -1514,7 +1498,7 @@ criteria:
     revision: 1c0df8bc4d2a4191d97dac96f938fad8f81f20df39c4f8f0282bc60e5834c21f
     status: active
   - id: PCT-169
-    type: visual
+    type: ui
     title: "La tab `criterios` existe en `/projectctl?tab=criterios` como octava tab, ocupa la quinta posición y conserva routing fail-closed"
     requirement: "La tab `criterios` existe en `/projectctl?tab=criterios` como octava tab, ocupa la quinta posición y conserva routing fail-closed"
     owner: "docs/app-map/views/projectctl/features/criterios.md"
@@ -1523,16 +1507,16 @@ criteria:
     revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
     status: active
   - id: PCT-170
-    type: docs
-    title: "Los criterios de la tab `criterios` son inline en su bundle App Map y `references/criterios.md` permanece como índice derivado cita-no-copia"
-    requirement: "Los criterios de la tab `criterios` son inline en su bundle App Map y `references/criterios.md` permanece como índice derivado cita-no-copia"
+    type: tooling
+    title: "Los criterios de la tab `criterios` son inline en su bundle App Map y `references/criterios/reglas.md` permanece como índice derivado cita-no-copia"
+    requirement: "Los criterios de la tab `criterios` son inline en su bundle App Map y `references/criterios/reglas.md` permanece como índice derivado cita-no-copia"
     owner: "docs/app-map/views/projectctl/features/criterios.md"
     source:
       - "docs/app-map/views/projectctl/features/criterios.md"
     revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
     status: active
   - id: PCT-171
-    type: docs
+    type: tooling
     title: "La documentación distingue el enum PCT de 7 valores del enum App Map de 9 y preserva exactamente el mapping 7→9"
     requirement: "La documentación distingue el enum PCT de 7 valores del enum App Map de 9 y preserva exactamente el mapping 7→9"
     owner: "docs/app-map/views/projectctl/features/criterios.md"
@@ -1541,7 +1525,7 @@ criteria:
     revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
     status: active
   - id: PCT-172
-    type: docs
+    type: tooling
     title: "El coverage ledger permanece separado de `criteria[]`, conserva su schema y acepta `entries: []`"
     requirement: "El coverage ledger permanece separado de `criteria[]`, conserva su schema y acepta `entries: []`"
     owner: "docs/app-map/views/projectctl/features/criterios.md"
@@ -1550,7 +1534,7 @@ criteria:
     revision: e1782c04323ffb5119f2e11cbbebd2f188899c0d199d9b0c162613c7d96d18f7
     status: active
   - id: PCT-173
-    type: visual
+    type: ui
     title: "La tab `criterios` renderiza `projectctl-tab-sources-criterios` con citas navegables y sin republicar tablas ni catálogos"
     requirement: "La tab `criterios` renderiza `projectctl-tab-sources-criterios` con citas navegables y sin republicar tablas ni catálogos"
     owner: "docs/app-map/views/projectctl/features/criterios.md"
@@ -1575,6 +1559,41 @@ criteria:
     source:
       - "docs/app-map/views/projectctl/index.md"
     revision: e67fdfe25b43c685e454c8e2a99fd5a63bde0169727439e8d332065239ac9440
+    status: active
+  - id: PCT-176
+    type: tooling
+    title: "runtime: `projectctl start dev` — Start the development environment from the current sandbox checkout"
+    requirement: "El catálogo público MUST representar explícitamente `projectctl start dev` como el comando de arranque del entorno de desarrollo."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "docs/app-map/views/projectctl/index.md"
+    revision: be4e7a58e87827bc8ca1e02a8f82cfaf9abda81d170f34bbf50401ca125cc198
+    status: active
+  - id: PCT-177
+    type: tooling
+    title: "runtime: `projectctl rebuild dev` — Rebuild the development environment from the current sandbox checkout"
+    requirement: "El catálogo público MUST representar explícitamente `projectctl rebuild dev` como la operación de rebuild controlada del entorno de desarrollo."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "sandbox/src/lib/projectctl-registry.ts"
+      - "sandbox/src/bin/projectctl.ts"
+      - "frontend/src/views/projectctl/data/cli-catalog.generated.ts"
+      - "frontend/__tests__/projectctl-commands-mapping.test.ts"
+      - "sandbox/src/__tests__/lib/projectctl-registry.test.ts"
+    revision: be4e7a58e87827bc8ca1e02a8f82cfaf9abda81d170f34bbf50401ca125cc198
+    status: active
+  - id: PCT-178
+    type: tooling
+    title: "runtime: `projectctl deploy prod` — Deploy the current sandbox checkout to production"
+    requirement: "El catálogo público MUST representar explícitamente `projectctl deploy prod` como el deploy del checkout actual a producción, con sensibilidad prod."
+    owner: "docs/app-map/views/projectctl/index.md"
+    source:
+      - "sandbox/src/lib/projectctl-registry.ts"
+      - "sandbox/src/bin/projectctl.ts"
+      - "frontend/src/views/projectctl/data/cli-catalog.generated.ts"
+      - "frontend/__tests__/projectctl-commands-mapping.test.ts"
+      - "sandbox/src/__tests__/lib/projectctl-registry.test.ts"
+    revision: be4e7a58e87827bc8ca1e02a8f82cfaf9abda81d170f34bbf50401ca125cc198
     status: active
 candidates:
   - id: PCT-CAND-20260908-PCTMAP-A01

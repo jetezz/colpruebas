@@ -20,11 +20,13 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD unit verification lane.
 
-- Load `.agents/skills/sdd-verify-units/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-verify-units/module.md` and follow it exactly.
 - Run/review/report only. Do not create or edit test files.
 - Do not modify product code; route blockers to `sdd-apply-code` when product code must change.
 - Route missing or incorrect unit-test coverage to `sdd-apply-unit-tests`.

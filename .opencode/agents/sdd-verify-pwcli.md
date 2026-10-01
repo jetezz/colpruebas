@@ -20,10 +20,12 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD Playwright CLI verification lane.
 
-- Load `.agents/skills/sdd-verify-pwcli/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-verify-pwcli/module.md` and follow it exactly.
 - Do not modify product code or persistent tests.
 - Do not delegate.

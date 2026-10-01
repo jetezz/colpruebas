@@ -1,23 +1,19 @@
-# Integrated Standard — Docs, Testing, Runtime and Projectctl Operation
+# Integrated Standard — Docs, Testing and Projectctl Operation
 
-> **last-verified**: 2026-09-21. El contrato activo es package v13.1.0/binding v10.0.0; cualquier mención a versiones anteriores en el historial de versionado no es normativa.
+> **last-verified**: 2026-09-28. Este contrato pertenece al core de criterios y evidencia; runtime gestionado y SDD se versionan en sus satélites.
 
-Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-governance`, `testing-policy`, `ops-runtime-policy` y `projectctl-operator`. `projectctl-requirements` package v13.1.0 publica el binding operativo único en `.agents/skills/projectctl-requirements/references/tasks/binding.md`; esta skill es el estándar integrado para compatibilidad `/projectctl`.
+Este archivo indexa documentación, testing, estructura, trazabilidad de código y operación del CLI. El runtime gestionado vive en `projectcl-enviorement` y el flujo de tareas, cuando se instala, en `projectctl-sdd`.
 
-> **Rol de este archivo**: integrado de reglas operativas. Los valores del workflow viven únicamente en el bloque `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2).
+> **Rol de este archivo**: contrato del core. No declara fases, gates ni valores del workflow SDD.
 
 ## 1. Documentación y app-map
 
 ### Fuentes a revisar primero
 
-1. `taskReadme/<task_id>-<task_slug>.md` (índice de coordinación) y su detalle full-artifact en `taskReadme/<task_id>-<task_slug>/<artifact>.md`, según `artifact_store.primary`/`artifact_store.phase_artifacts` del bloque `task-flow-binding`.
-2. `docs/04-process/task.md`.
-3. `docs/04-process/development.md`.
-4. `docs/app-map/navigation.yaml`.
-5. `docs/app-map/views/**`.
-6. `docs/00-context/agents_skills.md`.
-7. `AGENTS.md`.
-8. `README.md`.
+1. `docs/app-map/navigation.yaml` y sus bundles listados.
+2. `docs/app-map/views/**` cuando el destino usa esa jerarquía.
+3. `AGENTS.md` y la documentación local del proyecto para reglas de superficie.
+4. `README.md` para instrucciones de instalación y uso del destino.
 
 ### Reglas obligatorias
 
@@ -34,8 +30,13 @@ Este archivo absorbe las reglas de valor que antes estaban repartidas en `docs-g
 - Root fijo: `docs/app-map/`.
 - Manifest obligatorio: `docs/app-map/navigation.yaml`.
 - Bundle exacto por nodo: `${bundle}.md` + `${bundle}.mmd`.
-- Cada bundle declara 6 secciones: URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources.
+- `root_id` debe apuntar a un `navigation[]` no vacío; cada nodo declara `id`, `title`, `kind: view|feature`, `bundle` relativo sin extensión, y `children` (lista explícita). `id` y `bundle` son únicos en el árbol; el orden del manifest determina el sidebar. Un `.md` fuera del árbol no aparece en Doc.
+- Cada bundle listado lleva frontmatter `id`/`title`/`kind` idénticos al nodo, `summary` no vacío y `source_of_truth: app-map`; `## 1. URL` aporta ruta canónica o URL HTTP(S) real. El `.mmd` sibling debe contener un diagrama Mermaid válido para el lector.
+- Cada bundle declara editorialmente 6 secciones: URL, Tab, Objetivo, Criterios, Diagrama Mermaid, Sources. No son seis gates de parseo del lector; detalles y estados `missing`/`invalid`/`valid` en `references/docs/reglas.md`.
 - Cada bundle incluye frontmatter `criteria[]` con IDs inline para trazabilidad doc <-> tests <-> producto.
+ - La cadena criterios→docs→test→estructura→code exige `evidence_paths` en cada `criteria[]` activo y locators distintos por superficie (`@ac` en tests, `@criterion`/`@trace`/`@contract` en código; ningún marker equivale a cobertura): ver `references/estructura/reglas.md` (autoridad `evidence_paths` + mapping type→carpeta), `references/code/reglas.md` (convención completa de markers) y `references/test/reglas.md` (contrato `@ac` operativo).
+- El doctor local `bun .agents/skills/projectctl-requirements/scripts/project/doctor-docs.ts --root . --json` no puede certificar la aceptación del parser estricto: sin CLI autenticado informa `unverified` si la estructura local pasa. `--managed` usa `projectctl docs lint --json` y devuelve el veredicto del lector real; `projectctl docs check` es el gate del generador de `/projectctl`, no del bundle del proyecto.
+- Los tres doctors del checkout admiten `--target=<view>[:<feature>]` como diagnóstico acotado. La jerarquía la define únicamente `navigation.yaml`; los criterios pertenecen al frontmatter del bundle listado. El índice derivado común `scripts/project/app-map-inventory.ts` resuelve el target e IDs para Docs, Test y Estructura. Sin `--target` permanece el diagnóstico global; los checks comunes y los veredictos managed no se convierten en evidencia de una feature.
 - El ID del criterio es vinculante; no debe existir criterio en código o tests que no esté documentado en `docs/app-map/**`.
 - Todo criterio declarado en `docs/app-map/**` debe tener evidencia en código o tests, **o** una justificación explícita (not-applicable / Manual / documental).
 - Estados funcionales permitidos: `implemented | partial | missing | not-applicable`.
@@ -61,9 +62,16 @@ Cada criterio `criteria[]` declara `type` (obligatorio, item-level, indent 4, lo
 
 ### Auditoría de criterios
 
+Identidad única y ciclo de vida: `references/criterios/identity.md` y
+`scripts/project/criterion-contract.ts`. Todos los consumidores, incluidos
+proposal/spec/tasks de SDD, usan el mismo ID del bundle owner; no hay aliases
+operativos ni renumeración por tarea. Un alta propuesta lleva ID definitivo y
+una retirada conserva tombstone. Las revisiones de aceptación excluyen los
+resultados de ejecución; una definición modificada requiere evidencia vigente.
+
 La dirección doc→código es normativa (no un hard gate de lint). En el cierre de un cambio, verificar por bundle que cada criterio declarado tenga al menos una referencia en código o tests, o una nota de excepción (not-applicable / Manual / documental). Es un procedimiento normativo en close; NO es un hard gate de lint.
 
-La mitad mecánica del contrato vive en los checks de `scripts/docs-lint.ts`: `checkProductCode`, `checkUnitTests` y `checkPlaywrightSpecs` (código⇒criterio, dirección inversa a la auditoría doc⇒código). Esta sección solo declara la dirección doc⇒código como procedimiento de auditoría; no introduce un lint inverso.
+La mitad mecánica del contrato vive en los checks 1-5 puros del contrato portable `.agents/skills/projectctl-requirements/scripts/project/docs-lint-core.ts` (`checkProductCode`, `checkUnitTests` y `checkPlaywrightSpecs`, dirección código⇒criterio, inversa a la auditoría doc⇒código), instanciados por el wrapper local `<repo>/scripts/...` (proveído por el destino, parser real + globs del repo; evidencia aportada por el wrapper local de la instancia). Esta sección solo declara la dirección doc⇒código como procedimiento de auditoría; no introduce un lint inverso.
 
 ### Árbol de clasificación del criterio (T-5 — normativo)
 
@@ -80,13 +88,13 @@ Asignar el tipo de un criterio por la primera regla que coincida, en orden:
 
 Desempates: **un criterio = una preocupación** (preocupaciones mixtas MUST dividirse en dos criterios tipados, nunca multi-tipo); UI+backend mismo comportamiento → tipar por donde vive la evidencia directa más barata (regla de la pirámide; preocupación enforced en servidor → `backend` aunque tenga UI); a11y vs ui → el SC WCAG citado gana; tooling con UI de admin → mirar el consumidor del criterio (usuario final vs operador).
 
-> **last-verified**: 2026-09-07 — regenerar ante cualquier cambio en `shared/contracts/app-map.ts` (`APP_MAP_CRITERION_TYPES`), en `docs/app-map/views/project-workspace/features/doc-tab.md` (piloto T-6), en la taxonomía del spec (T-1/T-5) o en el contrato bidireccional doc⇒código (R-B; mitad mecánica en `scripts/docs-lint.ts` `checkProductCode`/`checkUnitTests`/`checkPlaywrightSpecs`).
+> **last-verified**: 2026-09-28 — regenerar ante cualquier cambio en el contrato de tipos del app-map, en el piloto T-6 del bundle de la instancia destino (no portable), en la taxonomía del spec (T-1/T-5) o en el contrato bidireccional doc⇒código (R-B; mitad mecánica en `.agents/skills/projectctl-requirements/scripts/project/docs-lint-core.ts` checks 1-5 + wrapper local `<repo>/scripts/...` proveído por el destino).
 
 ### Diagramas
 
 - Las vistas UI, tabs y subsuperficies documentadas deben tener diagrama Mermaid cuando formen parte de documentación funcional.
 - El formato canónico es Mermaid y debe validarse antes de cerrar el cambio.
-- Para `/projectctl`, los diagramas funcionales viven junto al bundle (`docs/app-map/views/projectctl/**/*.mmd`).
+- Para `/projectctl`, los diagramas funcionales viven junto al bundle (`docs/app-map/views/<view>/**/*.mmd`; patrón portable, instancia destino, no portable).
 
 ## 2. Testing, evidencia y coverage
 
@@ -101,7 +109,7 @@ Desempates: **un criterio = una preocupación** (preocupaciones mixtas MUST divi
 
 ### Reglas Playwright y Bun
 
-- Usar Bun: `bun test` y `bunx playwright test`; nunca `npm install` ni `npx`.
+- Usar Bun para los comandos gestionados: `bun test`, `bunx playwright test` y lockfile Bun versionado; no aceptar un gate que no ejecute tests o que use `--passWithNoTests`.
 - Usar `BASE_URL` o URL explícita; no hardcodear dominios legacy.
 - Preferir roles, labels y selectores estables; evitar sleeps fijos.
 - Si nace o cambia cobertura `PW-AUTO`, actualizar `playwright/TEST_PLAN.md`.
@@ -112,113 +120,33 @@ Desempates: **un criterio = una preocupación** (preocupaciones mixtas MUST divi
 
 - Tests Bun y specs Playwright deben declarar `// @ac <ID>` en las primeras 10 líneas.
 - Specs Playwright deben añadir `test.info().annotations.push({ type: 'ac', description: '<ID>' })`.
-- El runner unificado es `bun run scripts/test-runner.ts run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]`.
-- `projectctl test *` mapea 1:1 al runner unificado.
-- La persistencia canónica vive en `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/{junit.xml,results.json,summary.json}`.
-- En v1 los runs se persisten y la cobertura queda `pending`/no aceptada; el auto-writeback de `criteria[].coverage` está diferido (`AUTO_WRITEBACK_DEFERRED_V1`).
+- TST-40/TST-41/TST-42 (descubrimiento gestionado): cada spec declara el owner `// @<view-id>` (ID de `docs/app-map/navigation.yaml`) en las primeras 10 líneas, vive en `tests/e2e/<view>/` (unit del proyecto en `tests/unit/<view>/`) y sus títulos `test('...')` contienen sus IDs `// @ac` (el runner filtra con `--grep` sobre el título).
+- TST-39 (copia única): el proyecto NO declara `@playwright/test` (ni `playwright`) en `package.json`; specs y config resuelven a la copia única de plataforma. Browsers de la versión canónica vía `PLAYWRIGHT_BROWSERS_PATH` (default `/opt/pw-browsers` en sandbox).
+- El proyecto genérico PW-AUTO `pwauto-<view>` lo deriva el runner del `navigation.yaml` del proyecto (root canónico project-first); el checkout no inventa proyectos Playwright paralelos.
+- El runner unificado lo aporta el wrapper local de la instancia destino (proveído por el destino): `bun run <repo>/scripts/<runner>.ts run --method=<unit|pwauto|all> --target=<view>[:<feature>] [--persist]` sobre el contrato portable `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts`.
+- `projectctl test *` delega en el runner del operador; en proyectos gestionados, comprobar que el target `view[:feature]`, los tests y el app-map efectivos pertenecen al checkout correcto (source root y project root pueden diferir).
+ - La persistencia canónica vive en `.runtime/test-results/<projectId>/<run-id>/{unit,pwauto}/{junit.xml,results.json,summary.json}` (concepto ledger en `references/criterios/reglas.md` PCT-172; operativa en `references/test/reglas.md` PCT-92).
+ - Con `--persist`, un run exitoso con tests ejecutados > 0 puede hacer write-back V2 de Unit/PW-AUTO; `coverageAccepted: true` solo tras patch atómico confirmado (operativa en `references/test/reglas.md` PCT-92; el ledger nunca inventa filas, ver PCT-172). Fallo, 0 tests o patch no confirmado dejan cobertura `pending`/no aceptada; `AUTO_WRITEBACK_DEFERRED_V1` se conserva como fallback.
+- `test:check` debe comprobar en el app-map del proyecto gestionado que cada criterio `functional: implemented` tenga tanto Unit como PW-AUTO en `covered`, salvo `skip_quality_gate: true` justificado. `vitest run && tsc --noEmit` por sí solos no son ese gate.
+- Leer `references/test/reglas.md` para distinguir requisitos del checkout frente a la tab 5.1/5.2 y el runner/DB del operador. Correr el doctor read-only `bun .agents/skills/projectctl-requirements/scripts/project/doctor-test.ts --root . --json`; el exit 1 expone incumplimientos y el exit 3 no certifica el runtime.
 - `bun run test:check` es el gate de cobertura contractual.
+- TST-38: `docs:lint` valida la trazabilidad código⇒criterio contra la SoT `docs/app-map/**` (checks 1-5 puros en `.agents/skills/projectctl-requirements/scripts/project/docs-lint-core.ts`, instanciados por el wrapper local `<repo>/scripts/...` proveído por el destino; evidencia aportada por el wrapper local de la instancia).
+- Contrato portable del runner: tipos + validadores puros (`validateAcHeader`/`validateLayout`/`validateResultsEnvelope`, mapping 1:1, persistencia y `AUTO_WRITEBACK_DEFERRED_V1`) en `.agents/skills/projectctl-requirements/scripts/project/test-runner-contract.ts`; el wrapper local `<repo>/scripts/...` (proveído por el destino) es la instancia runtime que lo importa (SoT CLI = contrato portable vs Runtime = wrapper local de la instancia).
 
-## 3. Runtime, compose/env y tunnel
+## 3. Superficies satélite
 
-### Reglas duras
+El contrato gestionado de Compose, configuración y publicación (PCT-95..PCT-100) vive en `.agents/skills/projectcl-enviorement/references/managed-environments.md`. Usar su doctor estático y `projectctl doctor` para verificar el runtime; este estándar no replica reglas de operación. La tab CLI vive en la instancia destino (su App Map + catálogo publicado), fuera del ecosistema portable. Para Tareas, consultar `.agents/skills/projectctl-sdd/references/tasks/binding.md` solo cuando se instala SDD.
 
-- Layout canónico: `compose.yml` para prod y `compose.dev.yml` para dev.
-- Los proyectos deben conservar nombres de servicio estables por rol y documentar su mapeo local en los contratos de entorno del repositorio destino.
-- `compose.yml` sirve servidor/prod con `frontend` en `target: prod`.
-- `compose.dev.yml` sirve iteración local/dev con HMR/watch y `frontend` en `target: dev`.
-- `webhook-listener` es el ejecutor operativo; API y sandbox no ejecutan Docker ni `cloudflared` directamente.
-- La publicabilidad gestionada requiere un canal de tunnel central proporcionado por el operador; el paquete portable no fija nombres de endpoints, secretos, red, proveedor ni topología. Consulte `docs/00-context/entornos.md` y `docs/02-features/tunnel.md` del repositorio destino.
-- El estado canónico de configuración `prod/dev` de proyectos gestionados vive cifrado en Supabase; runtime solo consume inyección efímera.
-- `sandbox` y `api` no se exponen libremente al host en producción salvo la excepción explícita vigente del `compose.yml` raíz.
-- `HOST_PROJECT_DIR/workspace/users` debe seguir montado en `/workspace/users` para persistir `HOME` y caches del sandbox.
-- Cualquier servicio de tunnel local queda fuera del camino portable; si el repositorio destino conserva un fallback legacy opt-in, debe documentarlo en sus docs locales.
+## 4. Frontera operativa
 
-### Publicabilidad de proyectos gestionados
+La operación autenticada de `projectctl` y el wrapper root pertenecen a la instancia destino (no portable); la seguridad de `start dev/prod` y `deploy prod` a `projectcl-enviorement`. Los tests y su cobertura siguen en `references/test/reglas.md`. No tratar la presencia o ausencia de un satélite como evidencia de cobertura del core.
 
-- Los proyectos gestionados deben cumplir `references/entorno.md`.
-- Frontend debe exponer `4321` dentro del contenedor.
-- `.env` debe declarar `FRONTEND_PORT` y `.env.dev` debe declarar `FRONTEND_DEV_PORT`; ambos archivos son configuración local explícita y no aceptan aliases entre overlays.
-- El frontend debe unirse a la red edge gestionada por el operador con el alias esperado por entorno; los nombres concretos se definen en los docs locales del repositorio destino.
-- Prod y dev usan alias edge distintos y explícitos según el contrato local del operador.
-- No usar `host.docker.internal:<FRONTEND_PORT>` como camino estándar cuando existe alias edge gestionado; queda como compat/legacy.
-- El comando local de desarrollo usa el overlay sobre la base: `docker compose --env-file .env.dev -f compose.yml -f compose.dev.yml up -d --build`; `compose.dev.yml` no es un stack independiente.
-- `projectctl env validate` debe detectar las claves de puerto faltantes o inválidas según el overlay: `FRONTEND_PORT`/`API_PORT` en `.env` y `FRONTEND_DEV_PORT`/`API_DEV_PORT` en `.env.dev`.
-- `projectctl tunnel status` debe exponer `TUNNEL_NOT_PUBLISHABLE` con acciones cuando falte red/alias/hostname.
+## 5. Resultado esperado de un agente que usa este estándar
 
-### Cambios operativos
-
-- Si se toca Compose, preservar el modelo de overlays existente antes de introducir servicios, perfiles o puertos nuevos.
-- Si se toca compose/env de un proyecto gestionado, identificar archivos owned por la tarea, aplicar cambio mínimo y reportar qué requisito de `references/entorno.md` quedó satisfecho.
-- Si se toca startup ordering, dependencias o readiness, no cambiar rol de servicios ni mover fuente de verdad fuera del contrato documentado.
-- Si una decisión operativa impacta API, sandbox o tunnel, actualizar el contrato de esa superficie sin duplicar policy.
-
-## 4. Operación segura de `projectctl`
-
-### Boundary
-
-```text
-terminal -> projectctl -> API -> webhook-listener -> Docker host
-```
-
-- `projectctl` corre dentro de la PTY del proyecto.
-- Habla con backend autenticado y project-scoped.
-- API valida auth + ownership.
-- `webhook-listener` es la única superficie privilegiada que ejecuta Docker Compose.
-- `sandbox` no expone Docker CLI ni `docker.sock`.
-- Si necesitás runtime desde la terminal, la vía soportada es `projectctl`.
-
-### Uso permitido
-
-- Inspeccionar estado prod/dev: `projectctl status`, `projectctl ps`, `projectctl doctor`.
-- Leer logs: `projectctl logs dev|prod [service] --tail N --since DURATION`.
-- Operar dev: `start`, `stop`, `restart`, `rebuild`.
-- Promover/deploy prod con confirmación: `projectctl promote prod`, `projectctl deploy prod`.
-- Gestionar env: `projectctl env status|get|set|unset|edit|validate|pull|run`.
-- Gestionar tunnel: `projectctl tunnel status|tokens|routes|set-domain|set|clear`.
-- Ejecutar tests: `projectctl test run|list-runs|results|schedule-add`.
-- Consultar actividad, docs, storage, releases, metrics y comandos cuando aplique.
-
-### Prohibiciones y seguridad
-
-**REQUISITO NO NEGOCIABLE — integración a ramas protegidas (cliente-only):**
-- El agente **NUNCA** ejecuta un merge: **NUNCA merge a `develop`**, **NUNCA merge a `main`** (ni `gh pr merge`, ni `git merge` local hacia las ramas protegidas, ni equivalentes). El merge lo ejecuta únicamente el cliente con su revisión.
-- El alcance de entrega del agente termina en: commit → push → **crear el PR** → reportar la URL del PR → **esperar**. A partir de ahí la tarea queda esperando la decisión humana de integración; ningún criterio de "done" del agente incluye el merge.
-- Si el usuario pide "dejar en done" sin haber hecho merge, el estado `done` del taskReadme refleja implementación + verificación + PR abierto; el merge pendiente se declara explícitamente como acción del cliente.
-
-- No usar Docker raw en sandbox (`docker ps`, `docker compose ...` deben fallar o no existir).
-- No operar otros proyectos desde la PTY actual.
-- No administrar imágenes/redes/volúmenes arbitrarios del host.
-- `run dev` solo admite comandos allowlisted y usa `spawn(cmd, args, { shell: false })`.
-- `run prod` no está soportado.
-- Operaciones sensibles de prod requieren confirmación o `--yes` en modo no interactivo.
-- `rollback prod` requiere `--yes` y debe dejar auditoría o fallar con error accionable.
-- Outputs nunca deben imprimir tokens o secretos (`OPENCODE_API_TOKEN`, `API_TOKEN`, `token`, `apiToken`).
-
-## 5. Flujo operativo de tareas
-
- El contrato ejecutable completo vive únicamente en el bloque delimitado `task-flow-binding` (`TaskFlowBindingV2`, v10.0.0, model 2) dentro de `.agents/skills/projectctl-requirements/references/tasks/binding.md`.
-
-Este archivo respeta el contrato integral del bloque sin replicar valores:
-
-- **Rol**: solo cita `task-flow-binding` (block id, binding_id, binding_version, path) para que el lector sepa dónde está el binding; nunca publica un catálogo paralelo de estados, lanes o gates.
-- **Runtime projection**: la resolución de lane skill, policies de superficie, paths ordenados, fallo `skill_resolution_missing`, ownership de lanzamiento y snapshot inmutable de modos se rigen por D-20. Los contratos exactos viven en los siblings del módulo interno `.agents/skills/projectctl-requirements/modules/sd-protocol/`; no se duplican aquí ni se añaden al binding.
-- **Helpers opcionales**: la política `/task_skill_selection` declara `task-skills/v1`, identidad `metadata.id`, resolución project-installed, relectura por ejecución y orden lane → surfaces → helpers con dedupe exact-path first-wins. Vacío, missing o conflictivo nunca debilita paths obligatorios, modes ni gates.
-- **Tasks CLI profesional**: `/task_skill_selection/cli` es el contrato portable de PCT-53/PCT-54. Create usa el template profesional; `--skills`, `--no-skills` y `--interactive` son mutuamente excluyentes; sin modo, create usa defaults y update preserva.
-- El primary `taskReadme/<task_id>-<task_slug>.md` es un índice de coordinación escrito por el coordinador y el detalle full-artifact vive en `taskReadme/<task_id>-<task_slug>/<artifact>.md` (escrito por la lane owner), según `artifact_store.primary`/`artifact_store.phase_artifacts` del bloque; ninguna referencia introduce una segunda fuente de verdad.
-- La fase documental tiene un único owner por binding (`sdd-apply-doc`); los demás lanes deben consumir el bloque por contexto, no duplicar su rol.
-- Los criterios nuevos se trazan como `PCT-106..PCT-121` en `.agents/skills/projectctl-requirements/references/sources.md`; este `standard.md` solo los cita cuando corresponde al flujo integrado.
-- La persistencia SDD (primary index, phase artifacts, mirrors y write order) es parte del bloque. Este overlay configura cero mirrors; índice y phase artifacts son suficientes para recovery y cierre.
-- RDD, su modo opt-in, fase, lanes, guards, gates y entrega condicional se consumen desde el bloque. Este archivo no reproduce sus catálogos. Tareas V1/v8 se leen solo como RDD disabled; valores desconocidos o instalaciones V1/V2 y v8/v9 mezcladas bloquean sin fallback.
-- El paquete se instala por reemplazo completo `copy-tree-no-mods`; una instalación híbrida debe fail closed antes de routing o delivery.
- - Toda proposal MUST declarar el delta de criterios (añadir/eliminar/modificar con IDs) antes de Fase 2.
- - El binding único también define `environment_verification_deferred` y `pending_environment_close_block`; esta referencia los consume sin duplicar sus machine values.
-
-## 6. Resultado esperado de un agente que usa este estándar
-
-- Identifica qué área de `/projectctl` toca: `cli | tareas | agentes | doc | criterios | test | entorno | estructura`.
-- Aplica las reglas integradas de este archivo antes de buscar otra skill.
-- Si necesita valores normativos del flujo SDD, extrae el bloque `task-flow-binding` delimitado en `.agents/skills/projectctl-requirements/references/tasks/binding.md` v10.0.0.
-- Solo carga skills externas cuando el cambio toca una superficie no absorbida aquí.
+- Identifica qué eslabón core toca o si la tarea pertenece a CLI, Tareas o Entorno en sus satélites.
+- Aplica las reglas de la cadena y carga el satélite propietario cuando la tarea sale del core.
+- Si la tarea exige coordinación SDD, carga por separado `projectctl-sdd`; los criterios y evidencias de esta cadena siguen siendo autoridad del core.
+- Solo carga skills externas cuando el cambio toca su superficie.
 - Reporta criterios afectados (`PCT-*`, `TST-*`, `AC-*`, etc.).
 - Reporta validación ejecutada: `Unit`, `PW-CLI`, `PW-AUTO`, `Manual` o `not_required`.
-- Mantiene `docs/app-map/**`, `playwright/TEST_PLAN.md` y `references/*.md` alineados cuando cambian contratos, sin reintroducir catálogos paralelos al bloque.
+- Mantiene `docs/app-map/**`, `playwright/TEST_PLAN.md` y las referencias canónicas alineados cuando cambian contratos de criterios y cobertura.

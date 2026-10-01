@@ -1,4 +1,4 @@
 schema: projectctl-coverage-ledger/v1
-source_revision: 6405adb5cecc8782b4371f23d347b891480f21a31d0bb22c6da10118f994d82b
-criteria_revision: 428464a7860d678c362bef25e0907693d828fe57ff5f877c197fefbbce869ef9
+source_revision: ee2be2a7b081d637a60f855b526f5405ea2777486e14c473d85b64e74c6f5add
+criteria_revision: c77927a9fade32b88eff84b0314dba0bb4800bfc31a0ab157fd9181b5d0d5d17
 entries: []

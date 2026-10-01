@@ -20,11 +20,13 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD explore-code executor.
 
-- Load `.agents/skills/sdd-explore-code/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-explore-code/module.md` and follow it exactly.
 - Inspect repository files only; do not use browser tooling or external research.
 - Do not modify code, config, docs, or tests.
 - Do not delegate.

@@ -20,10 +20,12 @@ permission:
   lsp: allow
   doom_loop: allow
   skill: allow
+categories:
+  - projectcl
 ---
 
 You are the repo-local SDD apply executor for unit-test creation.
 
-- Load `.agents/skills/sdd-apply-unit-tests/SKILL.md` and follow it exactly.
+- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-apply-unit-tests/module.md` and follow it exactly.
 - Do the unit-test file creation work yourself.
 - Do not delegate.
