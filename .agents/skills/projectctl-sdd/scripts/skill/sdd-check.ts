@@ -4,6 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { assertMachineBaseline, generatePhaseStateSchema, parseBindingFile, resolveLaneSkillContext } from './task-flow-normalizer.ts';
 import { parseCriteriaChange } from '../project/criteria-change.ts';
+import { phaseExecutionPolicy } from '../project/phase-execution.ts';
 
 const RETIRED = ['ready_for_branch', 'branching', 'pushing', 'verified', 'completed', 'paused', 'phase1_generating', 'phase2_branching', 'phase3_implementing', 'phase4_pushing'];
 const INCLUDED_PACKAGE = [
@@ -53,10 +54,40 @@ function checkSkillFrontmatter(repoRoot: string, failures: string[]): void {
 
 export type SddCheckMode = 'package' | 'installed';
 
+function checkStartup(repoRoot: string, failures: string[], installed: boolean): void {
+  try {
+    const binding = parseBindingFile(repoRoot).binding;
+    const policy = phaseExecutionPolicy(binding);
+    for (const path of policy.startup_paths) {
+      if (!readFileSync(resolve(repoRoot, path), 'utf8').trim()) throw new Error(`startup source empty: ${path}`);
+    }
+    const examplePath = '.agents/skills/projectctl-sdd/assets/opencode-phase-execution.example.json';
+    const example = JSON.parse(readFileSync(resolve(repoRoot, examplePath), 'utf8'));
+    const expected: string = example.agent?.['sdd-orchestrator']?.prompt;
+    if (typeof expected !== 'string') throw new Error('startup example prompt missing');
+    const tokens = [...expected.matchAll(/\{file:([^}]+)\}/g)].map(match => match[0]);
+    if (tokens.length !== 4 || new Set(tokens).size !== tokens.length
+        || !expected.includes('{file:../.agents/skills/projectctl-sdd/references/tasks/binding.md}')
+        || !expected.includes('{file:../.agents/skills/projectctl-sdd/modules/sdd/sdd-orchestrator/module.md}')
+        || !expected.includes('{file:../.agents/skills/projectctl-sdd/references/phase-execution.md}')
+        || !expected.includes('{file:../.agents/skills/projectctl-sdd/assets/orchestrator-bootstrap.md}')) throw new Error('startup example must inject complete contract files');
+    for (const token of tokens) {
+      const path = token.slice('{file:'.length, -1);
+      if (!readFileSync(resolve(repoRoot, '.opencode', path), 'utf8').trim()) throw new Error(`startup source empty: ${path}`);
+    }
+    if (installed) {
+      const config = JSON.parse(readFileSync(resolve(repoRoot, '.opencode/opencode.json'), 'utf8'));
+      const prompt = config.agent?.['sdd-orchestrator']?.prompt;
+      if (typeof prompt !== 'string' || tokens.some(token => !prompt.includes(token))) throw new Error('installed orchestrator must inject the full startup contract; integrate assets/opencode-phase-execution.example.json');
+    }
+  } catch (error) { failures.push(`phase startup invalid: ${String(error)}`); }
+}
+
 export function checkSdd(repoRoot: string = resolve(import.meta.dir, '../../../../..'), options: { mode?: SddCheckMode } = {}): { ok: boolean; failures: string[] } {
   const mode: SddCheckMode = options.mode ?? 'installed';
   const failures: string[] = [];
   checkSkillFrontmatter(repoRoot, failures);
+  checkStartup(repoRoot, failures, mode === 'installed');
   try {
     const parsed = parseBindingFile(repoRoot);
     const { binding } = parsed;
@@ -69,7 +100,7 @@ export function checkSdd(repoRoot: string = resolve(import.meta.dir, '../../../.
     if (!existsSync(projection) || readFileSync(projection, 'utf8') !== generatePhaseStateSchema(parsed)) failures.push('base projection stale');
     for (const lane of Object.keys(binding.lanes as Record<string, unknown>)) resolveLaneSkillContext(repoRoot, binding, lane);
     if (binding.binding_id !== 'projectctl-requirements.task-flow') failures.push('binding_id must equal projectctl-requirements.task-flow');
-    if (binding.binding_version !== '15.0.0') failures.push(`binding_version must equal 15.0.0, got=${JSON.stringify(binding.binding_version)}`);
+    if (binding.binding_version !== '16.0.0') failures.push(`binding_version must equal 16.0.0, got=${JSON.stringify(binding.binding_version)}`);
     const retired = binding.retired_aliases;
     if (!Array.isArray(retired)) failures.push('binding retired_aliases must be an array');
     else for (const alias of RETIRED) if (!retired.includes(alias)) failures.push(`retired_aliases missing: ${alias}`);

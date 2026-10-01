@@ -283,6 +283,20 @@ interface WorkflowModeContextEntryV2 {
 
 interface WorkflowRuntimeContextV2 extends Omit<WorkflowRuntimeContextV1, "contract_version" | "mode_context"> {
   readonly contract_version: 2;
+  // Required before every coordinated lane launch; obtained from tasks.ts phase launch.
+  // This record authorizes only this lane/position, not a phase transition.
+  readonly execution_context: {
+    readonly schema: "phase-launch/v1";
+    readonly lane_id: string;
+    readonly position: { phase: string | null; state: string; status: string };
+    readonly authorization: {
+      schema: "phase-authorization/v1"; phase: string; actor: string;
+      literal_message: string; recorded_at: string; contract_digest: string;
+    };
+    readonly contract_digest: string;
+    readonly task_revision: string;
+    readonly sources: Readonly<Record<string, string>>;
+  };
   readonly mode_context: {
     readonly review: WorkflowModeContextEntryV2;
     readonly delivery: WorkflowModeContextEntryV2 & {
@@ -323,6 +337,7 @@ type WorkflowRuntimeContext = WorkflowRuntimeContextV1 | WorkflowRuntimeContextV
  */
 interface LaunchPacketV1 {
   readonly schema: "launch-packet/v1";
+  readonly execution_context: WorkflowRuntimeContextV2["execution_context"];
   readonly workflow_context_ref: {
     readonly contract_version: WorkflowRuntimeContext["contract_version"];
     readonly source: WorkflowRuntimeContext["source"];

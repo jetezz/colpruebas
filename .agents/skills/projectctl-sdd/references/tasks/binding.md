@@ -4,13 +4,13 @@ parent_skill: projectctl-sdd
 owner: sdd-orchestrator + SDD lanes
 purpose: base binding operational contract for task creation, core phases, evidence and delivery; optional mechanisms declared as extensions
 sot_policy: canonical-standard
-version: 15.0.0
-last_full_regen: 2026-09-30
+version: 16.0.0
+last_full_regen: 2026-10-01
 binding_id: projectctl-requirements.task-flow
 model_version: 2
 ---
 
-# Task flow binding — `projectctl-sdd` v15.0.0 (binding ID heredado)
+# Task flow binding — `projectctl-sdd` v16.0.0 (binding ID heredado)
 
 ## Purpose
 
@@ -65,7 +65,7 @@ A reader (human or agent) navigating this file MUST follow three rules:
 | Property | Value |
 |---|---|
 | `binding_id` | `projectctl-requirements.task-flow` |
-| `binding_version` | `15.0.0` |
+| `binding_version` | `16.0.0` |
 | `model_version` | `2` |
 | Marker opening | `<!-- task-flow-binding:start -->` |
 | Marker closing | `<!-- task-flow-binding:end -->` |
@@ -125,7 +125,7 @@ The remainder of this file is the delimited binding block. Do not add prose comm
 {
   "contract_kind": "TaskFlowBindingV2",
   "binding_id": "projectctl-requirements.task-flow",
-  "binding_version": "15.0.0",
+  "binding_version": "16.0.0",
   "model_version": 2,
   "bootstrap_locator": {
     "accessor": "workflow_binding_locator/v1",
@@ -138,6 +138,47 @@ The remainder of this file is the delimited binding block. Do not add prose comm
     "validator": "sdd-orchestrator",
     "executor": "consume_only",
     "invalid_failure": "launch_packet_invalid"
+  },
+  "phase_execution": {
+    "schema": "phase-execution/v1",
+    "execution": "complete-requested-phase",
+    "cross_phase": "ask-then-confirm-every-transition",
+    "approval_is_execution_permission": false,
+    "missing_authorization": "ask-preserve-position",
+    "resume": "reload-contract-preserve-scope",
+    "startup_paths": [
+      ".agents/skills/projectctl-sdd/assets/orchestrator-bootstrap.md",
+      ".agents/skills/projectctl-sdd/modules/sdd/sdd-orchestrator/module.md",
+      ".agents/skills/projectctl-sdd/references/phase-execution.md",
+      ".agents/skills/projectctl-sdd/modules/sd-protocol/workflow-runtime-context.md"
+    ],
+    "stop_states": {
+      "fase_1_propuesta": ["p1_awaiting_acceptance", "p1_accepted"],
+      "fase_2_implementacion": ["p2_awaiting_acceptance", "p2_accepted"],
+      "fase_3_verificacion": ["p3_complete"],
+      "fase_4_documentacion": ["p4_complete"]
+    },
+    "lane_states": {
+      "sdd-init": ["p1_started"],
+      "sdd-explore-code": ["p1_started", "p1_exploring"],
+      "sdd-explore-research": ["p1_started", "p1_exploring"],
+      "sdd-explore-pwcli": ["p1_started", "p1_exploring"],
+      "sdd-propose": ["p1_drafting", "p1_revision_requested"],
+      "sdd-spec": ["p2_planning", "p2_revision_requested"],
+      "sdd-design": ["p2_planning", "p2_revision_requested"],
+      "sdd-tasks": ["p2_planning", "p2_revision_requested"],
+      "sdd-apply-code-low": ["p2_implementing", "p2_revision_requested"],
+      "sdd-apply-code-medium": ["p2_implementing", "p2_revision_requested"],
+      "sdd-apply-code-high": ["p2_implementing", "p2_revision_requested"],
+      "sdd-verify-code": ["p2_code_review"],
+      "sdd-apply-doc": ["p2_planning", "p2_implementing", "p2_revision_requested", "p4_documenting", "p4_revision_requested"],
+      "sdd-apply-unit-tests": ["p3_test_preparing", "p3_test_fixing"],
+      "sdd-apply-pwauto-tests": ["p3_test_preparing", "p3_test_fixing"],
+      "sdd-verify-units": ["p3_test_running"],
+      "sdd-verify-pwauto": ["p3_test_running"],
+      "sdd-verify-pwcli": ["p3_test_running"],
+      "sdd-verify-requirements": ["p3_test_running", "p4_reviewing"]
+    }
   },
   "criteria_identity": {
     "schema": "canonical-criteria/v1",

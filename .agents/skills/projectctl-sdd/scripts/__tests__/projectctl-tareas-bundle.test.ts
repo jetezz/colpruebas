@@ -17,7 +17,7 @@ describe("PCT-106..PCT-121 binding contract (portable)", () => {
   it("exposes the informative tab contract through the binding", async () => {
     const binding = await fs.readFile(BINDING, "utf8");
     expect(binding).toContain("TaskFlowBindingV2");
-    expect(binding).toContain("15.0.0");
+    expect(binding).toContain("16.0.0");
     expect(binding).toContain('"extensions"');
     expect(binding).toContain("task-flow-binding:start");
     expect(binding).toContain("task-flow-binding:end");

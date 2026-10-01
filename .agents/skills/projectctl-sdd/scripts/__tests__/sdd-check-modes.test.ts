@@ -50,4 +50,15 @@ describe('sdd-check package vs installed (Paso 3)', () => {
     const result = checkSdd(root);
     expect(result.ok).toBe(false);
   });
+
+  it('installed blocks a missing or link-only startup prompt and accepts full injection', () => {
+    const root = makePortableTree('startup');
+    cpSync(join(source, '.agents/sdd-workflow.json'), join(root, '.agents/sdd-workflow.json'));
+    expect(checkSdd(root).failures.join()).toContain('phase startup invalid');
+    mkdirSync(join(root, '.opencode'));
+    writeFileSync(join(root, '.opencode/opencode.json'), JSON.stringify({ agent: { 'sdd-orchestrator': { prompt: 'Read module.md when necessary' } } }));
+    expect(checkSdd(root).failures.join()).toContain('must inject');
+    cpSync(join(root, '.agents/skills/projectctl-sdd/assets/opencode-phase-execution.example.json'), join(root, '.opencode/opencode.json'));
+    expect(checkSdd(root).ok).toBe(true);
+  });
 });

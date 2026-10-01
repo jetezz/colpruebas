@@ -1,5 +1,28 @@
 # Motor portable de tareas
 
+## Ejecución por fase
+
+El contrato de ejecución se resuelve del binding; su mecanismo está en
+[phase-execution.md](phase-execution.md). Operaciones exclusivas del orchestrator:
+
+| Operación | Resultado |
+| --- | --- |
+| `phase start FILE --actor ACTOR --message LITERAL` | Autoriza ejecutar la fase actual con las fuentes vigentes, sin autorizar saltos. |
+| `phase status FILE` | Devuelve posición, autorización, frontera y hashes de las fuentes cargadas. |
+| `phase launch FILE --lane LANE` | Comprueba fase, estado, autorización y frontera; devuelve admisión ligada a revisión del índice. |
+| `phase validate-launch FILE --ref PACKET_JSON` | Revalida inmediatamente la admisión de fase del LaunchPacket; rechaza packets obsoletos o inconsistentes. |
+| `phase request FILE --to STATE --question LITERAL` | Registra una pregunta para una arista entre fases, sin avanzar. Mostrarla y esperar otro turno. |
+| `phase confirm FILE --actor ACTOR --message ANSWER` | Registra la respuesta afirmativa real a esa pregunta, ligada a revisión actual. |
+| `phase migrate FILE --actor ACTOR --message LITERAL` | Migra un índice v15 explícitamente al contrato vigente, preservando posición y evidencias, sin importar autorización. |
+
+Todo salto de fase exige pregunta y confirmación recientes, además de los gates
+ordinarios. La autorización de salto se consume y la fase destino necesita su
+registro de ejecución. Nunca usar `evidence add` para sustituir estas operaciones.
+Preparar evidencias/checkpoint antes de preguntar o congelar un packet: cambios
+del índice invalidan la confirmación/packet. Los artefactos de planificación
+requieren sus referencias canónicas y contenido real; una referencia a proposal
+no satisface spec/design/tasks. `artifact record` no completa una macrofase.
+
 Para perfiles, preparación machine y comandos `requirements targets|snapshot|record|status`,
 ver [requirements-verification.md](requirements-verification.md). Sus predicates
 current/invalid se calculan desde receipts y inputs vivos; no se aceptan mediante
@@ -7,6 +30,12 @@ current/invalid se calculan desde receipts y inputs vivos; no se aceptan mediant
 antes de registrar y las huellas se vuelven a comprobar al evaluar transiciones.
 
 El ejecutable `scripts/project/tasks.ts` y la biblioteca `scripts/project/task-engine.ts` viajan íntegros con `projectctl-sdd`. Se invocan desde el checkout del proyecto (o con `--root DIR`) mediante Bun:
+
+En el API de biblioteca, usar `new TaskEngine(root, canonicalTaskFile)` para
+operar una tarea existente: captura sus selecciones explícitas y compone solo
+los satélites elegidos. `new TaskEngine(root)` prepara el binding base para
+inicialización. Un cambio de selecciones requiere una nueva instancia/contexto;
+no muta la ejecución capturada. El CLI resuelve esta distinción automáticamente.
 
 Para identidad canónica y migración, consultar [criteria-integration.md](criteria-integration.md). `criteria baseline TASK --targets view:feature` obtiene referencias/revisiones desde App Map; `proposal check TASK` devuelve y valida el delta completo antes de aprobación; `proposal check TASK --stage applied` comprueba definiciones y tombstones contra la propuesta aprobada. `proposal accept --criteria` usa los IDs exactos del delta, de cualquier prefijo canónico; se omite solo si el conjunto vacío está justificado. Spec/tasks requieren `criteria-links/v1` y los gates recomputan aprobación, links y materialización, sin admitir evidencia manual para esos predicates.
 

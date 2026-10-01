@@ -607,8 +607,8 @@ describe("AC-001 / REQ-TSKFLOW-001 — single binding identity (F-01 rerun defen
       );
     }
     expect((locator as Record<string, unknown>)["contract_version"]).toBe(2);
-    expect((locator as Record<string, unknown>)["expected_binding_version"]).toBe("15.0.0");
-    expect(binding.binding_version).toBe("15.0.0");
+    expect((locator as Record<string, unknown>)["expected_binding_version"]).toBe("16.0.0");
+    expect(binding.binding_version).toBe("16.0.0");
     expect((projection as Record<string, unknown>)["model_version"]).toBe(RDD_V2_EXPECTED_IDENTITY.modelVersion);
     expect((locator as Record<string, unknown>)["machine_block_id"]).toBe("task-flow-binding");
   });
@@ -1130,7 +1130,7 @@ describe("AC-P5-01 / SC-P5-007..011 / SC-P5-049..050 — RDD V2 state machine", 
   it("declares V2 identity, RDD mode and the exact six-state phase", () => {
     const binding = parseBindingFile(REPO_ROOT, undefined, { rdd_mode: 'receipt-driven' }).binding as Record<string, unknown>;
     expect(binding["contract_kind"]).toBe(RDD_V2_EXPECTED_IDENTITY.contractKind);
-    expect(binding["binding_version"]).toBe("15.0.0");
+    expect(binding["binding_version"]).toBe("16.0.0");
     expect(binding["model_version"]).toBe(RDD_V2_EXPECTED_IDENTITY.modelVersion);
     const rddMode = (binding["modes"] as Record<string, unknown>)["rdd_mode"];
     expect(rddMode).toEqual(expect.objectContaining({ default: "disabled", allowed: [...RDD_MODE_VALUES] }));

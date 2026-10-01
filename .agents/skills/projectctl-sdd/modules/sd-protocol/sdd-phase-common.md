@@ -10,6 +10,14 @@ Executor boundary: every SDD phase agent is an EXECUTOR, not an orchestrator. `s
 
 ## A. Skill Loading
 
+For V2 coordinated launches, also require the immutable `execution_context`
+from `phase launch` in both the workflow context and LaunchPacket. They must
+match exactly, identify this lane and current position, and carry matching
+authorization/contract digests and a task revision. Missing or inconsistent
+admission returns `blocked` with `phase_execution_not_authorized` before work.
+Never start another phase, manufacture consent or reconstruct admission from
+raw files. Report blockers and return to the orchestrator.
+
 1. Consume the sdd-orchestrator-validated launch packet before any phase work, artifact retrieval, or artifact write. The packet is bounded input: if it is absent or invalid, do no phase work and return `blocked` with routing reason `launch_packet_invalid`. The executor MUST NOT consult raw sources or reconstruct the packet.
 2. Read only the exact repo-local paths published in the resolved `WorkflowRuntimeContextV1`: mandatory `lane_context.lane_skill_path`, every required path in `lane_context.surface_skill_paths`, optional `lane_context.task_selected_skill_paths`, and the complete ordered aggregate in `lane_context.skill_paths`. Read every aggregate entry before reading, writing, reviewing, testing, or creating artifacts. The aggregate is already frozen for this execution in lane → configured surfaces → optional helpers order with exact-path first-wins deduplication; the executor MUST NOT re-open the task snapshot, rescan installed skills, truncate the list, substitute a fallback, or let empty/warning state alter mandatory entries. The sub-agent, not `sdd-orchestrator`, loads these files.
 3. Treat those full repo-local `SKILL.md` files as the canonical policy source. If compact reminders conflict with a loaded `SKILL.md`, the full `SKILL.md` wins.

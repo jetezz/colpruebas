@@ -911,19 +911,19 @@ describe("AC-001 / F-01 — single source identity (binding ↔ projection ↔ l
         "MUST equal 'projectctl-requirements.task-flow'",
       );
     }
-    if ((parsed.binding as { binding_version: string }).binding_version !== "15.0.0") {
+    if ((parsed.binding as { binding_version: string }).binding_version !== "16.0.0") {
       fail(
         "REQ-TSKFLOW-001 F-01",
         `${BINDING_PATH}#/binding_version`,
         String((parsed.binding as { binding_version: string }).binding_version),
-        "MUST equal '15.0.0'",
+        "MUST equal '16.0.0'",
       );
     }
     expect((parsed.binding as { binding_id: string }).binding_id).toBe("projectctl-requirements.task-flow");
-    expect((parsed.binding as { binding_version: string }).binding_version).toBe("15.0.0");
+    expect((parsed.binding as { binding_version: string }).binding_version).toBe("16.0.0");
   });
 
-  it("pins package v25, binding v15, locator and canonical generator together (portable)", async () => {
+  it("pins package v26, binding v16, locator and canonical generator together (portable)", async () => {
     const skill = await fs.readFile(path.join(SDD_DIR, "SKILL.md"), "utf8");
     const locator = JSON.parse(await fs.readFile(LOCATOR_PATH, "utf8")) as Record<string, unknown>;
     const normalizer = await fs.readFile(
@@ -932,9 +932,9 @@ describe("AC-001 / F-01 — single source identity (binding ↔ projection ↔ l
     );
     const parsed = parseBindingFile(REPO_ROOT);
 
-    expect(skill).toMatch(/metadata:\s*[\s\S]*?version:\s*25\.0\.0/);
-    expect(parsed.frontmatter.version).toBe("15.0.0");
-    expect(locator["expected_binding_version"] ?? locator["binding_version"]).toBe("15.0.0");
+    expect(skill).toMatch(/metadata:\s*[\s\S]*?version:\s*26\.0\.0/);
+    expect(parsed.frontmatter.version).toBe("16.0.0");
+    expect(locator["expected_binding_version"] ?? locator["binding_version"]).toBe("16.0.0");
     expect(normalizer).toContain("parseBindingFile");
     expect(normalizer).toContain("taskflow:generate");
     expect(normalizer).toContain("source_sha256");
@@ -1214,14 +1214,14 @@ describe("AC-P5-01 / SC-P5-049..050 / SC-P5-055..056 — V2 package anti-hybrid 
     const skill = await fs.readFile(path.join(SDD_DIR, "SKILL.md"), "utf8");
 
     expect((parsed.binding as Record<string, unknown>)["contract_kind"]).toBe("TaskFlowBindingV2");
-    expect((parsed.binding as Record<string, unknown>)["binding_version"]).toBe("15.0.0");
+    expect((parsed.binding as Record<string, unknown>)["binding_version"]).toBe("16.0.0");
     expect((parsed.binding as Record<string, unknown>)["model_version"]).toBe(2);
-    expect(locator["expected_binding_version"]).toBe("15.0.0");
-    expect((projection["source"] as Record<string, unknown>)["binding_version"]).toBe("15.0.0");
+    expect(locator["expected_binding_version"]).toBe("16.0.0");
+    expect((projection["source"] as Record<string, unknown>)["binding_version"]).toBe("16.0.0");
     expect(projection["model_version"]).toBe(2);
-    expect(skill).toMatch(/^\s*version:\s*25\.0\.0\s*$/m);
+    expect(skill).toMatch(/^\s*version:\s*26\.0\.0\s*$/m);
     expect(skill).toContain("TaskFlowBindingV2");
-    expect(skill).toContain("v15.0.0");
+    expect(skill).toContain("v16.0.0");
   });
 
   it("declares copy-tree replacement and blocks mixed V1/V2 or v8/v9 installations", async () => {

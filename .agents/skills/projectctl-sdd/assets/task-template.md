@@ -4,7 +4,7 @@ task_id: "<YYYYMMDD-shortid>"
 task_slug: "<kebab-case-slug>"
 sdd_change_id: "<YYYYMMDD-shortid-slug o vacío>"
 binding_id: "projectctl-requirements.task-flow"
-binding_version: "15.0.0"
+binding_version: "16.0.0"
 binding_path: ".agents/skills/projectctl-sdd/references/tasks/binding.md"
 sdd_persistence: "taskReadme index + phase artifacts"
 phase_artifacts_dir: "taskReadme/<task_id>-<task_slug>/"
@@ -28,7 +28,7 @@ blocked_reason: ""
 
 # Task: <Nombre claro de la tarea>
 
-> **Origen de los valores**: este template es un **asset del binding `projectctl-requirements.task-flow` v15.0.0**. Todo valor escribible se valida contra el binding canónico `TaskFlowBindingV2` (model `2`).
+> **Origen de los valores**: este template es un **asset del binding `projectctl-requirements.task-flow` v16.0.0**. Todo valor escribible se valida contra el binding canónico `TaskFlowBindingV2` (model `2`). Antes de ejecutar, registrar la petición con `phase start`; el template no concede permisos de fase ni confirma saltos.
 >
 > **Modelo de persistencia v11.** Este archivo es el índice compacto de coordinación y el detalle completo vive en los phase artifacts referenciados. Ambos son la fuente canónica y suficiente de persistencia y recuperación. El binding configura `mirrors: []`; herramientas opcionales de soporte no son evidencia ni fuente de verdad SDD.
 

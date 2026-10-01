@@ -3,7 +3,7 @@ name: projectctl-rdd
 description: "Trigger: projectctl RDD, receipt-driven review, Fase 5. Route and explain the repo-local RDD adapter without duplicating Gentle-AI authority."
 metadata:
   id: projectctl-rdd
-  version: 3.0.0
+  version: 4.0.0
   layer: repo
   type: satellite
   sot_policy: satellite-extension

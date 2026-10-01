@@ -66,6 +66,7 @@ import {
 import { composeSelectedExtensions } from './task-flow-extension';
 import { requirementsContract } from '../project/requirements-evidence';
 import { criteriaIdentityContract } from '../project/criteria-change';
+import { phaseExecutionPolicy } from '../project/phase-execution';
 export { composeSelectedExtensions } from './task-flow-extension';
 
 // Portable inline fallback for the task-skill snapshot contract
@@ -128,8 +129,8 @@ export const DEFAULT_PACKAGE_SKILL_PATH =
  * Editorial Markdown is out of scope; only locator/config/code/binding JSON.
  */
 export const CANONICAL_BASELINE = Object.freeze({
-  packageVersion: '25.0.0',
-  bindingVersion: '15.0.0',
+  packageVersion: '26.0.0',
+  bindingVersion: '16.0.0',
   contractKind: 'TaskFlowBindingV2',
   modelVersion: 2,
   locatorContractVersion: 2,
@@ -191,6 +192,7 @@ export const REQUIRED_BINDING_KEYS = [
   'retired_aliases',
   'requirements_verification',
   'criteria_identity',
+  'phase_execution',
 ] as const;
 
 export type RequiredBindingKey = (typeof REQUIRED_BINDING_KEYS)[number];
@@ -792,6 +794,7 @@ export function assertBindingShape(parsed: Record<string, unknown>): void {
   requireModeDefinition(parsed.modes as Record<string, unknown> | undefined, 'delivery_mode');
   normalizeEnvironmentDeferralContext(parsed);
   requirementsContract(parsed);
+  phaseExecutionPolicy(parsed);
   const identity = criteriaIdentityContract(parsed);
   for (const [key, value] of Object.entries(identity)) {
     if (!key.endsWith('_evidence')) continue;
@@ -1503,6 +1506,7 @@ export function generatePhaseStateSchema(parsed: ParsedBinding): string {
     modes: binding.modes,
     artifacts: binding.artifact_store,
     requirements_verification: binding.requirements_verification,
+    phase_execution: binding.phase_execution,
     state_model: {
       status: {
         writable: status.writable,

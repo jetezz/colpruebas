@@ -3,13 +3,47 @@ name: sdd-orchestrator
 description: "Trigger: sdd-orchestrator, SDD task flow. Resolve a validated WorkflowRuntimeContextV1 from the project locator and binding before routing or transition; never assume project defaults."
 metadata:
   id: sdd-orchestrator
-   version: 7.0.0
+  version: 8.0.0
   contract_ref: WorkflowRuntimeContextV1
 ---
 
 ## Core role
 
 `sdd-orchestrator` is a router and reconciler, never an executor of delegated product work. It owns runtime-context resolution, lane authorization, gates and transitions, work-unit scheduling, scoped delegation, result reconciliation, mechanical delivery controls, and the complete operational `projectctl` CLI surface.
+
+### Complete requested phase and mandatory human boundaries
+
+Before every first decision, delegation or recovery, load the complete active
+binding and all binding-declared `phase_execution.startup_paths`. Apply
+`references/phase-execution.md` as the mechanism for the binding's policy.
+The OpenCode integration injects the full bootstrap/module/policy/binding at
+startup; this does not waive re-resolution of current files and task state.
+
+Run `phase status` and record the explicit current-phase request using `phase
+start`. Schedule **all** dependency-ready required work of the requested phase;
+continue after each reconciled lane result until its declared boundary, an
+actual blocker, or necessary clarification. Never label a phase complete from
+one artifact, stop after spec when a complete phase was requested, or take a
+direct-apply shortcut past required planning artifacts.
+
+Before each lane launch obtain `phase launch` and include the immutable result
+as `execution_context` in the context and LaunchPacket. Freeze it after index
+checkpoint writes and execute `phase validate-launch` immediately before launch;
+any mismatch or admission failure suppresses delegation. This check supplements,
+never replaces, the complete LaunchPacket validator.
+
+Before **every** cross-phase transition, including backward repair, documentary
+bridges, extension phases and terminal closure, register `phase request`, show
+the question and end the turn. Only a fresh affirmative human answer to that
+question may be registered with `phase confirm`; then apply the ordinary gates
+and `transition`. Each question authorizes exactly one edge and is invalidated
+by task/contract changes. Proposal/functional acceptance, green tests, a lane
+report, an initial request for a later phase or general autonomy never bypass
+the question. Preserve position when denied, ambiguous or blocked.
+
+Consult `phase status` before presenting the result and distinguish partial
+artifact progress, a phase awaiting acceptance and an accepted phase. Delivery
+controls require explicit delivery authorization independently of documentation.
 
 ### Canonical index operations
 
@@ -143,6 +177,7 @@ First branch on `artifact_context.mirrors.length`. With zero mirrors, require `w
 ## Preconditions and transitions
 
 - Match every requested transition exactly against `binding.phases[].transitions[]` or `binding.controls[].transitions[]`, including named id, source, target, and guard.
+- Apply the binding's phase-execution confirmation contract conjunctively with every ordinary guard; a legal edge is not permission to execute it.
 - Resolve targets to a declared phase-local state or control. Never infer a cross-phase jump from status, target naming, lane choice, or intention.
 - Evaluate every declared guard from `gate_context` evidence. Unknown guards return `guard_unknown`; malformed transitions return `transition_invalid`; missing evidence returns `transition_guard_failed` with the guard id.
 - Apply envelope, transition, close, revision, evidence, hard-gate, and self-report evaluators exactly as defined in `.agents/skills/projectctl-sdd/modules/sd-protocol/acceptance-criteria-gates.md`; do not republish their procedures here.
@@ -285,7 +320,7 @@ Only `sdd-orchestrator` consolidates aggregate apply progress and the final veri
 
 - For new work, create the canonical shell at the resolved primary path through `tasks.ts init` when its inputs are available. Only an incomplete bootstrap may use the minimal inline filesystem shell exception.
 - Route missing readiness detail to the next necessary planning lane; do not invent it in sdd-orchestrator.
-- A direct apply path is allowed only for one bounded objective with no unresolved product/architecture decision, DB/security contract change, multi-surface dependency ordering, broad discovery need, or ambiguous verification path.
+- A bounded apply assignment may be small, but never bypass binding-required planning artifacts, the complete requested-phase contract or human phase boundaries.
 - Simple routing still requires the canonical artifact, an authorized lane, scoped assignment, required gates, and necessary verification.
 
 ## Mechanical delivery controls

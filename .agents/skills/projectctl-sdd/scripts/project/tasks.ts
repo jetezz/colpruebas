@@ -5,6 +5,12 @@ import { TaskEngine } from './task-engine.ts';
 const usage = `Usage: bun .agents/skills/projectctl-sdd/scripts/project/tasks.ts [--root DIR] <command> ...
 
   init --id ID --slug SLUG --title TITLE --problem TEXT --app-map PATH
+  phase start FILE --actor ACTOR --message LITERAL
+  phase status FILE | phase launch FILE --lane LANE
+  phase validate-launch FILE --ref LAUNCH_PACKET_JSON
+  phase request FILE --to STATE --question LITERAL_QUESTION
+  phase confirm FILE --actor ACTOR --message LITERAL_ANSWER
+  phase migrate FILE --actor ACTOR --message LITERAL_MIGRATION_APPROVAL
   validate FILE | transitions FILE | check FILE | transition FILE --to STATE
   evidence add FILE --id EVIDENCE_ID --ref EXISTING_FILE
   proposal check FILE [--stage baseline|applied]
@@ -53,7 +59,8 @@ export function run(argv: string[]): unknown {
   if (argv.includes('--help') || argv.includes('-h') || !argv.length) return usage;
   const { args, flags } = parse(argv);
   const [command, ...rest] = args;
-  const engine = new TaskEngine(flags.root ?? process.cwd());
+  const operatorFile = command === 'init' ? undefined : ['validate', 'transitions', 'check', 'transition'].includes(command!) ? rest[0] : rest[1];
+  const engine = new TaskEngine(flags.root ?? process.cwd(), operatorFile);
   const file = rest[0];
   if (command === 'init') return { file: engine.init({ id: flag(flags, 'id'), slug: flag(flags, 'slug'), title: flag(flags, 'title'), problem: flag(flags, 'problem'), appMap: flag(flags, 'app-map') }) };
   if (!file && command !== 'evidence' && command !== 'proposal' && command !== 'functionality' && command !== 'branch' && command !== 'pr' && command !== 'browser' && command !== 'mode' && command !== 'checkpoint' && command !== 'outcome' && command !== 'artifact' && command !== 'work-unit' && command !== 'criteria' && command !== 'verification' && command !== 'skills' && command !== 'environment') throw new Error('task file required');
@@ -62,6 +69,13 @@ export function run(argv: string[]): unknown {
   if (command === 'transition') return engine.transition(file!, flag(flags, 'to'));
   const sub = rest[0]; const subfile = rest[1];
   if (!subfile) throw new Error('task file required');
+  if (command === 'phase' && sub === 'start') { engine.phaseStart(subfile, flag(flags, 'actor'), flag(flags, 'message')); return engine.phaseStatus(subfile); }
+  if (command === 'phase' && sub === 'status') return engine.phaseStatus(subfile);
+  if (command === 'phase' && sub === 'launch') return engine.phaseLaunch(subfile, flag(flags, 'lane'));
+  if (command === 'phase' && sub === 'validate-launch') { engine.phaseValidateLaunchFile(subfile, flag(flags, 'ref')); return { ok: true }; }
+  if (command === 'phase' && sub === 'request') { engine.phaseRequest(subfile, flag(flags, 'to'), flag(flags, 'question')); return { ok: true }; }
+  if (command === 'phase' && sub === 'confirm') { engine.phaseConfirm(subfile, flag(flags, 'actor'), flag(flags, 'message')); return { ok: true }; }
+  if (command === 'phase' && sub === 'migrate') { engine.phaseMigrate(subfile, flag(flags, 'actor'), flag(flags, 'message')); return { ok: true }; }
   if (command === 'requirements' && sub === 'targets') { engine.requirementsTargets(subfile, flag(flags, 'targets').split(',')); return { ok: true }; }
   if (command === 'requirements' && sub === 'snapshot') return engine.requirementsInputs(subfile, flag(flags, 'target'));
   if (command === 'requirements' && sub === 'status') return engine.requirementsStatus(subfile);

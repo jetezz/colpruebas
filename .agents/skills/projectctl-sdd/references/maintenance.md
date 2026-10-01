@@ -4,7 +4,7 @@
 
 ## Identidad y actualización
 
-- `metadata.version` de `projectctl-sdd/SKILL.md` versiona el satélite. El binding conserva el ID estable `projectctl-requirements.task-flow` v15.0.0, fijado en el locator. Ese ID **no** concede autoridad al core.
+- `metadata.version` de `projectctl-sdd/SKILL.md` versiona el satélite. El binding conserva el ID estable `projectctl-requirements.task-flow` v16.0.0, fijado en el locator. Ese ID **no** concede autoridad al core.
 - Un cambio del bloque machine exige actualizar binding y satélites seleccionables que pineen `base_binding_id`/`base_binding_version`, regenerar la proyección con `bun .agents/skills/projectctl-sdd/scripts/skill/task-flow-normalizer.ts --generate-base-projection` y comprobar el baseline con `--check-baseline`.
 - La proyección es derivada y no autoriza estados, aprobaciones ni recuperación. El cambio de `active_sources` altera el digest y también requiere regeneración.
 - Una instalación mixed/híbrida de versiones de binding, locator, proyección, MAP y extensión seleccionada **bloquea** antes de routing o delivery. En particular V1/V2 o task documents v8/v9 no se convierten por fallback a una revisión vigente. Nunca elegir una fuente alternativa por silencio.
@@ -12,7 +12,7 @@
 
 ## Checks
 
-1. `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check` (= `--check-installed` / `--mode installed`, default compat) valida paquete + binding + locator de la instancia (falla sin locator o con locator corrupto). `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check-package` (o `--mode package`) valida solo el árbol portable (paquete + binding + `active_sources` + templates, omite el locator) y debe dar 0 en un copy-tree sin `.agents/sdd-workflow.json`.
+1. `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check` (= `--check-installed` / `--mode installed`, default compat) valida paquete + binding + locator + inyección completa del prompt de arranque en `.opencode/opencode.json` (falla sin locator, con locator corrupto o sin integración del agente). `bun .agents/skills/projectctl-sdd/scripts/skill/sdd-check.ts --check-package` (o `--mode package`) valida el árbol portable, incluyendo fuentes y ejemplo de arranque, sin exigir locator ni configuración OpenCode del destino.
 2. `bun .agents/skills/projectctl-sdd/scripts/skill/task-flow-normalizer.ts --check-baseline` valida identidad, locator y versión (modo installed; el API acepta `{ skipLocator: true }` solo para verificación portable programática).
 3. `bun test ./.agents/skills/projectctl-sdd/scripts/__tests__` comprueba el protocolo, resolución, proyección y composición condicional RDD/JD.
 4. `bun .agents/skills/projectctl-requirements/scripts/skill/requirements-check.ts --check` valida **solo el core**; no presupone la instalación SDD.
@@ -20,6 +20,20 @@
 Las decisiones vigentes se documentan en [`decisions.md`](decisions.md); [`sources.md`](sources.md) contiene los IDs PCT-106..PCT-121 del workflow. Un informe de lane SDD no equivale a cobertura aceptada por la política Test del core.
 
 Las operaciones Git del motor producen la evidencia `branch_name` que consume el gate de PR/cierre. Al cambiar productores o consumidores, comprobar su integración con un repositorio Git de prueba y cubrir la recuperación `branch verify` sin avance de estado ni evidencia de procedencia inferida. Esta corrección operativa no cambia el bloque machine ni requiere migrar índices o extensiones.
+
+## v26 / binding v16 — fase completa y fronteras humanas
+
+`phase_execution` configura alcance, carga, fronteras y estados de admisión de
+lanes. El mecanismo está en `references/phase-execution.md`. La integración
+OpenCode inyecta contenido completo mediante el ejemplo portable; actualizar
+el prompt del destino y reiniciar OpenCode, conservando modelo y permisos.
+El check installed rechaza una integración que solo prometa leer enlaces.
+
+Migrar índices v15 solo con aprobación explícita y `phase migrate`: no cambiar
+posición ni dar por aceptada una fase ni importar permisos. Índices anteriores
+requieren primero su migración de identidad canónica. Actualizar los pins de
+extensiones seleccionables; una extensión con fase propia declara también sus
+fronteras y posiciones de lanes, sin defaults ni saltos implícitos.
 
 ## v25 / binding v15 — identidad canónica
 

@@ -9,10 +9,12 @@ import { criteriaBaseline, criteriaIdentityContract, parseCriteriaChange, valida
 import { requireAppMap } from '../../../projectctl-requirements/scripts/project/app-map-inventory.ts';
 import { isCriterionId, isRetiredCriterion } from '../../../projectctl-requirements/scripts/project/criterion-contract.ts';
 import { criterionReferences } from '../../../projectctl-requirements/scripts/project/criterion-references.ts';
+import { executionDigest, phaseExecutionPolicy, type PhaseExecutionRecord } from './phase-execution.ts';
+import { composeSelectedExtensions } from '../skill/task-flow-extension.ts';
 
 type Entry = Record<string, unknown>;
 type Transition = { from: string; to: string; guard?: string; blocking_gates?: string[]; id?: string };
-type Phase = { id: string; status: string; states: string[]; transitions: Transition[] };
+type Phase = { id: string; status: string; states: string[]; allowed_lanes: string[]; transitions: Transition[] };
 type Control = { id: string; writes_state: boolean; value?: Position; transitions: Transition[] };
 export type Position = { phase: string | null; state: string; status: string };
 type Binding = {
@@ -26,7 +28,7 @@ type Binding = {
   retired_aliases: string[];
   modes: Record<string, { allowed: string[]; default: string }>;
 };
-type RecordData = { schema: 'task-operations/v1'; evidence: Record<string, string>; approvals: Record<string, Entry>; browser?: Entry; blockers?: Entry[]; checkpoint?: Entry; delivery?: Entry; environment?: Entry; verification?: Record<string, Entry>; requirements?: { targets: string[]; receipts: Partial<Record<Profile, Record<string, { ref: string; sha256: string }>>> } };
+type RecordData = { schema: 'task-operations/v1'; evidence: Record<string, string>; approvals: Record<string, Entry>; execution?: PhaseExecutionRecord; browser?: Entry; blockers?: Entry[]; checkpoint?: Entry; delivery?: Entry; environment?: Entry; verification?: Record<string, Entry>; requirements?: { targets: string[]; receipts: Partial<Record<Profile, Record<string, { ref: string; sha256: string }>>> } };
 type Task = { file: string; raw: string; front: Record<string, string>; body: string; record: RecordData };
 const START = '<!-- task-operations:start -->';
 const END = '<!-- task-operations:end -->';
@@ -131,6 +133,16 @@ function issues(root: string, binding: Binding, task: Task): string[] {
   }
   if (task.record.delivery?.pr_url && task.front.pr_url !== task.record.delivery.pr_url) errors.push('PR URL differs from operations record');
   if (task.record.browser?.credentials_ref && typeof task.record.browser.credentials_ref !== 'string') errors.push('invalid credentials reference');
+  if (task.record.execution) {
+    const e = task.record.execution;
+    if (typeof e !== 'object' || Array.isArray(e)) errors.push('invalid phase execution record');
+    const a = e.authorization;
+    if (a && (a.schema !== 'phase-authorization/v1' || !binding.phases.some(p => p.id === a.phase)
+        || !a.actor || !a.literal_message || !a.recorded_at || !/^[a-f0-9]{64}$/.test(a.contract_digest))) errors.push('invalid phase authorization');
+    for (const q of [e.question, e.last_transition]) if (q && (q.schema !== 'phase-question/v1' || !q.from || !q.to
+        || !q.question || !q.asked_at || !/^[a-f0-9]{64}$/.test(q.revision)
+        || (q.confirmation && (!q.confirmation.actor || !q.confirmation.literal_message || !q.confirmation.recorded_at)))) errors.push('invalid phase question');
+  }
   if (task.record.environment) {
     const record = task.record.environment;
     const allowed = (binding as Binding & { modes: { environment_deferral?: { allowed_methods: string[] } } }).modes.environment_deferral?.allowed_methods ?? [];
@@ -190,11 +202,128 @@ export class TaskEngine {
   readonly root: string;
   readonly binding: Binding;
   readonly bindingPath: string;
-  constructor(root: string) {
+  private readonly baseBinding: Binding;
+  private readonly taskFile?: string;
+  private selections(front: Record<string, string>): Record<string, string> {
+    const declarations = (this.baseBinding as unknown as Entry).extensions as Record<string, { selector: string }>;
+    return Object.fromEntries(Object.values(declarations).filter(d => front[d.selector]).map(d => [d.selector, front[d.selector]!]));
+  }
+  constructor(root: string, file?: string) {
     this.root = resolve(root);
     const context = readLocator(this.root);
-    this.binding = context.binding;
+    this.baseBinding = context.binding;
+    this.taskFile = file;
+    const selected = file ? this.selections(parseTask(file, readFileSync(within(this.root, file), 'utf8')).front) : {};
+    this.binding = composeSelectedExtensions(context.binding as unknown as Entry, this.root, selected) as unknown as Binding;
     this.bindingPath = context.path;
+  }
+  /** Re-resolve live sources on every admission; cached/session rules cannot authorize work. */
+  private executionContract() {
+    const live = readLocator(this.root);
+    const selected = this.taskFile ? this.selections(parseTask(this.taskFile, readFileSync(within(this.root, this.taskFile), 'utf8')).front) : {};
+    const composed = composeSelectedExtensions(live.binding as unknown as Entry, this.root, selected);
+    if (executionDigest(composed) !== executionDigest(this.binding) || live.path !== this.bindingPath) throw new Error('phase_contract_stale');
+    const policy = phaseExecutionPolicy(this.binding as unknown as Entry);
+    const baseSources = (this.baseBinding as unknown as { active_sources: { include: string[] } }).active_sources.include;
+    const extensionSources = (this.binding as unknown as { active_sources: { include: string[] } }).active_sources.include.filter(path => !baseSources.includes(path));
+    const paths = ['.agents/sdd-workflow.json', this.bindingPath, ...policy.startup_paths, ...extensionSources];
+    const sources = Object.fromEntries(paths.map(path => [path, hash(readFileSync(within(this.root, path), 'utf8'))]));
+    return { policy, sources, digest: executionDigest(sources) };
+  }
+  private targetPosition(to: string): Position {
+    const phase = this.binding.phases.find(p => p.states.includes(to));
+    const control = this.binding.controls.find(c => c.id === to && c.writes_state);
+    if (!phase && !control?.value) throw new Error(`unknown target: ${to}`);
+    return phase ? { phase: phase.id, state: to, status: phase.status } : control!.value!;
+  }
+  private executionRevision(task: Task): string {
+    const { updated: _updated, ...front } = task.front;
+    const { execution, ...record } = task.record;
+    const { question: _question, last_transition: _last, ...executionInputs } = execution ?? {};
+    // Only question bookkeeping is excluded; changing execution scope invalidates consent too.
+    const body = task.body.replace(/<!-- task-operations:start -->[\s\S]*?<!-- task-operations:end -->/, '');
+    return executionDigest({ front, body, record, execution: executionInputs, contract: this.executionContract().digest });
+  }
+  phaseMigrate(file: string, actor: string, message: string): void {
+    const absolute = within(this.root, file);
+    const task = parseTask(relative(this.root, absolute).split(sep).join('/'), readFileSync(absolute, 'utf8'));
+    if (task.front.binding_id !== this.binding.binding_id || task.front.binding_version !== '15.0.0') throw new Error('phase_migration_requires_v15_index');
+    requireValue(actor, 'actor'); requireValue(message, 'literal message');
+    this.executionContract();
+    task.front.binding_version = this.binding.binding_version;
+    task.front.binding_path = this.bindingPath;
+    task.record.execution = {};
+    task.record.checkpoint = { last_action: 'Explicit phase-execution contract migration', actor, literal_message: message,
+      recorded_at: NOW(), next_action: 'Ask for current-phase execution authorization' };
+    save(this.root, this.binding, task);
+  }
+  phaseStart(file: string, actor: string, message: string): void {
+    const task = load(this.root, this.binding, file);
+    const current = position(task);
+    if (!current.phase || ['blocked', 'failed'].includes(current.status)) throw new Error('phase_start_requires_active_position');
+    const { digest } = this.executionContract();
+    requireValue(actor, 'actor'); requireValue(message, 'literal message');
+    task.record.execution ??= {};
+    task.record.execution.authorization = { schema: 'phase-authorization/v1', phase: current.phase,
+      actor, literal_message: message, recorded_at: NOW(), contract_digest: digest };
+    save(this.root, this.binding, task);
+  }
+  phaseRequest(file: string, to: string, question: string): void {
+    const task = load(this.root, this.binding, file);
+    const current = position(task);
+    const next = this.targetPosition(to);
+    if (current.phase === next.phase) throw new Error('phase_question_requires_cross_phase_transition');
+    if (!this.inspect(file).transitions.some(t => t.to === to)) throw new Error('phase_question_transition_not_declared');
+    requireValue(question, 'question');
+    task.record.execution ??= {};
+    task.record.execution.question = { schema: 'phase-question/v1', from: current.state, to,
+      from_phase: current.phase, to_phase: next.phase, question,
+      asked_at: NOW(), revision: this.executionRevision(task) };
+    save(this.root, this.binding, task);
+  }
+  phaseConfirm(file: string, actor: string, message: string): void {
+    const task = load(this.root, this.binding, file);
+    const q = task.record.execution?.question;
+    if (!q || q.confirmation || q.from !== task.front.state || q.revision !== this.executionRevision(task)) throw new Error('phase_question_missing_or_stale');
+    requireValue(actor, 'actor'); requireValue(message, 'literal message');
+    q.confirmation = { actor, literal_message: message, recorded_at: NOW() };
+    save(this.root, this.binding, task);
+  }
+  phaseStatus(file: string) {
+    const task = load(this.root, this.binding, file);
+    const current = position(task);
+    const contract = this.executionContract();
+    const authorization = task.record.execution?.authorization;
+    return { schema: 'phase-status/v1', position: current, contract_digest: contract.digest, sources: contract.sources,
+      authorized: !!authorization && authorization.phase === current.phase && authorization.contract_digest === contract.digest,
+      at_phase_boundary: !!current.phase && contract.policy.stop_states[current.phase]?.includes(current.state) === true,
+      authorization: authorization ?? null, question: task.record.execution?.question ?? null };
+  }
+  phaseLaunch(file: string, lane: string) {
+    const status = this.phaseStatus(file);
+    if (['blocked', 'failed'].includes(status.position.status)) throw new Error('phase_execution_interrupted');
+    if (!status.authorized) throw new Error('phase_execution_not_authorized');
+    if (status.at_phase_boundary) throw new Error('phase_execution_boundary_reached');
+    const phase = this.binding.phases.find(p => p.id === status.position.phase);
+    if (!phase?.states.includes(status.position.state) || !phase.allowed_lanes.includes(lane)) throw new Error('lane_not_allowed_in_phase');
+    const policy = phaseExecutionPolicy(this.binding as unknown as Entry);
+    if (!policy.lane_states[lane]?.includes(status.position.state)) throw new Error('lane_not_allowed_in_state');
+    const task = load(this.root, this.binding, file);
+    return { schema: 'phase-launch/v1', lane_id: lane, position: status.position, authorization: status.authorization,
+      contract_digest: status.contract_digest, task_revision: hash(task.raw), sources: status.sources };
+  }
+  phaseValidateLaunch(file: string, packet: unknown): void {
+    if (!packet || typeof packet !== 'object' || Array.isArray(packet)) throw new Error('phase_launch_packet_invalid');
+    const supplied = packet as Entry;
+    const admission = supplied.execution_context as Entry | undefined;
+    const routing = supplied.routing as Entry | undefined;
+    if (supplied.schema !== 'launch-packet/v1' || !admission || typeof admission.lane_id !== 'string'
+        || routing?.lane_id !== admission.lane_id) throw new Error('phase_launch_packet_invalid');
+    const expected = this.phaseLaunch(file, admission.lane_id);
+    if (executionDigest(admission) !== executionDigest(expected)) throw new Error('phase_launch_packet_stale_or_inconsistent');
+  }
+  phaseValidateLaunchFile(file: string, ref: string): void {
+    this.phaseValidateLaunch(file, JSON.parse(readFileSync(within(this.root, ref), 'utf8')));
   }
   init(input: { id: string; slug: string; title: string; problem: string; appMap: string }): string {
     const file = target(this.binding, input.id, input.slug);
@@ -230,13 +359,32 @@ export class TaskEngine {
     const task = load(this.root, this.binding, file);
     const current = position(task);
     const transitions = [...this.binding.phases.flatMap(p => p.transitions), ...this.binding.controls.flatMap(c => c.transitions)].filter(t => t.from === current.state);
-    return { position: current, transitions: transitions.map(t => ({ to: t.to, guard: t.guard, missing: this.missing(task, t) })) };
+    return { position: current, transitions: transitions.map(t => ({ to: t.to, guard: t.guard, missing: [...this.missing(task, t), ...this.phaseTransitionMissing(task, t.to)] })) };
+  }
+  private phaseTransitionMissing(task: Task, to: string): string[] {
+    if (position(task).phase === this.targetPosition(to).phase) return [];
+    const q = task.record.execution?.question;
+    if (!q || q.schema !== 'phase-question/v1' || q.from !== task.front.state || q.to !== to
+        || q.from_phase !== position(task).phase || q.to_phase !== this.targetPosition(to).phase
+        || !q.confirmation?.actor || !q.confirmation.literal_message || q.revision !== this.executionRevision(task)) return ['phase_change_confirmation_required'];
+    return [];
   }
   private missing(task: Task, transition: Transition): string[] {
     const contract = requirementsContract(this.binding as unknown as Entry);
     const identity = criteriaIdentityContract(this.binding as unknown as Entry);
     const computedCache = new Map<string, boolean>();
     const compute = (id: string): boolean | undefined => {
+      if (['spec_complete', 'design_complete', 'tasks_complete'].includes(id)) {
+        const kind = id.replace('_complete', '');
+        const ref = `${task.front.phase_artifacts_dir}${kind}.md`;
+        if (task.record.evidence[id] !== ref) return false;
+        try {
+          const content = readFileSync(within(this.root, ref), 'utf8').trim();
+          if (!content) return false;
+          if (kind !== 'design') this.planningLinks(task, this.approvedChange(task));
+          return true;
+        } catch { return false; }
+      }
       if ([identity.approval_evidence, identity.planning_evidence, identity.close_evidence].includes(id)) {
         try {
           const change = this.approvedChange(task);
@@ -291,9 +439,11 @@ export class TaskEngine {
     const task = load(this.root, this.binding, file);
     const current = position(task);
     if (current.status === 'blocked' || current.status === 'failed') throw new Error('resume interrupted position first');
+    this.executionContract();
     const candidates = [...this.binding.phases.flatMap(p => p.transitions), ...this.binding.controls.flatMap(c => c.transitions)]
       .filter(t => t.from === current.state && t.to === to);
     if (!candidates.length) throw new Error(`transition not declared: ${current.state} -> ${to}`);
+    if (this.phaseTransitionMissing(task, to).length) throw new Error('phase_change_confirmation_required: ask the user and record a fresh answer before changing phase');
     // Environmental candidates retain their own audited return even when the
     // ordinary technical-invalid predicate also allows the same target.
     const environmentalReturn = task.record.environment?.documentation_candidate === 'allowed'
@@ -312,6 +462,12 @@ export class TaskEngine {
     const control = this.binding.controls.find(c => c.id === to && c.writes_state);
     if (!phase && !control?.value) throw new Error(`unknown target: ${to}`);
     const next = phase ? { phase: phase.id, state: to, status: phase.status } : control!.value!;
+    if (next.phase !== current.phase) {
+      const execution = task.record.execution!;
+      execution.last_transition = execution.question;
+      delete execution.question;
+      delete execution.authorization;
+    }
     if (eligible.guard === 'environment_verification_deferred' && task.record.environment) task.record.environment.documentation_candidate = 'allowed';
     if (eligible.guard === 'p4_document_candidate_written' && task.record.environment) task.record.environment.documentation_candidate = 'written_returned_to_p3';
     task.front.phase = next.phase ?? 'null'; task.front.state = next.state; task.front.status = next.status;

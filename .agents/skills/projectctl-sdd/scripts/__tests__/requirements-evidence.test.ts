@@ -5,6 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { parseBindingFile, resolveLaneSkillContext } from '../skill/task-flow-normalizer.ts';
 import { composeSelectedExtensions } from '../skill/task-flow-extension.ts';
 import { TaskEngine } from '../project/task-engine.ts';
+import { phaseExecutionPolicy } from '../project/phase-execution.ts';
 import { authorizeMachinePreparation, authorizeRequirements, buildRequirementsLaunch, evaluateRequirements, fileDigest, requirementsContract, requirementsSnapshot, validateMachinePreparationChanges, validateRequirementsLaunch, type RequirementsReceipt } from '../project/requirements-evidence.ts';
 
 const repo = resolve(import.meta.dir, '../../../../..');
@@ -14,7 +15,7 @@ const roots: string[] = [];
 const put = (root: string, path: string, text: string) => { mkdirSync(dirname(join(root, path)), { recursive: true }); writeFileSync(join(root, path), text); };
 function setup() {
   const root = mkdtempSync(join(tmpdir(), 'sdd-requirements-')); roots.push(root);
-  for (const file of ['.agents/sdd-workflow.json', '.agents/skills/projectctl-sdd/references/tasks/binding.md']) put(root, file, readFileSync(join(repo, file), 'utf8'));
+  for (const file of ['.agents/sdd-workflow.json', '.agents/skills/projectctl-sdd/references/tasks/binding.md', ...phaseExecutionPolicy(binding).startup_paths]) put(root, file, readFileSync(join(repo, file), 'utf8'));
   put(root, 'docs/app-map/navigation.yaml', 'root_id: app\nnavigation:\n  - id: app\n    title: App\n    kind: view\n    bundle: views/app\n    children:\n      - id: feature\n        title: Feature\n        kind: feature\n        bundle: views/feature\n        children: []\n');
   for (const [name, id] of [['app', 'AC-001'], ['feature', 'AC-002']]) {
     put(root, `docs/app-map/views/${name}.md`, `---\nid: ${name}\nkind: ${name === 'app' ? 'view' : 'feature'}\ntitle: Example\ncriteria:\n  - id: ${id}\n    title: Example\n    type: functionality\n    functional: implemented\n    coverage: {Unit: covered, PW-CLI: missing, PW-AUTO: covered, Manual: missing}\n    evidence_paths: [frontend/src/${name}.ts]\n---\n# Editorial\n`);
@@ -231,6 +232,9 @@ describe('scoped requirements routing and freshness', () => {
     expect(engine.inspect(file).transitions.find(t => t.guard === 'documentation_changed_requires_reverification')?.missing.length).toBeGreaterThan(0);
     put(root, 'docs/app-map/views/feature.mmd', 'flowchart TD\nC --> D\n');
     expect(engine.requirementsStatus(file).technical).toEqual([]);
+    expect(() => engine.transition(file, 'p3_test_preparing')).toThrow('phase_change_confirmation_required');
+    engine.phaseRequest(file, 'p3_test_preparing', '¿Autorizas volver a verificación?');
+    engine.phaseConfirm(file, 'user', 'Sí');
     expect(() => engine.transition(file, 'p3_test_preparing')).toThrow('guards unsatisfied');
     put(root, 'frontend/src/feature.ts', '// @criterion AC-002\nexport const result = 3;');
     expect(engine.requirementsStatus(file).technical.join()).toContain('inputs stale');
@@ -243,6 +247,8 @@ describe('scoped requirements routing and freshness', () => {
     engine.environmentDefer(file, 'operator', 'runtime unavailable', 'rev-1');
     const gate = (binding.gates as Record<string, { required_evidence: string[] }>).environment_verification_deferred;
     for (const id of gate.required_evidence) engine.evidence(file, id, file);
+    engine.phaseRequest(file, 'p4_started', '¿Autorizas el puente documental?');
+    engine.phaseConfirm(file, 'user', 'Sí');
     engine.transition(file, 'p4_started');
     engine.transition(file, 'p4_documenting');
     for (const method of ['Go', 'Docker', 'PW', 'Git-real']) engine.environmentComplete(file, method, 'rev-1', file);
@@ -251,6 +257,8 @@ describe('scoped requirements routing and freshness', () => {
     expect(engine.inspect(file).transitions.find(t => t.to === 'p4_complete')?.missing).toContain('environment_document_candidate_return_required');
     const returning = (binding.gates as Record<string, { required_evidence: string[] }>).p4_document_candidate_written;
     for (const id of returning.required_evidence) engine.evidence(file, id, file);
+    engine.phaseRequest(file, 'p3_test_preparing', '¿Autorizas regresar a verificación?');
+    engine.phaseConfirm(file, 'user', 'Sí');
     expect(engine.transition(file, 'p3_test_preparing').state).toBe('p3_test_preparing');
     expect(readFileSync(join(root, file), 'utf8')).toContain('written_returned_to_p3');
   });

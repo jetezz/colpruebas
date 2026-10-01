@@ -8,13 +8,15 @@ import { TaskEngine } from '../project/task-engine.ts';
 import { run } from '../project/tasks.ts';
 import { criterionRevision } from '../../../projectctl-requirements/scripts/project/criterion-contract.ts';
 import { parseCriteriaChange } from '../project/criteria-change.ts';
+import { phaseExecutionPolicy } from '../project/phase-execution.ts';
+import { parseBindingFile } from '../skill/task-flow-normalizer.ts';
 
 const source = resolve(import.meta.dir, '../../../../..');
 const fixtures: string[] = [];
 function setup() {
   const root = mkdtempSync(join(tmpdir(), 'sdd-task-engine-'));
   fixtures.push(root);
-  for (const file of ['.agents/sdd-workflow.json', '.agents/skills/projectctl-sdd/references/tasks/binding.md']) {
+  for (const file of ['.agents/sdd-workflow.json', '.agents/skills/projectctl-sdd/references/tasks/binding.md', ...phaseExecutionPolicy(parseBindingFile(source).binding).startup_paths]) {
     mkdirSync(dirname(join(root, file)), { recursive: true });
     writeFileSync(join(root, file), readFileSync(join(source, file)));
   }
@@ -70,6 +72,9 @@ describe('portable SDD task engine', () => {
     });
     expect(engine.inspect(file).position).toEqual(position);
     expect(engine.validate(file)).toEqual([]);
+    expect(engine.inspect(file).transitions.find(t => t.to === 'p2_planning')!.missing).toEqual(['phase_change_confirmation_required']);
+    engine.phaseRequest(file, 'p2_planning', '¿Autorizas entrar en implementación?');
+    engine.phaseConfirm(file, 'user', 'Sí, realiza fase 2');
     expect(engine.inspect(file).transitions.find(t => t.to === 'p2_planning')!.missing).toEqual([]);
   });
   it('recovers late missing branch evidence via the CLI without claiming creation', () => {
@@ -135,7 +140,7 @@ describe('portable SDD task engine', () => {
   it('uses the current sdd-orchestrator binding for an existing task index', () => {
     const { root, engine, file } = setup();
     const raw = readFileSync(join(root, file), 'utf8');
-    expect(raw).toContain('binding_version: "15.0.0"');
+    expect(raw).toContain('binding_version: "16.0.0"');
     expect(engine.validate(file)).toEqual([]);
     expect(engine.inspect(file).transitions[0]?.to).toBe('p1_exploring');
   });
@@ -265,7 +270,7 @@ describe('portable SDD task engine', () => {
   it('preserves an old binding index as invalid instead of silently migrating its approvals', () => {
     const { root, engine, file } = setup();
     const path = join(root, file);
-    writeFileSync(path, readFileSync(path, 'utf8').replace('binding_version: "15.0.0"', 'binding_version: "13.0.0"'));
+    writeFileSync(path, readFileSync(path, 'utf8').replace('binding_version: "16.0.0"', 'binding_version: "13.0.0"'));
     expect(engine.validate(file)).toContain('binding identity mismatch');
     expect(() => engine.transition(file, 'p1_exploring')).toThrow('binding identity');
     expect(readFileSync(path, 'utf8')).toContain('binding_version: "13.0.0"');

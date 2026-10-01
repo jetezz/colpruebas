@@ -1,6 +1,7 @@
 /** Generic, fail-closed composition of explicitly selected workflow extensions. */
 import { existsSync, lstatSync, readFileSync, realpathSync } from 'node:fs';
 import { basename, dirname, isAbsolute, relative, resolve } from 'node:path';
+import { phaseExecutionPolicy } from '../project/phase-execution.ts';
 
 type Entry = Record<string, unknown>;
 interface Declaration { selector: string; selected: string; inactive?: string; path: string; skill: string }
@@ -140,6 +141,19 @@ export function composeSelectedExtensions(base: Entry, root: string, selections:
           if (!record(value) || !text(value.id) || !uniqueStrings(value.states) || !uniqueStrings(value.allowed_lanes)
             || !Array.isArray(value.transitions) || (result.phases as Entry[]).some(p => p.id === value.id)) invalid('phase collision/shape');
           (result.phases as Entry[]).push(value as Entry);
+          if (record(result.phase_execution)) {
+            const added = value as Entry;
+            if (!uniqueStrings(added.execution_stop_states) || !(added.execution_stop_states as string[]).length
+                || (added.execution_stop_states as string[]).some(s => !(added.states as string[]).includes(s))) invalid('extension phase execution boundary missing');
+            (result.phase_execution.stop_states as Entry)[added.id as string] = added.execution_stop_states;
+            if (!record(added.execution_lane_states)) invalid('extension phase lane positions missing');
+            const positions = added.execution_lane_states as Entry;
+            if (keys(positions).length !== (added.allowed_lanes as string[]).length
+                || (added.allowed_lanes as string[]).some(lane => !uniqueStrings(positions[lane])
+                  || !(positions[lane] as string[]).length || (positions[lane] as string[]).some(state => !(added.states as string[]).includes(state))
+                  || own(result.phase_execution.lane_states as Entry, lane))) invalid('extension phase lane positions overlap or invalid');
+            Object.assign(result.phase_execution.lane_states as Entry, added.execution_lane_states);
+          }
           break;
         }
         case 'add_statuses': {
@@ -245,6 +259,7 @@ export function composeSelectedExtensions(base: Entry, root: string, selections:
   }
   if (active.length) {
     assertGraph(result);
+    if (result.phase_execution) phaseExecutionPolicy(result);
     result.active_extensions = active;
     if (keys(laneModules).length) result.extension_lane_modules = laneModules;
     if (keys(mechanisms).length) result.review_mechanisms = mechanisms;

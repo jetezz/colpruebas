@@ -5,7 +5,7 @@
   "selected": "receipt-driven",
   "authority": "Gentle-AI",
   "base_binding_id": "projectctl-requirements.task-flow",
-  "base_binding_version": "14.0.0",
+  "base_binding_version": "16.0.0",
   "modes": {"rdd_mode": {"default": "disabled", "allowed": ["disabled", "receipt-driven"], "skills": ["rdd-phase", "rdd-review", "rdd-correct", "rdd-validate"]}},
   "artifact_keys": ["rdd-report"],
   "statuses": ["reviewing"],
@@ -27,6 +27,16 @@
   "entry": {"phase": "fase_4_documentacion", "from": "p4_complete", "to": "p5_started", "guard": "rdd_mode_receipt_driven", "blocking_gates": ["pending_environment_close_block", "requirements_current_close_block"]},
   "phase": {
     "id": "fase_5_rdd", "status": "reviewing",
+    "execution_stop_states": ["p5_complete", "p5_escalated"],
+    "execution_lane_states": {
+      "rdd-review-risk": ["p5_reviewing"],
+      "rdd-review-readability": ["p5_reviewing"],
+      "rdd-review-reliability": ["p5_reviewing"],
+      "rdd-review-resilience": ["p5_reviewing"],
+      "rdd-refuter": ["p5_reviewing"],
+      "rdd-correct": ["p5_correction_required"],
+      "rdd-validate": ["p5_validating"]
+    },
     "states": ["p5_started", "p5_reviewing", "p5_correction_required", "p5_validating", "p5_complete", "p5_escalated"],
     "allowed_lanes": ["rdd-review-risk", "rdd-review-readability", "rdd-review-reliability", "rdd-review-resilience", "rdd-refuter", "rdd-correct", "rdd-validate"],
     "transitions": [

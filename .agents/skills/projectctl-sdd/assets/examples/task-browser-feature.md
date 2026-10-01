@@ -4,7 +4,7 @@ task_id: "20260417-a1b2c3"
 task_slug: "rename-project"
 sdd_change_id: "20260417-a1b2c3-rename-project"
 binding_id: "projectctl-requirements.task-flow"
-binding_version: "15.0.0"
+binding_version: "16.0.0"
 binding_path: ".agents/skills/projectctl-sdd/references/tasks/binding.md"
 sdd_persistence: "taskReadme index + phase artifacts"
 phase_artifacts_dir: "taskReadme/20260417-a1b2c3-rename-project/"
@@ -28,7 +28,7 @@ blocked_reason: ""
 
 # Task: Validar renombrado de proyecto desde dashboard
 
-> **Origen de los valores**: ejemplo ilustrativo del binding v15.0.0 / `TaskFlowBindingV2` (model `2`). Los AC de abajo son IDs canónicos del bundle dashboard del proyecto de ejemplo, no IDs creados por esta task; un destino debe usar sus IDs reales. No es evidencia de ejecución ni approval importable. El índice/artifacts conservan coordinación; App Map conserva definición. `rdd-report.md` es una proyección no autoritativa.
+> **Origen de los valores**: ejemplo ilustrativo del binding v16.0.0 / `TaskFlowBindingV2` (model `2`). Los AC de abajo son IDs canónicos del bundle dashboard del proyecto de ejemplo, no IDs creados por esta task; un destino debe usar sus IDs reales. No es evidencia de ejecución ni approval importable. El índice/artifacts conservan coordinación; App Map conserva definición. `rdd-report.md` es una proyección no autoritativa. Las autorizaciones y preguntas de fase se registran con el motor, nunca se importan de este ejemplo.
 
 ## 1. Objetivo
 
