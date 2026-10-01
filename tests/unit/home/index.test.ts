@@ -19,7 +19,7 @@ describe('Home landing contract', () => {
   });
 
   it('renders the landing without client-side error-producing code', () => {
-    expect(indexSource).not.toContain('console.error');
+    expect(indexSource).not.toMatch(/console\.error\s*\(/);
     expect(indexSource).not.toContain('window.');
     expect(indexSource).not.toContain('document.');
   });

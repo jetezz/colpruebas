@@ -56,14 +56,14 @@ Landing principal (`/`).
 
 Permite verificar en segundos que colpruebas esta arriba, que el entorno visible es el esperado y que la lectura tiene contexto operativo minimo.
 
-## 4. Criterios de calidad
+## 4. Criterios
 
 Este bundle conserva solo los criterios propios de la landing. `home-status-summary` es la autoridad única para `HSS-01..HSS-04`, y `home-runtime-metadata` para `HRM-01..HRM-02`; esos comportamientos no se duplican aquí.
 
-| ID | Nivel | Cubre |
+| ID | Nivel | Título (AFTER aprobado) |
 |---|---|---|
-| HOME-01 | obligatorio | Identidad visible de la aplicacion en la portada |
-| HOME-05 | obligatorio | Carga principal sin errores visibles |
+| HOME-01 | obligatorio | La aplicacion se identifica visiblemente apenas carga la landing con su nombre en el titulo del documento y en la tarjeta principal. |
+| HOME-05 | obligatorio | La carga inicial de la landing no produce errores de consola (browser console clean). |
 
 ## 5. Diagrama Mermaid
 

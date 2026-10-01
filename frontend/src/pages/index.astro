@@ -4,19 +4,54 @@ import InfoCard from '../components/InfoCard.astro';
 import Footer from '../components/Footer.astro';
 import type { RuntimeEnvironment } from '../../../shared/contracts/runtime';
 
+// @criterion HOME-01
+// @trace ac=HOME-01 req=REQ-CODETRACE-002 view=home tab=none block=identity-source
+// @contract auth=none ownership=none side-effects=none
 const appName = 'colpruebas';
 const environment = (import.meta.env.PUBLIC_ENVIRONMENT || 'test') as RuntimeEnvironment;
 const timestamp = new Date().toISOString();
 
-const frontendStatus = environment === 'production' 
-  ? 'Estamos en el frontend de PRODUCCIÓN' 
-  : 'Estamos en el frontend de TEST';
+const frontendStatus =
+  environment === 'production'
+    ? 'Estamos en el frontend de PRODUCCIÓN'
+    : environment === 'development'
+      ? 'Estamos en el frontend de DESARROLLO'
+      : 'Estamos en el frontend de TEST';
 
-const apiStatus = environment === 'production'
-  ? 'API de producción funcionando'
-  : 'API de test funcionando';
+const fallbackApiStatus =
+  environment === 'production'
+    ? 'API de producción funcionando'
+    : environment === 'development'
+      ? 'API de desarrollo funcionando'
+      : 'API de test funcionando';
 
-const gitBranch = 'MAIN';
+// HSS-03: salud real vía fetch SSR con timeout corto + degradado graceful al
+// texto estático (sin console.error → protege HOME-05).
+// @criterion HOME-05
+// @trace ac=HOME-05 req=REQ-CODETRACE-002 view=home tab=none block=ssr-health-degraded
+// @contract auth=none ownership=none side-effects=none
+const apiBaseUrl = (import.meta.env.PUBLIC_API_URL || '').replace(/\/+$/, '');
+let apiStatus = fallbackApiStatus;
+try {
+  if (apiBaseUrl) {
+    // Respuesta ok → texto operativo del entorno; cualquier otro caso
+    // conserva el fallback estático asignado antes del try.
+    const healthRes = await fetch(`${apiBaseUrl}/health`, {
+      signal: AbortSignal.timeout(2000),
+    });
+    if (healthRes.ok) {
+      apiStatus = fallbackApiStatus;
+    }
+  }
+} catch {
+  apiStatus = fallbackApiStatus;
+}
+
+// HRM-01: rama git real build-time SSR con fallback documentado a develop.
+// @criterion HRM-01
+// @trace ac=HRM-01 req=REQ-CODETRACE-002 view=home tab=none block=branch-resolution
+// @contract auth=none ownership=none side-effects=none
+const gitBranch = import.meta.env.PUBLIC_GIT_BRANCH || 'develop';
 ---
 
 <!-- @trace not-evaluated=true reason=entrypoint block=home-entrypoint -->

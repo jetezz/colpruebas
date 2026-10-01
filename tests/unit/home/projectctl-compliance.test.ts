@@ -49,15 +49,15 @@ describe('projectctl compliance contract', () => {
     expect(exists('backend/src')).toBe(true);
   });
 
-  it('pins the workflow locator to the v14 binding and preserves its machine block', () => {
+  it('pins the workflow locator to the v15 binding and preserves its machine block', () => {
     const locator = JSON.parse(read('.agents/sdd-workflow.json')) as Record<string, unknown>;
     expect(locator.binding_path).toBe('.agents/skills/projectctl-sdd/references/tasks/binding.md');
     expect(locator.machine_block_id).toBe('task-flow-binding');
     expect(locator.expected_binding_id).toBe('projectctl-requirements.task-flow');
-    expect(locator.expected_binding_version).toBe('14.0.0');
+    expect(locator.expected_binding_version).toBe('15.0.0');
 
     const binding = read('.agents/skills/projectctl-sdd/references/tasks/binding.md');
-    expect(binding).toContain('version: 14.0.0');
+    expect(binding).toContain('version: 15.0.0');
     const block = /<!-- task-flow-binding:start -->\n```json\n([\s\S]*?)\n```\n<!-- task-flow-binding:end -->/.exec(binding);
     expect(block, 'binding must contain one delimited JSON machine block').not.toBeNull();
     const machine = JSON.parse(block?.[1] ?? '{}') as {
@@ -69,12 +69,12 @@ describe('projectctl compliance contract', () => {
     };
 
     expect(machine.contract_kind).toBe('TaskFlowBindingV2');
-    expect(machine.binding_version).toBe('14.0.0');
+    expect(machine.binding_version).toBe('15.0.0');
     expect(machine.status?.writable).toContain('testing');
     expect(machine.status?.writable).not.toContain('verified');
     expect(machine.lanes).toHaveProperty('sdd-apply-unit-tests');
     expect(machine.lanes).toHaveProperty('sdd-apply-pwauto-tests');
-    expect(machine.active_sources?.include).toContain('.agents/sdd-workflow.json');
+    expect(machine.active_sources?.include).toContain('.agents/skills/projectctl-sdd/references/tasks/binding.md');
     expect(machine.active_sources?.exclude).toContain('.agents/skills/projectctl-requirements/references/tareas.md');
   });
 

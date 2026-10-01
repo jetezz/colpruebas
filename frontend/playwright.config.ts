@@ -8,7 +8,11 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const configDir = dirname(fileURLToPath(import.meta.url));
-const baseURL = process.env.BASE_URL?.trim();
+// TST-09-BASE-URL: target explícito por entorno vía BASE_URL (inyectada por el
+// operador en prod/dev). Sin pin a una sola URL localhost: ausente/vacía →
+// undefined y Playwright usa el target gestionado por defecto.
+const rawBaseURL = process.env.BASE_URL?.trim();
+const baseURL = rawBaseURL ? rawBaseURL : undefined;
 
 export const PWAUTO_VIEWS = {
   'home': { project: 'pwauto-home', bundle_path: 'views/home/index', grep: /@home\b/ },

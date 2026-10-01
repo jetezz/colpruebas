@@ -86,14 +86,14 @@ Landing principal (`/`).
 
 Reduce la incertidumbre inicial y ayuda a validar si esta viendo el entorno correcto antes de seguir con una prueba o una revision manual.
 
-## 4. Criterios de calidad
+## 4. Criterios
 
-| ID | Nivel | Cubre |
+| ID | Nivel | Título (AFTER aprobado) |
 |---|---|---|
-| HSS-01 | obligatorio | Aplicacion visible con label `Aplicacion:` y valor correcto |
-| HSS-02 | obligatorio | Frontend visible con label `Frontend:` y color por entorno |
-| HSS-03 | obligatorio | API visible con label `API:` y color por entorno |
-| HSS-04 | esperado | Referencia de rama git visible con label `Rama Git:` |
+| HSS-01 | obligatorio | El nombre de la aplicacion es visible dentro de la tarjeta central `Resumen de estado` con la etiqueta `Aplicacion:`. |
+| HSS-02 | obligatorio | El estado del frontend se muestra dentro de la misma tarjeta, alineado a la derecha del label `Frontend:` y diferenciado por entorno. |
+| HSS-03 | obligatorio | El estado de la API se muestra dentro de la tarjeta con la etiqueta `API:` y replica el patron de color por entorno. |
+| HSS-04 | esperado | Una referencia de rama git se renderiza con la etiqueta `Rama Git:` en la misma tarjeta. |
 
 ## 5. Diagrama Mermaid
 
