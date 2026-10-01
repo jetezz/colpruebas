@@ -4,8 +4,8 @@ task_id: "20260727-p1draft"
 task_slug: "state-p1-drafting"
 sdd_change_id: ""
 binding_id: "projectctl-requirements.task-flow"
-binding_version: "8.0.0"
-binding_path: ".agents/skills/projectctl-requirements/references/tareas.md"
+binding_version: "14.0.0"
+binding_path: ".agents/skills/projectctl-sdd/references/tasks/binding.md"
 sdd_persistence: "taskReadme index + phase artifacts"
 phase_artifacts_dir: "taskReadme/20260727-p1draft-state-p1-drafting/"
 status: planning
@@ -16,106 +16,114 @@ type: test
 area: task-flow
 created: "2026-07-27T09:30:00Z"
 updated: "2026-07-27T09:35:00Z"
-proposal_authored_at: "2026-07-27T09:30:00Z"
-proposal_lane: "sdd-propose"
-proposal_topic_key: "sdd/20260727-p1draft/proposal"
-proposal_state: "drafted"
 source_branch: develop
 target_branch: develop
-branch_name: null
-pr_url: null
+branch_name: "feature/20260727-p1draft-state-p1-drafting"
+pr_url: ""
 browser_validation: required
 docker_validation: required
 docs_impact: not_required
-blocked_reason: null
-error_message: null
+blocked_reason: ""
 ---
 
 # State test: p1_drafting
 
-## Purpose
-Display one task in the canonical workflow state `p1_drafting`.
+> **Origen de los valores**: este fixture es un **asset derivado del binding `projectctl-requirements.task-flow` v14.0.0**. Todo valor escribible se valida contra el binding canónico `TaskFlowBindingV2` (model `2`).
+>
+> **Modelo de persistencia v11.** Este archivo es el índice compacto de coordinación y el detalle completo vive en los phase artifacts referenciados. Ambos son la fuente canónica y suficiente de persistencia y recuperación. El binding configura `mirrors: []`; herramientas opcionales de soporte no son evidencia ni fuente de verdad SDD.
+>
+> **Nota**: fixture histórico de visibilidad del state `p1_drafting` (`binding.phases[]`, fase `fase_1_propuesta`). `kind: "phase-state"`, `writes_state: true`, `owner: "sdd-orchestrator"`. El `status` es exactamente el status de su fase (`planning`). Cuerpo normalizado a plantilla v14 por fix F-01 de verify-code (valores `phase`/`state`/`status` preservados).
 
-## Expected
-- Phase: `fase_1_propuesta`
-- State: `p1_drafting`
-- Status: `planning`
+## 1. Objetivo
 
-## Proposal (sdd-propose lane evidence)
+Mostrar la forma canónica de un taskReadme en `phase: fase_1_propuesta` / `state: p1_drafting` / `status: planning` según plantilla v14 (fixture `type: test` para resolución del Tasks Tab sin artefactos paralelos).
 
-> Owned by `sdd-propose` lane. Inline in the canonical `taskReadme` per repo-local contract; no `proposals/`, `specs/`, `designs/` or `tasks/` filesystem artifact is created.
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["1_objetivo"]`).
 
-### Intent
+## 2. Contexto operativo
 
-Produce the canonical proposal-owned evidence for the `p1_drafting` workflow state. The fixture is a `type: test` task whose sole purpose is to display one task in `state: p1_drafting` so the Tasks Tab can resolve and render the state without depending on `proposals/`, `specs/`, `designs/` or `tasks/` directories.
+- **Origen del pedido**: fixture de visibilidad de estado (serie histórica `20260727-p*`, recabecerada a v14).
+- **Motivación**: referencia auditable del state `p1_drafting` con frontmatter de plantilla v14 y valores `phase`/`state`/`status` preservados.
+- **Restricciones** (el detalle va a los phase artifacts):
+  - Persistencia única: índice + phase artifacts; `mirrors: []`.
+  - Cierre solo en forma terminal única `{ phase: null, state: "done", status: "done" }`.
+  - `phase`/`state` se resuelven desde `binding.phases[]` y `binding.controls[]`; los `retired_aliases` **no** son escribibles.
+  - Sin artefactos filesystem bajo `proposals/`, `specs/`, `designs/` ni `tasks/`; sin git/gh, builds, tests, browser, Docker ni runtime `projectctl`; sin ediciones de código de producto.
 
-### Scope (in/out)
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["2_contexto_operativo"]`).
 
-In
-- Canonical frontmatter identifiers preserved verbatim (`task_id`, `task_slug`, `sdd_change_id`, `binding_id`, `binding_version`, `binding_path`, `phase`, `state`, `status`).
-- Inline proposal evidence (this section) inside the canonical `taskReadme`.
-- Engram mirror under topic key `sdd/20260727-p1draft/proposal`.
+## 3. Criterios de aceptación
 
-Out
-- No new `proposal.md` file under `proposals/` or any parallel SDD filesystem artifact.
-- No `spec.md`, `design.md`, `tasks.md` files; phases 2/3/4 remain blocked by binding.
-- No git/gh, builds, tests, browser, Docker or `projectctl` runtime; no product code edits.
+Solo IDs canónicos + veredicto + método. Este fixture no aporta cobertura (los fixtures de estado no son evidencia).
 
-### Capabilities
-
-None at spec level. This is a state-visibility fixture (`type: test`), not a capability-introducing change. Per `sdd-propose` §Capabilities rule, both New and Modified sub-sections are intentionally empty.
-
-### Approach
-
-1. Re-read the canonical `taskReadme` immediately before writing; patch only proposal-owned sections.
-2. Record proposal metadata in frontmatter (`proposal_authored_at`, `proposal_lane`, `proposal_topic_key`, `proposal_state`).
-3. Author this inline Proposal section matching `sdd-propose` SKILL.md fields (Intent, Scope, Capabilities, Approach, Affected Areas, Risks, Rollback, Dependencies, Success Criteria).
-4. Mirror the exact evidence to Engram with `topic_key: sdd/20260727-p1draft/proposal`.
-5. Leave `state: p1_drafting` untouched; the next legal transition is `p1_awaiting_acceptance` per `references/tareas.md` phases[id=fase_1_propuesta].transitions.
-
-### Affected Areas
-
-| Area | Impact | Description |
+| Criterion-ID | Veredicto | Método |
 | --- | --- | --- |
-| `taskReadme/20260727-p1draft-state-p1-drafting.md` | Modified | Inline Proposal section + proposal frontmatter keys. |
+| `— (fixture de estado, sin cobertura)` | `not_applicable` | `not_required` |
 
-### Risks
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["3_criterios_de_aceptacion"]`).
 
-| Risk | Likelihood | Mitigation |
+## 4. Fases
+
+| Fase | Estado | Resumen (≤10 líneas) | Artefacto |
+| --- | --- | --- | --- |
+| Propuesta | `p1_drafting` | Fixture del state de redacción de la fase 1; evidencia inline en este fichero. | `taskReadme/20260727-p1draft-state-p1-drafting/` |
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["4_fases"]`).
+
+## 5. Work units
+
+Sin work units (fixture de estado, no una tarea ejecutable).
+
+| WU-id | Lane | apply_lane | Estado | Artefacto de evidencia |
+| --- | --- | --- | --- | --- |
+| `—` | `—` | `—` | `—` | `—` |
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["5_work_units"]`).
+
+## 6. Verificación
+
+- **Estado consolidado**: `not_required` (fixture de estado)
+- **Lanes requeridos / ejecutados**: `ninguno`
+- **Cobertura contra specs**: `n/a`
+- **Refs**: `—`
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["6_verificacion"]`).
+
+## 7. Estado actual / Siguiente paso / Handoff
+
+- **Estado actual**: `planning`
+- **Fase / State**: `fase_1_propuesta` / `p1_drafting`
+- **Siguiente paso**: transición del coordinador hacia `p1_awaiting_acceptance` (requiere aprobación humana explícita per `AC-010`). No inicia trabajo de spec, design, tasks ni implementación antes de ese guard.
+- **Handoff para resume**: fixture estático; sin resume operativo.
+- **Resume checkpoint**: `null`.
+
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["7_estado_actual_siguiente_paso_handoff"]`).
+
+## 8. Problemas / Blockers
+
+Sin blockers.
+
+| Severidad | Problema | Resolución / siguiente paso |
 | --- | --- | --- |
-| Identifier drift (`state`, `phase`, `status`, binding) | Low | Preserve verbatim; record evidence rather than normalizing. |
-| Engram mirror unavailable | Low | Evidence lives in `taskReadme`; mirror is a recovery backend, not the SoT. |
-| Confused with a real SDD change | Low | `type: test`, `sdd_change_id: ""`, no spec-level capability changes. |
+| `—` | `—` | `—` |
 
-### Rollback Plan
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["8_problemas_blockers"]`).
 
-Revert only this `taskReadme` file (frontmatter `proposal_*` keys and this Proposal section). Do not touch other state fixtures, binding sources or `phase_artifacts_dir`.
+## 9. Git y PR
 
-### Dependencies
+- **Rama actual**: `feature/20260727-p1draft-state-p1-drafting` (per `binding.delivery.branch_pattern`)
+- **PR URL**: `` (vacío)
+- **Base target**: `develop` (per `binding.delivery.target_branch`)
+- **Estado de PR**: `not_created`
 
-- Binding `projectctl-requirements.task-flow` v8.0.0 at `.agents/skills/projectctl-requirements/references/tareas.md`.
-- Repo-local persistence: `taskReadme` index + Engram mirror (per `engram-policy`).
-- No external services, no product code, no fixtures outside this file.
+### Checklist de cierre (gate antes de pasar a `done`)
 
-### Success Criteria
+- [ ] Todas las unidades `apply_lane: code-*` en `done` o `blocked` (tabla §5)
+- [ ] Las lanes de verificación requeridas en `passed` o `not_required` (mapping en `apply-work-unit-schema.md`)
+- [ ] Branch + PR registrados arriba
+- [ ] Documentación actualizada registrada en el phase artifact `apply-<unit>` de doc y reflejada en §4/§5
+- [ ] Gate `AC-009.app_map_close` verificado si hay criterios `modificar`/`eliminar`/`añadir` en §3 (ver `acceptance-criteria-gates.md`)
+- [ ] Receipts técnicos y documentales vigentes para todos los targets; pending_environment resuelto (per `binding.gates["documentation_gate_passed"]`).
+- [ ] Forma terminal única: `status: done`, `phase: null`, `state: "done"` (per `binding.controls["done"].value`)
 
-- Frontmatter keeps `state: p1_drafting`, `phase: fase_1_propuesta`, `status: planning` and binding identifiers unchanged.
-- This Proposal section is present and follows `sdd-propose` SKILL.md fields.
-- No new filesystem artifacts under `proposals/`, `specs/`, `designs/` or `tasks/`.
-- Engram observation saved under `sdd/20260727-p1draft/proposal` mirrors this evidence verbatim.
-
-## Next step
-
-Await coordinator transition to `p1_awaiting_acceptance` (requires human explicit approval per `AC-010`). No spec, design, tasks or implementation work starts before that guard.
-
-## Lane run: sdd-propose (2026-07-27T09:35:00Z)
-
-- **Result**: `verified_no_writes_required`.
-- **Inline Proposal section**: all nine `sdd-propose` SKILL.md fields present and non-empty (Intent, Scope in/out, Capabilities, Approach, Affected Areas, Risks, Rollback Plan, Dependencies, Success Criteria).
-- **Frontmatter `proposal_*` keys**: all four present (`proposal_authored_at`, `proposal_lane: "sdd-propose"`, `proposal_topic_key: "sdd/20260727-p1draft/proposal"`, `proposal_state: "drafted"`).
-- **Phase artifact decision**: did NOT create `taskReadme/20260727-p1draft-state-p1-drafting/proposal.md`. Binding v8.0.0 `phase_artifacts` are optional; fixture scope explicitly keeps canonical evidence inline.
-- **Engram mirror**: NOT called. Binding v8.0.0 `mirrors: []` — memory tools are not authoritative under v8.0.0. `proposal_topic_key` is metadata only.
-- **State**: preserved `p1_drafting` (fixture intent — Tasks Tab render target).
-- **Identifiers**: preserved verbatim (`task_id`, `task_slug`, `sdd_change_id`, `binding_id`, `binding_version`, `binding_path`, `phase`, `state`, `status`, `phase_artifacts_dir`).
-- **Out-of-authority commands run**: none.
-- **Next legal coordinator transition**: `p1_drafting → p1_awaiting_acceptance`, gated by `AC-010.explicit_approval` (not performed by this lane).
+> **Ownership**: `sdd-orchestrator` (per `binding.task.heading_owners["9_git_y_pr"]`).

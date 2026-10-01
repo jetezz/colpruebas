@@ -4,8 +4,8 @@ task_id: "20260727-p3done"
 task_slug: "state-p3-complete"
 sdd_change_id: ""
 binding_id: "projectctl-requirements.task-flow"
-binding_version: "8.0.0"
-binding_path: ".agents/skills/projectctl-requirements/references/tareas.md"
+binding_version: "14.0.0"
+binding_path: ".agents/skills/projectctl-sdd/references/tasks/binding.md"
 sdd_persistence: "taskReadme index + phase artifacts"
 phase_artifacts_dir: "taskReadme/20260727-p3done-state-p3-complete/"
 status: testing
@@ -18,13 +18,12 @@ created: "2026-07-27T09:30:00Z"
 updated: "2026-07-27T09:30:00Z"
 source_branch: develop
 target_branch: develop
-branch_name: null
-pr_url: null
+branch_name: "feature/20260727-p3done-state-p3-complete"
+pr_url: ""
 browser_validation: required
 docker_validation: required
 docs_impact: not_required
-blocked_reason: null
-error_message: null
+blocked_reason: ""
 ---
 
 # State test: p3_complete

@@ -42,22 +42,22 @@ describe('projectctl compliance contract', () => {
       expect(readdirSync(join(repoRoot, folder)).length, `${folder}/ must not be empty`).toBeGreaterThan(0);
     }
 
-    const structure = read('.agents/skills/projectctl-requirements/references/estructura.md');
+    const structure = read('.agents/skills/projectctl-requirements/references/estructura/reglas.md');
     expect(structure).toContain('baseline de estructura 7+3');
     expect(structure).toContain('| `backend/src/` | `apps/api-bun/src/`, `api/src/` |');
     expect(exists('api/src')).toBe(true);
     expect(exists('backend/src')).toBe(true);
   });
 
-  it('pins the workflow locator to the v10 binding and preserves its machine block', () => {
+  it('pins the workflow locator to the v14 binding and preserves its machine block', () => {
     const locator = JSON.parse(read('.agents/sdd-workflow.json')) as Record<string, unknown>;
-    expect(locator.binding_path).toBe('.agents/skills/projectctl-requirements/references/tasks/binding.md');
+    expect(locator.binding_path).toBe('.agents/skills/projectctl-sdd/references/tasks/binding.md');
     expect(locator.machine_block_id).toBe('task-flow-binding');
     expect(locator.expected_binding_id).toBe('projectctl-requirements.task-flow');
-    expect(locator.expected_binding_version).toBe('10.0.0');
+    expect(locator.expected_binding_version).toBe('14.0.0');
 
-    const binding = read('.agents/skills/projectctl-requirements/references/tasks/binding.md');
-    expect(binding).toContain('version: 10.0.0');
+    const binding = read('.agents/skills/projectctl-sdd/references/tasks/binding.md');
+    expect(binding).toContain('version: 14.0.0');
     const block = /<!-- task-flow-binding:start -->\n```json\n([\s\S]*?)\n```\n<!-- task-flow-binding:end -->/.exec(binding);
     expect(block, 'binding must contain one delimited JSON machine block').not.toBeNull();
     const machine = JSON.parse(block?.[1] ?? '{}') as {
@@ -69,7 +69,7 @@ describe('projectctl compliance contract', () => {
     };
 
     expect(machine.contract_kind).toBe('TaskFlowBindingV2');
-    expect(machine.binding_version).toBe('10.0.0');
+    expect(machine.binding_version).toBe('14.0.0');
     expect(machine.status?.writable).toContain('testing');
     expect(machine.status?.writable).not.toContain('verified');
     expect(machine.lanes).toHaveProperty('sdd-apply-unit-tests');
