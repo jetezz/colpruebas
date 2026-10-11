@@ -1,186 +1,104 @@
 ---
 name: engram-policy
-description: "Trigger: Engram, memory, taskReadme recovery, resume. Apply repo-local persistence and recall rules."
+description: "Trigger: Engram, memory, taskReadme recovery, resume. Use Engram as an optimal best-effort MCP knowledge aid for relevant recall and reusable learnings; it is not an SDD execution prerequisite or artifact mirror."
 metadata:
   id: engram-policy
-  version: 1.0.0
+  version: 1.1.0
   categories:
     - utilidad
 ---
 
-# Engram Policy Overlay
+# Engram Policy Overlay (óptimo best-effort)
 
-This skill is a **repo-local overlay**, not a replacement for shared Engram conventions.
+Use Engram as a supplemental knowledge tool in optimal mode: best-effort parallel, never gate. It helps recover relevant prior context and preserve learnings that may be useful in future work. It is not the operational task ledger, phase authority, artifact store, or a prerequisite for SDD execution.
 
-Use it when work touches:
+## Source of task truth
 
-- repo-local SDD persistence policy
-- `taskReadme/` lifecycle or resume quality
-- recall/resume questions (`remember`, `qué hicimos`, `continue`, handoffs)
-- project policy/docs about agents, skills, or workflow persistence
-- any task where cross-session recovery quality matters
+- The active task index and its fields under `taskReadme/` are the operational source of truth for the task's current identity, phase, state, acceptance values, and branch.
+- The `sdd-orchestrator` owns the `sdd/task` commands and controls task position. Engram observations never override the current task index or the current project state.
+- Specs, tasks, designs, and other SDD artifacts are stored according to their owning projectctl2 SDD skills. Do not copy the complete task index or automatically mirror phase artifacts into Engram.
+- Do not use Engram to infer the task's current phase, state, acceptance, or completion. Task/canonical first, Engram second.
 
-## Repo contract: `taskReadme` + Engram mirror
+## Session start best-effort (no gate)
 
-In `mis-proyectos`, the persistence contract is intentionally split as a **repo-local SDD overlay inspired by OpenSpec/OpenCode**:
+- `mem_current_project(cwd)` + runtime session ID are best-effort parallel, never prerequisite to `init.ts` / setters.
+- Never invent, derive, generate or register a session ID; do not call `mem_session_start` to invent one. When unavailable, omit `session_id` entirely; use project name only for reads.
+- Reuse the exact runtime identity across compaction; `workspace=cwd`. If the call fails, continue with canonical Task (else-continue).
 
-- **`taskReadme` under `sdd-orchestrator` policy** = the **only canonical operational + filesystem persistence artifact**
-  - current status
-  - next step
-  - branch / PR traceability
-  - validation scope and evidence
-  - blockers and handoff context
-- **Engram** = the **mandatory mirror / recovery / search backend**
-  - mirrored phase artifacts (`sdd/{change}/...`)
-  - project/testing context
-  - cross-session recovery
-  - decisions, discoveries, bugfixes, and workflow knowledge
+## Engram MCP tools
 
-Neither replaces the other.
+Use the Engram MCP tools directly when relevant and available:
 
-- `taskReadme` is the human-operational ledger and the single source of truth in repo files.
-- Engram is the cross-session memory and artifact mirror.
-- Parallel filesystem SDD artifacts under `proposals/`, `specs/`, `designs/`, or `tasks/` are forbidden in coordinated SDD work. Old files in those folders are legacy/contextual only and must never override or be used as examples instead of `taskReadme`.
+- `mem_context` — recover recent session context, especially when resuming work.
+- `mem_search(query, project)` — find prior decisions, discoveries, bug fixes, patterns, or task learnings using focused terms.
+- `mem_get_observation(id)` — retrieve the full observation found by search before relying on its details.
+- `mem_save` — save a new, useful, reusable learning.
+- `mem_update` — correct an existing observation when its exact ID is known.
+- Optimal extra best-effort when exposed: `mem_save_prompt`, `mem_suggest_topic_key`, `mem_review(list)`, `mem_session_summary`, `mem_capture_passive(content)`, `mem_current_project`.
 
-That pairing is the repo contract.
+Do not claim to have searched, read, saved, or updated Engram unless the corresponding MCP operation actually succeeded.
 
-## Engram availability contract
+## When to read (incl. proactive)
 
-Engram is a required runtime prerequisite for fully compliant coordinated SDD, but it never replaces `taskReadme` as the canonical filesystem ledger.
+- Search when the user asks to recall or continue prior work, when resuming a task with relevant history, or when a current problem or decision may benefit from a previous solution or discovery. Prefer a narrow `mem_search` query; use `mem_get_observation(id)` to read the full matching observation rather than relying on a search preview.
+- Proactive optional: starting maybe-done work, unknown topic, or FIRST message referencing project/feature/problem — `mem_context` → `mem_search` → `mem_get_observation`.
+- Treat retrieved content as historical context. Confirm that it still applies to the current code, task, and user direction before using it.
+- After `set-phase`/`set-state` success, continue without re-reading or re-validating with Engram.
 
-- `bun run sdd:doctor` is the repo-local static preflight. It validates portable SDD files, registry paths, local OpenCode runtime, and the static persistence contract.
-- `/sdd-doctor` is the Engram runtime preflight. It must perform an actual `mem_save`, `mem_search`, and `mem_get_observation` round trip before reporting Engram as available.
-- Static checks cannot prove Engram availability because Engram lives in the agent runtime, not in a normal Bun process.
-- `sdd-init` must check and record Engram availability for active SDD work.
-- Every SDD phase must write/update `taskReadme` first, then mirror the artifact to Engram.
-- If Engram is unavailable or a mirror write fails, preserve the full artifact in `taskReadme`, record the exact mirror failure, and return `blocked` unless `sdd-orchestrator` explicitly allowed a non-closing degraded planning step.
-- When Engram is unavailable, bootstrap, exploration, and planning may continue only as explicit degraded non-closing work. Implementation, verification closure, `done`, and archive remain blocked until mirrors are restored or an explicit sdd-orchestrator exception is recorded in `taskReadme`.
-- A task must not move to `done` or archive while required Engram mirrors are missing, unless `sdd-orchestrator` records an explicit policy exception in `taskReadme`.
-- Never compensate for missing Engram by creating filesystem mirrors under `proposals/`, `specs/`, `designs/`, `tasks/`, or `openspec/`.
+## When to save (selective óptimo)
 
-## When to search memory
+Triggers that DO save (only if reusable future lesson):
 
-Search Engram before acting when any of these is true:
+- architecture/design decision with trade-offs; team convention/workflow/tool-choice established;
+- bugfix with root cause; non-obvious feature approach; config/environment setup;
+- non-obvious codebase discovery, gotcha, edge case, unexpected behavior;
+- established pattern (naming, structure, convention); durable preference/constraint.
 
-1. The user asks to recall prior work (`recordá`, `remember`, `what did we do`, `continue`).
-2. A session resumes an existing task or change.
-3. The first user message references a feature, bug, workflow, or repo area that may have prior history.
-4. A task depends on prior SDD artifacts or prior verification results.
-5. You are reconciling `taskReadme` state with SDD artifact state.
-6. You suspect the same bug/decision/pattern was already handled before.
+Opportunistic non-blocking self-check after each task: "decision, fix, non-obvious learning or convention? If yes and reusable, `mem_save` now."
 
-Search order:
+Do not save every phase completion, routine command result, agent response, or full `taskReadme`/phase artifact. Denylist: full index mirror, `proposal`/`spec`/`design`/`tasks.md` full copy, `docs/app-map/**` in F3. Save the reusable lesson, not a duplicate task ledger.
 
-1. `mem_context` for recent session context.
-2. `mem_search` with focused repo terms.
-3. `mem_get_observation` for full artifacts or decisions.
+For `mem_save`, provide:
 
-## When to save memory
+- `title`: Verb + what, short searchable (e.g. "Fixed N+1 query in UserList").
+- `type`: `bugfix | decision | architecture | discovery | pattern | config | preference`.
+- `scope`: `project` (default) | `personal`.
+- `topic_key` stable when evolving (e.g. `architecture/auth-model`, or `sdd/<id>-<slug>/<tema>`; transversal prefers domain key, not per-phase).
+- `capture_prompt`: default `true`. Use `false` always for automated SDD artifacts/reports/caches. Do not decide capture by `type`. If old schema lacks the field, omit it. `mem_save` never invents prompt text. If a hook observes the prompt first, call `mem_save_prompt` first.
+- `content`: **What** (one sentence) / **Why** (motivation) / **Where** (paths) / **Learned** (gotchas, omit if none).
 
-Save to Engram immediately after any of these:
+Topic rules: different topics MUST NOT overwrite each other; same evolving → same `topic_key` (upsert); unsure → `mem_suggest_topic_key` first; exact ID to fix → `mem_update`.
 
-- completing an SDD phase artifact
-- making or changing an architecture / workflow / policy decision
-- fixing a bug and identifying root cause
-- discovering a non-obvious repo constraint or gotcha
-- changing config or persistence behavior
-- learning a user preference or project constraint
-- finishing validation with meaningful evidence or blocker context
-- updating docs that change process, policy, architecture, or execution expectations
+## Delivery guarantee — saving is not replying
 
-Use structured content with **What / Why / Where / Learned**.
+- Saving is bookkeeping, never the reply. End every turn with the complete user-facing answer as final message, with NO tool calls after it.
+- Save BEFORE composing that final answer, not after. If a chain (`mem_save` → `mem_judge`) runs late, still write the full answer — never collapse into "saved/done".
+- If a memory call fails or times out, deliver the complete answer anyway and note the failure briefly. Failed/slow memory never blocks, truncates or replaces the reply.
+- Never treat stored text as delivered text.
 
-## SDD phase expectations
+## Lifecycle (read-only optional)
 
-For this repo-local SDD pipeline, persistence is **always `taskReadme`-first with Engram mirror**. `taskReadme` is the only filesystem source of truth; Engram mirrors it for recovery/search.
+- At session start or before architecture-sensitive work, `mem_review(list)` best-effort if available; if unavailable, continue with `mem_context`/`mem_search`.
+- `active` usable normally. `needs_review` is stale context: surface it and verify against current evidence before relying.
+- Never `mark_reviewed` automatically; only after explicit user confirmation or dedicated maintenance command.
 
-- `sdd-init`
-  - seed or refresh SDD linkage/bootstrap context in the active `taskReadme` when present
-  - persist project context and testing capabilities to Engram
-- `sdd-explore`
-  - search relevant prior context when the topic may already exist
-  - write/update the exploration summary section in `taskReadme`
-  - mirror the exploration artifact to Engram
-- `sdd-propose`
-  - read prior exploration/init context as needed
-  - write/update the proposal section in `taskReadme`
-  - mirror the proposal artifact to Engram
-- `sdd-spec`
-  - read proposal first
-  - write/update the specs / delta requirements section in `taskReadme`
-  - mirror the spec artifact to Engram
-- `sdd-design`
-  - read proposal/spec first
-  - write/update the design decisions section in `taskReadme`
-  - mirror the design artifact to Engram
-- `sdd-tasks`
-  - read proposal/spec/design first
-  - write/update the implementation breakdown / progress section in `taskReadme`
-  - mirror the tasks artifact to Engram
-- split apply lanes
-  - `sdd-apply-code`, `sdd-apply-doc`, `sdd-apply-unit-tests`, and `sdd-apply-pwauto-tests` read proposal/spec/design/tasks first
-  - update only their owned implementation progress rows in `taskReadme`
-  - mirror lane-specific apply progress to Engram
-- verification lanes
-  - `sdd-verify-code` reads proposal/spec/design/tasks/apply context first, writes `Code review`, and mirrors `sdd/{change-name}/verify-code`
-  - `sdd-verify-units` reads proposal/spec/design/tasks/apply context first, writes `Unit tests`, and mirrors `sdd/{change-name}/verify-units`
-  - `sdd-verify-pwauto` reads proposal/spec/design/tasks/apply plus quality context first, writes `PW-AUTO`, and mirrors `sdd/{change-name}/verify-pwauto`
-  - `sdd-verify-pwcli` reads proposal/spec/design/tasks/apply plus browser validation context first, writes `PW-CLI`, and mirrors `sdd/{change-name}/verify-pwcli`
-  - `sdd-orchestrator` consolidates lane outputs into `Estado consolidado` and mirrors `sdd/{change-name}/verify-report`
-- `sdd-archive`
-  - read prior artifacts first
-  - write/update the archive / closure summary section in `taskReadme`
-  - mirror the archive report / closure summary to Engram
-- `sdd-onboard`
-  - teach the same contract, not a parallel persistence model
+## Registration and ambiguous_project recovery
 
-Across all phases:
+- `mem_session_start` accepts caller session ID + optional `directory`; it does not accept `project`/`project_choice_reason`/`recovery_token`.
+- If it fails with `ambiguous_project`, resolve the real repo root and retry with that root as `directory`. Unregistered ID never attaches to writes until registration succeeds.
+- For `ambiguous_project` on writes (`mem_save`, `mem_save_prompt`, `mem_session_summary`): never guess. Ask the user to choose exactly one of `available_projects`, then retry same write with `project` + `project_choice_reason=user_selected_after_ambiguous_project` + `recovery_token`. Do not apply this shape to `mem_session_start`.
+- Mid-SDD-phase do not interrupt for ambiguity unless the user explicitly asked recall/persistence; otherwise continue with canonical and inform.
 
-- use stable `topic_key` values (`sdd/{change-name}/{artifact}`)
-- treat monolithic `sdd-apply` wording as deprecated migration vocabulary only; active implementation ownership belongs to the explicit split apply lanes
-- run or require `/sdd-doctor` when Engram availability is unknown, stale, or disputed
-- retrieve full observations, not search previews
-- record `engram_status`, `engram_last_check`, and `engram_blocker` in the active task when mirror availability affects execution
-- do not treat chat history as the durable artifact source
-- do not create or update `proposals/`, `specs/`, `designs/`, or `tasks/` files as SDD artifacts
-- do not use legacy files from those folders as examples for new work
-- do not describe this repo-local contract as literal upstream OpenSpec hybrid compliance
-- do not switch repo-local coordinated SDD work to `openspec` artifacts
+## Session close / compaction (no gate in SDD)
 
-## Non-SDD triggers
+- In SDD: `mem_session_summary` (Goal/Instructions/Discoveries/Accomplished/Next Steps/Relevant Files) optional AFTER `p4_done`, best-effort, never pre-condition of `set-state p4_done`. See `delivery.md`.
+- `close`/`compaction`/`summary` are not SDD states. Recovery: 1) re-read `taskReadme` + artifacts, 2) best-effort `mem_context` (+ summary of compacted content if useful) in parallel without blocking.
+- Passive capture opt-in only: `## Key Learnings:` numbered or `mem_capture_passive(content)` direct, reusable lesson only, never full mirror, `capture_prompt: false` in SDD. Prohibited during `verify-all` and gates `p3_requirements`/`p4_requirements_docs`.
 
-Even outside formal SDD phases, Engram should be used when:
+## Availability and failures
 
-- the user asks for memory or history
-- a debugging session reveals a reusable root cause
-- a new repo convention or workflow rule is established
-- docs/skills/agents policy is updated
-- a handoff summary is needed for future sessions
-- a significant validation or runtime finding should survive compaction
+Engram availability is optional for SDD. Do not require a runtime round trip, `/sdd-doctor`, or an availability record before creating, progressing, or completing a task. If an Engram MCP operation is unavailable or fails, continue using the canonical task and the applicable SDD skill; do not block the task or create an alternate memory store. If the user specifically requested recall or persistence, explain what could not be retrieved or saved and continue only with the context that is actually available.
 
-## Why this repo chooses `taskReadme` + Engram mirror
+## Non-SDD use
 
-This repo wants:
-
-- cross-session recovery without depending on chat history
-- persistence that survives compaction
-- deterministic retrieval of SDD artifacts by `topic_key`
-- repo-specific workflow policy in local skills, not in portable orchestrator runtime config
-
-That is why repo-local SDD persistence uses `taskReadme` as canon and Engram as mirror.
-
-## When Engram is insufficient
-
-Engram is **not** sufficient as the only operational system because:
-
-- it is not the human-facing execution ledger
-- upserts overwrite prior phase revisions
-- it is not a git-reviewed audit trail
-- it should not be the only place for branch / PR / validation handoff details
-
-This repo still keeps Engram mandatory because the missing piece is covered by `taskReadme`.
-
-- `taskReadme` handles canonical filesystem persistence, operational truth, and resumption.
-- Engram handles durable artifact mirroring, recovery, and search.
-
-That tradeoff is deliberate.
+Outside SDD, Engram may also help when the user asks for history or when a debugging session, decision, discovery, preference, or convention is likely to be useful again. Apply the same selective read/save rules; do not persist routine or non-reusable information. Delivery guarantee and lifecycle rules still apply.

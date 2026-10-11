@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/urn:projectctl2:schema:phase-definition:v1",
+  "$defs": {
+    "urn:projectctl2:schema:phase-definition:v1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "const": "fase_1_propuesta",
+              "description": "Workflow phase identifier."
+            },
+            "states": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "p1_started",
+                  "p1_exploring",
+                  "p1_awaiting_acceptance"
+                ],
+                "description": "Workflow state identifier."
+              },
+              "uniqueItems": true,
+              "description": "States permitted in this phase, in workflow order."
+            }
+          },
+          "required": [
+            "id",
+            "states"
+          ],
+          "additionalProperties": false,
+          "description": "State definition for workflow phase fase_1_propuesta."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "const": "fase_2_implementacion",
+              "description": "Workflow phase identifier."
+            },
+            "states": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "p2_planning",
+                  "p2_implementing",
+                  "p2_code_review",
+                  "p2_awaiting_acceptance"
+                ],
+                "description": "Workflow state identifier."
+              },
+              "uniqueItems": true,
+              "description": "States permitted in this phase, in workflow order."
+            }
+          },
+          "required": [
+            "id",
+            "states"
+          ],
+          "additionalProperties": false,
+          "description": "State definition for workflow phase fase_2_implementacion."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "const": "fase_3_verificacion",
+              "description": "Workflow phase identifier."
+            },
+            "states": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "p3_test_preparing",
+                  "p3_test_running",
+                  "p3_requirements"
+                ],
+                "description": "Workflow state identifier."
+              },
+              "uniqueItems": true,
+              "description": "States permitted in this phase, in workflow order."
+            }
+          },
+          "required": [
+            "id",
+            "states"
+          ],
+          "additionalProperties": false,
+          "description": "State definition for workflow phase fase_3_verificacion."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "const": "fase_4_documentacion",
+              "description": "Workflow phase identifier."
+            },
+            "states": {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "p4_documenting",
+                  "p4_requirements_docs",
+                  "p4_done"
+                ],
+                "description": "Workflow state identifier."
+              },
+              "uniqueItems": true,
+              "description": "States permitted in this phase, in workflow order."
+            }
+          },
+          "required": [
+            "id",
+            "states"
+          ],
+          "additionalProperties": false,
+          "description": "State definition for workflow phase fase_4_documentacion."
+        }
+      ],
+      "title": "PhaseDefinition"
+    }
+  },
+  "$id": "urn:projectctl2:schema:phase-definition:v1"
+}

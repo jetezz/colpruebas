@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/urn:projectctl2:schema:state-definition:v1",
+  "$defs": {
+    "urn:projectctl2:schema:state-definition:v1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "const": "fase_1_propuesta",
+              "description": "Workflow phase containing the state."
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "p1_started",
+                "p1_exploring",
+                "p1_awaiting_acceptance"
+              ],
+              "description": "Current workflow state within the phase."
+            }
+          },
+          "required": [
+            "phase",
+            "state"
+          ],
+          "additionalProperties": false,
+          "description": "State selection for workflow phase fase_1_propuesta."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "const": "fase_2_implementacion",
+              "description": "Workflow phase containing the state."
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "p2_planning",
+                "p2_implementing",
+                "p2_code_review",
+                "p2_awaiting_acceptance"
+              ],
+              "description": "Current workflow state within the phase."
+            }
+          },
+          "required": [
+            "phase",
+            "state"
+          ],
+          "additionalProperties": false,
+          "description": "State selection for workflow phase fase_2_implementacion."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "const": "fase_3_verificacion",
+              "description": "Workflow phase containing the state."
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "p3_test_preparing",
+                "p3_test_running",
+                "p3_requirements"
+              ],
+              "description": "Current workflow state within the phase."
+            }
+          },
+          "required": [
+            "phase",
+            "state"
+          ],
+          "additionalProperties": false,
+          "description": "State selection for workflow phase fase_3_verificacion."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "const": "fase_4_documentacion",
+              "description": "Workflow phase containing the state."
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "p4_documenting",
+                "p4_requirements_docs",
+                "p4_done"
+              ],
+              "description": "Current workflow state within the phase."
+            }
+          },
+          "required": [
+            "phase",
+            "state"
+          ],
+          "additionalProperties": false,
+          "description": "State selection for workflow phase fase_4_documentacion."
+        }
+      ],
+      "title": "StateDefinition"
+    }
+  },
+  "$id": "urn:projectctl2:schema:state-definition:v1"
+}

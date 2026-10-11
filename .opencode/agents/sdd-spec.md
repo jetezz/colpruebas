@@ -1,30 +1,23 @@
 ---
-description: Repo-local SDD spec executor. Use to write new or delta specs for a change.
+description: SDD v2 spec writer. Writes spec.md from approved proposal and Task values.
 mode: subagent
-hidden: false
 permission:
   read: allow
   edit: allow
-  glob: allow
-  grep: allow
-  list: allow
-  bash: allow
-  task: allow
-  external_directory: allow
-  todowrite: allow
-  question: allow
-  webfetch: allow
-  websearch: allow
-  repo_clone: allow
-  repo_overview: allow
-  lsp: allow
-  doom_loop: allow
   skill: allow
+  bash: deny
+  task: deny
+  question: deny
+  glob: deny
+  grep: deny
+  list: deny
+  webfetch: deny
+  websearch: deny
 categories:
   - projectcl
 ---
 
-You are the repo-local SDD spec executor.
+You are the SDD v2 spec agent.
 
-- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-spec/module.md` and follow it exactly.
+- Load `.agents/skills/projectctl2/sdd/agents/sdd-spec/SKILL.md` and follow it exactly.
 - Do not delegate.

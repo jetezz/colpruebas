@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/urn:projectctl2:schema:criteria-map:v1",
+  "$defs": {
+    "urn:projectctl2:schema:criteria-map:v1": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "number",
+          "const": 1,
+          "description": "Criteria map format version."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "frontend",
+            "backend",
+            "data",
+            "tooling",
+            "utils"
+          ],
+          "description": "Implementation area responsible for the criterion."
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "title": "NonEmptyText",
+                "description": "View identifier matching navigation."
+              },
+              "features": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S",
+                      "title": "NonEmptyText",
+                      "description": "Feature name matching navigation."
+                    },
+                    "criteria": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S",
+                            "title": "NonEmptyText",
+                            "description": "Criterion identifier matching navigation."
+                          },
+                          "paths": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1,
+                              "pattern": "\\S",
+                              "title": "NonEmptyText",
+                              "description": "Project-relative implementation path."
+                            },
+                            "description": "Implementation paths associated with the criterion."
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "paths"
+                        ],
+                        "additionalProperties": false,
+                        "title": "CriteriaMapCriterion",
+                        "description": "Criterion and its implementation paths."
+                      },
+                      "description": "Criteria of this feature mapped to implementation paths."
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "criteria"
+                  ],
+                  "additionalProperties": false,
+                  "title": "CriteriaMapFeature",
+                  "description": "Feature and its path-mapped criteria."
+                },
+                "description": "Features and mapped criteria for this view."
+              }
+            },
+            "required": [
+              "id",
+              "features"
+            ],
+            "additionalProperties": false,
+            "title": "CriteriaMapView",
+            "description": "View and its feature mappings."
+          },
+          "description": "Views represented in this implementation-area map."
+        }
+      },
+      "required": [
+        "schema_version",
+        "type",
+        "views"
+      ],
+      "additionalProperties": false,
+      "title": "CriteriaMapDocument",
+      "description": "A per-type projection of navigation criteria with project-relative implementation paths."
+    }
+  },
+  "$id": "urn:projectctl2:schema:criteria-map:v1"
+}

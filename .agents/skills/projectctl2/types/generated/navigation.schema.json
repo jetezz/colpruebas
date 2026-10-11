@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/urn:projectctl2:schema:navigation:v1",
+  "$defs": {
+    "urn:projectctl2:schema:navigation:v1": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "number",
+          "const": 1,
+          "description": "Navigation contract format version."
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "title": "NonEmptyText",
+                "description": "Stable view identifier used in documentation paths."
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "title": "NonEmptyText",
+                "description": "Human-readable view name."
+              },
+              "features": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S",
+                      "title": "NonEmptyText",
+                      "description": "Feature name within the view."
+                    },
+                    "criteria": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S",
+                            "title": "NonEmptyText",
+                            "description": "Stable criterion identifier."
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S",
+                            "title": "NonEmptyText",
+                            "description": "Canonical behavior or acceptance condition."
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "frontend",
+                              "backend",
+                              "data",
+                              "tooling",
+                              "utils"
+                            ],
+                            "description": "Implementation area responsible for the criterion."
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "description",
+                          "type"
+                        ],
+                        "additionalProperties": false,
+                        "title": "NavigationCriterion",
+                        "description": "Acceptance criterion with a stable identifier and responsible implementation area."
+                      },
+                      "description": "Acceptance criteria belonging to this feature."
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "criteria"
+                  ],
+                  "additionalProperties": false,
+                  "title": "NavigationFeature",
+                  "description": "A named feature and its acceptance criteria."
+                },
+                "description": "Features available in this view."
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "features"
+            ],
+            "additionalProperties": false,
+            "title": "NavigationView",
+            "description": "A view and its feature hierarchy."
+          },
+          "description": "Views and their features and criteria."
+        }
+      },
+      "required": [
+        "schema_version",
+        "views"
+      ],
+      "additionalProperties": false,
+      "title": "NavigationDocument",
+      "description": "Canonical view-feature-criterion hierarchy parsed from docs/app-map/navigation.yaml."
+    },
+    "criterion": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "NonEmptyText",
+          "description": "Stable criterion identifier."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "NonEmptyText",
+          "description": "Canonical behavior or acceptance condition."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "frontend",
+            "backend",
+            "data",
+            "tooling",
+            "utils"
+          ],
+          "description": "Implementation area responsible for the criterion."
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "type"
+      ],
+      "additionalProperties": false,
+      "title": "NavigationCriterion",
+      "description": "Acceptance criterion with a stable identifier and responsible implementation area."
+    }
+  },
+  "$id": "urn:projectctl2:schema:navigation:v1"
+}

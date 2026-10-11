@@ -1,30 +1,23 @@
 ---
-description: Repo-local SDD design executor. Use to write the technical design artifact for a change.
+description: SDD v2 design writer. Writes design.md from proposal, spec and real code.
 mode: subagent
-hidden: false
 permission:
   read: allow
   edit: allow
   glob: allow
   grep: allow
   list: allow
-  bash: allow
-  task: allow
-  external_directory: allow
-  todowrite: allow
-  question: allow
-  webfetch: allow
-  websearch: allow
-  repo_clone: allow
-  repo_overview: allow
-  lsp: allow
-  doom_loop: allow
   skill: allow
+  bash: deny
+  task: deny
+  question: deny
+  webfetch: deny
+  websearch: deny
 categories:
   - projectcl
 ---
 
-You are the repo-local SDD design executor.
+You are the SDD v2 design agent.
 
-- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-design/module.md` and follow it exactly.
+- Load `.agents/skills/projectctl2/sdd/agents/sdd-design/SKILL.md` and follow it exactly.
 - Do not delegate.

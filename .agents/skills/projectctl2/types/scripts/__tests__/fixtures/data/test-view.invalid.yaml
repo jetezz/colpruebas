@@ -1,0 +1,8 @@
+schema_version: 1
+features:
+  - name: Search
+    criteria:
+      - id: AC-1
+        test:
+          type: E2E
+          status: verde

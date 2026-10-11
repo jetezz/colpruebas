@@ -1,0 +1,265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/urn:projectctl2:schema:task:v1",
+  "$defs": {
+    "urn:projectctl2:schema:task:v1": {
+      "type": "object",
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "pattern": "^\\d{8}-[a-z0-9]{4,8}$",
+          "description": "Unique task identifier in date-suffix format."
+        },
+        "task_slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "description": "URL- and path-safe task name."
+        },
+        "task_name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "NonEmptyText",
+          "description": "Human-readable task title."
+        },
+        "current_problem": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "NonEmptyText",
+          "description": "Problem or need this task addresses."
+        },
+        "ui_url": {
+          "type": "string",
+          "description": "Optional URL to the relevant interface or reference."
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "NonEmptyText",
+            "description": "Non-blank text value."
+          },
+          "uniqueItems": true,
+          "description": "Skills relevant to completing this task."
+        },
+        "app_map": {
+          "anyOf": [
+            {
+              "type": "string",
+              "const": ""
+            },
+            {
+              "type": "object",
+              "properties": {
+                "view": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S",
+                      "title": "NonEmptyText",
+                      "description": "Target view identifier."
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S",
+                      "title": "NonEmptyText",
+                      "description": "Target view name."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "description": "View containing the task scope."
+                },
+                "feature": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S",
+                      "title": "NonEmptyText",
+                      "description": "Target feature name."
+                    }
+                  },
+                  "required": [
+                    "name"
+                  ],
+                  "additionalProperties": false,
+                  "description": "Feature containing the task scope."
+                }
+              },
+              "required": [
+                "view",
+                "feature"
+              ],
+              "additionalProperties": false
+            }
+          ],
+          "title": "TaskAppMapTarget",
+          "description": "App Map view and feature in scope, or an empty string when none applies."
+        },
+        "expected": {
+          "type": "string",
+          "description": "Expected outcome or completion evidence."
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "const": "new",
+                    "description": "Add a criterion to navigation."
+                  },
+                  "criterion": {
+                    "$ref": "urn:projectctl2:schema:navigation:v1#/$defs/criterion"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "criterion"
+                ],
+                "additionalProperties": false,
+                "title": "NewCriterionOperation",
+                "description": "Add a criterion to the navigation hierarchy."
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "const": "edit",
+                    "description": "Update an existing navigation criterion."
+                  },
+                  "criterion": {
+                    "$ref": "urn:projectctl2:schema:navigation:v1#/$defs/criterion"
+                  }
+                },
+                "required": [
+                  "operation",
+                  "criterion"
+                ],
+                "additionalProperties": false,
+                "title": "EditCriterionOperation",
+                "description": "Replace an existing navigation criterion."
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "const": "delete",
+                    "description": "Remove a navigation criterion."
+                  },
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "\\S",
+                    "title": "NonEmptyText",
+                    "description": "Identifier of the criterion to remove."
+                  }
+                },
+                "required": [
+                  "operation",
+                  "id"
+                ],
+                "additionalProperties": false,
+                "title": "DeleteCriterionOperation",
+                "description": "Remove a criterion by identifier."
+              }
+            ],
+            "title": "TaskCriterionOperation"
+          },
+          "description": "Planned navigation criterion additions, edits, or removals."
+        },
+        "source_branch": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "NonEmptyText",
+          "description": "Branch from which task work begins."
+        },
+        "branch": {
+          "type": "string",
+          "description": "Task working branch, when assigned."
+        },
+        "pr": {
+          "type": "string",
+          "description": "Pull request reference, when available."
+        },
+        "phase": {
+          "type": "string",
+          "enum": [
+            "fase_1_propuesta",
+            "fase_2_implementacion",
+            "fase_3_verificacion",
+            "fase_4_documentacion"
+          ],
+          "description": "Current SDD workflow phase."
+        },
+        "state": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "description": "Current state within the workflow phase."
+        },
+        "proposal_state": {
+          "type": "string",
+          "enum": [
+            "not-init",
+            "rejected",
+            "approve"
+          ],
+          "description": "Acceptance status of the task proposal."
+        },
+        "functional_state": {
+          "type": "string",
+          "enum": [
+            "not-init",
+            "rejected",
+            "approve"
+          ],
+          "description": "Acceptance status of the implemented functionality."
+        },
+        "requirements_fix": {
+          "default": false,
+          "type": "boolean",
+          "description": "Run req-fixer gates in Fase 3 and Fase 4 when true; skip both when false."
+        }
+      },
+      "required": [
+        "task_id",
+        "task_slug",
+        "task_name",
+        "current_problem",
+        "ui_url",
+        "skills",
+        "app_map",
+        "expected",
+        "criteria",
+        "source_branch",
+        "branch",
+        "pr",
+        "phase",
+        "state",
+        "proposal_state",
+        "functional_state"
+      ],
+      "additionalProperties": false,
+      "title": "TaskDocument",
+      "description": "Complete Task SDD frontmatter document. App Map correspondence and phase-transition rules remain semantic checks."
+    }
+  },
+  "$id": "urn:projectctl2:schema:task:v1"
+}

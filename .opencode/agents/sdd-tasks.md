@@ -1,30 +1,23 @@
 ---
-description: Repo-local SDD tasks executor. Use to create the actionable implementation checklist for a change.
+description: SDD v2 task planner. Writes tasks.md without assigning complexity.
 mode: subagent
-hidden: false
 permission:
   read: allow
   edit: allow
-  glob: allow
-  grep: allow
-  list: allow
-  bash: allow
-  task: allow
-  external_directory: allow
-  todowrite: allow
-  question: allow
-  webfetch: allow
-  websearch: allow
-  repo_clone: allow
-  repo_overview: allow
-  lsp: allow
-  doom_loop: allow
   skill: allow
+  bash: deny
+  task: deny
+  question: deny
+  glob: deny
+  grep: deny
+  list: deny
+  webfetch: deny
+  websearch: deny
 categories:
   - projectcl
 ---
 
-You are the repo-local SDD tasks executor.
+You are the SDD v2 tasks agent.
 
-- Load `.agents/skills/projectctl-sdd/modules/sdd/sdd-tasks/module.md` and follow it exactly.
+- Load `.agents/skills/projectctl2/sdd/agents/sdd-tasks/SKILL.md` and follow it exactly.
 - Do not delegate.

@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/urn:projectctl2:schema:test-view:v1",
+  "$defs": {
+    "urn:projectctl2:schema:test-view:v1": {
+      "type": "object",
+      "properties": {
+        "schema_version": {
+          "type": "number",
+          "const": 1,
+          "description": "Test record format version."
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S",
+                "title": "NonEmptyText",
+                "description": "Feature name matching navigation."
+              },
+              "criteria": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S",
+                      "title": "NonEmptyText",
+                      "description": "Criterion identifier matching navigation."
+                    },
+                    "test": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "PW-AUTO",
+                            "UNIT"
+                          ],
+                          "description": "Test execution kind for the criterion."
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "sin-test",
+                            "rojo",
+                            "verde"
+                          ],
+                          "description": "Current test status: not tested, failing, or passing."
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "status"
+                      ],
+                      "additionalProperties": false,
+                      "title": "TestRecord",
+                      "description": "Test kind and current status."
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "test"
+                  ],
+                  "additionalProperties": false,
+                  "title": "TestCriterion",
+                  "description": "Test record associated with one criterion."
+                },
+                "description": "Test records for this feature's criteria."
+              }
+            },
+            "required": [
+              "name",
+              "criteria"
+            ],
+            "additionalProperties": false,
+            "title": "TestFeature",
+            "description": "Feature and its criterion test records."
+          },
+          "description": "Features and their criterion test records for the view."
+        }
+      },
+      "required": [
+        "schema_version",
+        "features"
+      ],
+      "additionalProperties": false,
+      "title": "TestViewDocument",
+      "description": "Test-type and test-status records for one view, parsed from its App Map YAML file."
+    }
+  },
+  "$id": "urn:projectctl2:schema:test-view:v1"
+}
